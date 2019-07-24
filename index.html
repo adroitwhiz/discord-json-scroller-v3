@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Discord JSON Browser</title>
+	
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="css/page.css">
+	<link rel="stylesheet" type="text/css" href="css/messages-layout.css">
+	<link rel="stylesheet" type="text/css" href="css/messages-theme.css">
+	<link rel="stylesheet" type="text/css" href="css/channels.css">
+	
+	<script src="js/linkify.min.js"></script>
+	<script src="js/linkify-element.min.js"></script>
+	<script src="js/handlebars-v4.0.5.js"></script>
+	<script src="js/moment.js"></script>
+	<script src="js/main.js"></script>
+</head>
+<body>
+	<div class="flex-cols flex-expand">
+		<div class="flex-col">
+			<p>
+				Channels:
+			</p>
+			<ul id="channel-list">
+			</ul>
+		</div>
+		<div class="flex-expand flex-col">
+			<div class="flex-row flex-collapse">
+				<div id="navigation">
+					<div class="nav-section">
+						From <input type="number" value="1" id="msg-range-min"> message(s) back, to <input type="number" value="2" id="msg-range-max"> message(s) back
+						<button id="render-btn">Render</button>
+					</div>
+					<hr />
+					<div class="nav-section">
+						<span>Jump to message w/ ID</span>
+						<input type="text" value="1" id="msg-num">
+						<span>with</span>
+						<input type="number" value="1" id="msg-context">
+						<span>surrounding message(s)</span>
+						<button id="jump-btn">Jump</button>
+					</div>
+				</div>
+			</div>
+			
+			<div class="messages-container">
+				<div id="messages"></div>
+			</div>
+		</div>
+		
+		<div class="flex-col" style="display:none">
+			<div id="find-controls" class="flex-row">
+				<div>
+					<input type="checkbox" id="find-filter-by-text">
+					<span>Contains text:</span>
+					<input type="text" id="find-filter-text">
+				</div>
+				<div>
+					<input type="checkbox" id="find-filter-by-username">
+					<span>From user:</span>
+					<input type="text" id="find-filter-username">
+				</div>
+				<div>
+					<button id="find-btn">Find</button>
+				</div>
+			</div>
+			<div class="messages-container">
+				<div id="found-messages">
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="flex-row flex-collapse">
+		<div id="json-file-upload-form">
+			<div>JSON log file:</div>
+			<input type="file" id="json-file-picker">
+		</div>
+	</div>
+	
+	<script id="message-template" type="text/x-handlebars-template">
+		<div class="message">
+			<div class="message-data">
+				<div class="username">{{username}}</div>
+				<div class="timestamp">{{timestamp}}</div>
+				<div class="index">{{index}}</div>
+			</div>
+			<div class="message-content">
+				<div class="message-text">{{text}}</div>
+				{{#if attachments}}
+					<div class="message-attachments">
+						{{#each attachments}}
+							<img src="{{this.url}}" class="attachment" />
+						{{/each}}
+					</div>
+				{{/if}}
+			</div>
+		</div>
+	</script>
+	
+	<script id="channel-template" type="text/x-handlebars-template">
+		<li class="channel">
+			<span class="channel-name">{{channelName}}</span>
+		</li>
+	</script>
+</body>
+</html>
