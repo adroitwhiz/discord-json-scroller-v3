@@ -1,0 +1,15 @@
+.collapsed {
+	width: 0%;
+	overflow:auto;
+}
+
+#find-toggle {
+	position:absolute;
+	height:2em;
+	width:2em;
+	padding:0.5em;
+	transform: translateX(-2em);
+	border-bottom-left-radius: 0.5em;
+	user-select:none;
+	cursor:pointer;
+}

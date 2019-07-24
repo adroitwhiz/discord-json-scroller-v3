@@ -1,7 +1,7 @@
 .message {
 	background-color:#333;
 	border-bottom:1px solid #666;
-	color:#dcdcdc;
+	color:#eeeeee;
 	padding:0.25em 0.5em;
 }
 
@@ -16,6 +16,7 @@
 
 .username {
 	font-weight:600;
+	opacity: 0.75;
 }
 
 .timestamp {
@@ -25,4 +26,5 @@
 
 .index {
 	font-size:0.75em;
+	opacity:0.5;
 }

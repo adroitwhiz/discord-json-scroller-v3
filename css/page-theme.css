@@ -1,0 +1,43 @@
+:root {
+	--border-style: 1px solid #ccc;
+}
+
+body {
+	font-family: sans-serif;
+}
+
+#channel-list {
+	margin: 0
+}
+
+#channel-list-header, #json-file-upload-form, #find-controls, #navigation {
+	margin: 0;
+	padding: 0.5em;
+}
+
+#json-file-upload-form, #navigation {
+	font-size: 0.75em;
+}
+
+#channels-panel {
+	border-right: var(--border-style);
+}
+
+#json-file-upload-form {
+	border-top: var(--border-style);
+}
+
+#find-panel {
+	border-left: var(--border-style);
+}
+
+#navigation, #find-controls {
+	border-bottom: var(--border-style);
+}
+
+#find-toggle {
+	background-color: white;
+	border-bottom-left-radius: 0.5em;
+	border-bottom: var(--border-style);
+	border-left: var(--border-style);
+}

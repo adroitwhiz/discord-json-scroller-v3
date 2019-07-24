@@ -5,6 +5,7 @@
 .channel {
 	padding:0.5em 1em;
 	cursor:pointer;
+	transition: background-color 0.25s;
 }
 
 .channel:hover {

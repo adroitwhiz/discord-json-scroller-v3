@@ -5,104 +5,122 @@
 	<title>Discord JSON Browser</title>
 	
 	<link rel="stylesheet" type="text/css" href="css/normalize.css">
-	<link rel="stylesheet" type="text/css" href="css/page.css">
+	<link rel="stylesheet" type="text/css" href="css/page-layout.css">
+	<link rel="stylesheet" type="text/css" href="css/page-theme.css">
 	<link rel="stylesheet" type="text/css" href="css/messages-layout.css">
 	<link rel="stylesheet" type="text/css" href="css/messages-theme.css">
 	<link rel="stylesheet" type="text/css" href="css/channels.css">
+	<link rel="stylesheet" type="text/css" href="css/find-panel.css">
 	
-	<script src="js/linkify.min.js"></script>
-	<script src="js/linkify-element.min.js"></script>
-	<script src="js/handlebars-v4.0.5.js"></script>
-	<script src="js/moment.js"></script>
+	<script src="js/vendor/linkify.js"></script>
+	<script src="js/vendor/linkify-element.js"></script>
+	<script src="js/vendor/moment.js"></script>
+	<script src="js/vendor/vue.js"></script>
 	<script src="js/main.js"></script>
 </head>
 <body>
-	<div class="flex-cols flex-expand">
-		<div class="flex-col">
-			<p>
-				Channels:
-			</p>
-			<ul id="channel-list">
-			</ul>
-		</div>
-		<div class="flex-expand flex-col">
-			<div class="flex-row flex-collapse">
-				<div id="navigation">
-					<div class="nav-section">
-						From <input type="number" value="1" id="msg-range-min"> message(s) back, to <input type="number" value="2" id="msg-range-max"> message(s) back
-						<button id="render-btn">Render</button>
+	<div class="flex-expand flex-col" id="app">
+		<div class="flex-cols flex-expand">
+			<div class="flex-col" id="channels-panel">
+				<p id="channel-list-header">
+					Channels:
+				</p>
+				<ul id="channel-list">
+					<li
+						v-bind:class="{channel: true, selected: activeChannelId === channel.id}"
+						v-on:click="setChannel(channel.id)"
+						v-for="channel in server.channels"
+					>
+						<span class="channel-name">{{channel.name}}</span>
+					</li>
+				</ul>
+			</div>
+			<div class="flex-expand flex-col">
+				<div class="flex-row flex-collapse">
+					<div id="navigation">
+						<div class="nav-section">
+							<span>From</span>
+							<input type="number" v-model.number="navigationData.renderRangeMin">
+							<span>message(s) back, to</span>
+							<input type="number" v-model.number="navigationData.renderRangeMax">
+							<span>message(s) back</span>
+							<button v-on:click="renderMessages">Render</button>
+						</div>
+						<hr />
+						<div class="nav-section">
+							<span>Jump to message w/ ID</span>
+							<input type="text" v-model="navigationData.messageJumpId">
+							<span>with</span>
+							<input type="number" v-model.number="navigationData.messageJumpContextAmount">
+							<span>surrounding message(s)</span>
+							<button v-on:click="jumpMessages">Jump</button>
+						</div>
 					</div>
-					<hr />
-					<div class="nav-section">
-						<span>Jump to message w/ ID</span>
-						<input type="text" value="1" id="msg-num">
-						<span>with</span>
-						<input type="number" value="1" id="msg-context">
-						<span>surrounding message(s)</span>
-						<button id="jump-btn">Jump</button>
+				</div>
+				
+				<div class="messages-container">
+					<div id="messages">
+						<message v-for="message in messages" v-bind:message="message" v-bind:key="message.index"></message>
 					</div>
 				</div>
 			</div>
 			
-			<div class="messages-container">
-				<div id="messages"></div>
+			<div v-bind:class="{'flex-col': true, collapsed: !findPanelVisible}" id="find-panel">
+				<div id="find-controls" class="flex-row">
+					<div>
+						<input type="checkbox" v-model="searchFilterData.filterByText">
+						<span>Contains text:</span>
+						<input type="text" v-model="searchFilterData.textFilter">
+					</div>
+					<div>
+						<input type="checkbox" v-model="searchFilterData.filterByUser">
+						<span>From user (name or ID):</span>
+						<input type="text" v-model="searchFilterData.userFilter">
+					</div>
+					<div>
+							<input type="checkbox" v-model="searchFilterData.filterByChannel">
+							<span>From channel:</span>
+							<select v-model="searchFilterData.channelFilter">
+								<option v-for="channel in server.channels" v-bind:value="channel.id">
+									{{channel.name}}
+								</option>
+							</select>
+						</div>
+					<div>
+						<button v-on:click="searchMessages">Find</button>
+					</div>
+				</div>
+				<div class="messages-container">
+					<div id="found-messages">
+						<message v-for="message in foundMessages" v-bind:message="message" v-bind:key="message.index"></message>
+					</div>
+				</div>
+				<div id="find-toggle" v-on:click="findPanelVisible = !findPanelVisible">🔍</div>
 			</div>
 		</div>
 		
-		<div class="flex-col" style="display:none">
-			<div id="find-controls" class="flex-row">
-				<div>
-					<input type="checkbox" id="find-filter-by-text">
-					<span>Contains text:</span>
-					<input type="text" id="find-filter-text">
-				</div>
-				<div>
-					<input type="checkbox" id="find-filter-by-username">
-					<span>From user:</span>
-					<input type="text" id="find-filter-username">
-				</div>
-				<div>
-					<button id="find-btn">Find</button>
-				</div>
-			</div>
-			<div class="messages-container">
-				<div id="found-messages">
-				</div>
+		<div class="flex-row flex-collapse">
+			<div id="json-file-upload-form">
+				<span>JSON log file:</span>
+				<input type="file" v-on:change="loadJSONFromFile">
 			</div>
 		</div>
 	</div>
-	
-	<div class="flex-row flex-collapse">
-		<div id="json-file-upload-form">
-			<div>JSON log file:</div>
-			<input type="file" id="json-file-picker">
-		</div>
-	</div>
-	
-	<script id="message-template" type="text/x-handlebars-template">
+
+	<script id="message-template" type="text/x-template">
 		<div class="message">
 			<div class="message-data">
-				<div class="username">{{username}}</div>
-				<div class="timestamp">{{timestamp}}</div>
-				<div class="index">{{index}}</div>
+				<div class="username">{{message.username}}</div>
+				<div class="timestamp">{{message.timestamp}}</div>
+				<div class="index">{{message.index}}</div>
 			</div>
 			<div class="message-content">
-				<div class="message-text">{{text}}</div>
-				{{#if attachments}}
-					<div class="message-attachments">
-						{{#each attachments}}
-							<img src="{{this.url}}" class="attachment" />
-						{{/each}}
-					</div>
-				{{/if}}
+				<div class="message-text" v-linkified>{{message.text}}</div>
+				<div class="message-attachments" v-if="message.attachments">
+					<img :src="attachment.url" class="attachment" v-for="attachment in message.attachments" />
+				</div>
 			</div>
 		</div>
-	</script>
-	
-	<script id="channel-template" type="text/x-handlebars-template">
-		<li class="channel">
-			<span class="channel-name">{{channelName}}</span>
-		</li>
 	</script>
 </body>
 </html>
