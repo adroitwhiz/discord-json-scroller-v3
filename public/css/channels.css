@@ -1,0 +1,29 @@
+.channel-list {
+	list-style-type: none;
+	padding: 0;
+	margin:0;
+	flex-grow: 1;
+	overflow-y: auto;
+}
+.channel {
+	cursor: pointer;
+	transition: background-color 0.25s;
+}
+
+.text-channel, .voice-channel {
+	padding: 0.5em 1em;
+}
+
+.category-channel {
+	padding: 0.25em 1em;
+	text-transform: uppercase;
+	font-size:0.75em;
+}
+
+.channel:hover {
+	background-color: #eee;
+}
+
+.channel.selected {
+	background-color: #ddd;
+}

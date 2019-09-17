@@ -1,0 +1,54 @@
+* {
+	box-sizing: border-box;
+}
+
+html, body, #app {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.flex-cols {
+	display: flex;
+	flex: 1 1 auto;
+	flex-direction: row;
+	overflow: auto;
+}
+
+.flex-col {
+	display: flex;
+	flex: 0 0 auto;
+	flex-direction: column;
+}
+
+.flex-row {
+	display: flex;
+	flex: 0 0 auto;
+	flex-direction: column;
+}
+
+.flex-collapse {
+	flex: 0 0 auto;
+}
+
+.flex-expand {
+	flex-grow: 1;
+	min-width: 0;
+}
+
+.flex-shrink {
+	flex-shrink: 1;
+}
+
+.messages-container {
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+#find-panel {
+	max-width: 33.33%;
+}

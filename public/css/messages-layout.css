@@ -1,5 +1,5 @@
-#messages {
-	overflow-wrap:anywhere;
+.messages-container {
+	overflow-wrap: anywhere;
 }
 .message {
 	display: flex;

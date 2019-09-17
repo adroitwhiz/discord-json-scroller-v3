@@ -1,0 +1,11 @@
+.attachment {
+	font-size:0.75em;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 0.25em;
+	padding: 0.5em;
+	display: inline-block;
+}
+
+.attachment > a {
+	padding-right: 0.5em;
+}

@@ -1,0 +1,13 @@
+{
+	"eslint.validate": [
+		{
+			"language": "vue"
+		},
+		{
+			"language": "javascript"
+		},
+		{
+			"language": "javascriptreact"
+		}
+	]
+}

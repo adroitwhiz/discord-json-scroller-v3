@@ -1,0 +1,27 @@
+{
+  "name": "discord-json-scroller-v2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/js/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "author": "adroitwhiz",
+  "license": "MIT",
+  "dependencies": {
+    "linkifyjs": "^2.1.8",
+    "moment": "^2.24.0",
+    "vue": "^2.6.10",
+    "vuex": "^3.1.1"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^3.11.0",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.4.0",
+    "eslint-plugin-vue": "^5.2.3",
+    "vue-template-compiler": "^2.6.10"
+  },
+  "postcss": {}
+}
