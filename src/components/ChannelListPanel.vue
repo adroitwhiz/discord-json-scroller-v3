@@ -53,8 +53,7 @@ export default {
 		},
 		...mapState(['server'])
 	},
-	
+
 	methods: {}
-	
 };
 </script>

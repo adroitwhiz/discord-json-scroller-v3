@@ -47,7 +47,6 @@ export default {
 				}
 				default: break;
 			}
-			
 		}
 	}
 };

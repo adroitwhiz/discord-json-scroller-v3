@@ -37,7 +37,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<message-list
 			:messages="messages"
 			@scroll="handleScroll($event)"
@@ -96,7 +96,7 @@ export default {
 			}
 
 			if (messageIndex === -1) return;
-	
+
 			const messageJumpContext = this.messageJumpContextAmount;
 			const messagesToRender = messageChannel.messages.slice(
 				Math.max(0, messageIndex - messageJumpContext),

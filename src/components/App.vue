@@ -8,7 +8,7 @@
 			<channel-messages-panel />
 			<find-panel />
 		</div>
-		
+
 		<div class="flex-row flex-collapse">
 			<div id="json-file-upload-form">
 				<span>JSON log file:</span>
@@ -50,7 +50,7 @@ export default {
 	data: function () {
 		return {};
 	},
-	
+
 	computed: {
 		...mapState(['server'])
 	},
@@ -65,6 +65,14 @@ export default {
 			const deserialized = deserializeArchive(serializedServer);
 
 			this.$store.commit('setServer', deserialized);
+
+			// Automatically set active channel if there's only one
+			if (this.server.channels.size === 1) {
+				const firstChannel = this.server.channels.values().next().value;
+				if (firstChannel.type === 'text') {
+					this.$store.commit('setActiveChannel', firstChannel.id);
+				}
+			}
 		}
 	}
 };
