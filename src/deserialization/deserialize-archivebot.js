@@ -60,7 +60,7 @@ const deserializeArchiveBot = json => {
 	const serverEmojis = server.emojis;
 	for (const emoji of json.emojis) {
 		const parsedEmoji = new Prims.Emoji();
-		
+
 		parsedEmoji.id = emoji.id;
 		parsedEmoji.name = emoji.name;
 		parsedEmoji.url = emoji.url; // explicitly null in serialized format if unset
@@ -87,30 +87,29 @@ const deserializeArchiveBot = json => {
 			// possible tight loop?
 			for (let i = 0; i < channel.messages.length; i++) {
 				const message = channel.messages[i];
-	
+
 				const parsedMessage = new Prims.Message();
-	
+
 				parsedMessage.id = message.id;
 				parsedMessage.authorID = message.author;
 				parsedMessage.content = message.content;
 				parsedMessage.createdTimestamp = message.createdTimestamp;
-				// explicitly null in serialized format if unset
-				parsedMessage.editedTimestamp = message.editedTimestamp;
-				parsedMessage.type = message.type || 'DEFAULT'; // may be unnecessary to set 'DEFAULT'
-	
-				if (message.attachments.length > 0) {
+				parsedMessage.editedTimestamp = message.editedTimestamp || null;
+				parsedMessage.type = message.type || 'DEFAULT'; // if DEFAULT, not explicitly set to save space
+
+				if (message.hasOwnProperty('attachments') && message.attachments.length > 0) {
 					for (const attachment of message.attachments) {
 						const parsedAttachment = new Prims.Attachment();
-	
+
 						parsedAttachment.id = attachment.id;
 						parsedAttachment.name = attachment.name;
 						parsedAttachment.size = attachment.size;
 						parsedAttachment.url = attachment.url;
-	
+
 						parsedMessage.attachments.push(parsedAttachment);
 					}
 				}
-	
+
 				Object.freeze(parsedMessage);
 				channelMessages.push(parsedMessage);
 			}
@@ -121,7 +120,7 @@ const deserializeArchiveBot = json => {
 		Object.freeze(parsedChannel);
 		serverChannels.set(parsedChannel.id, parsedChannel);
 	}
-	
+
 	return server;
 };
 

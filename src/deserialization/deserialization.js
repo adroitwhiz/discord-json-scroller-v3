@@ -38,7 +38,9 @@ const deserializeArchive = json => {
 	switch (version) {
 		case 'archivebot-v1':
 		case 'archivebot-v2':
-		case 'archivebot-v3': {
+		case 'archivebot-v3':
+		case 'archivebot-v4':
+		case 'archivebot-v5': {
 			return deserializeArchiveBot(json);
 		}
 		case 'toonmemebot-server-snapshot': {

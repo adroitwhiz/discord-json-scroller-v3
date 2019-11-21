@@ -1,11 +1,20 @@
 .attachment {
+	border-radius: 0.25em;
+	display: inline-block;
+}
+
+.attachment-file {
 	font-size:0.75em;
 	background-color: rgba(0, 0, 0, 0.5);
-	border-radius: 0.25em;
-	margin: 0.5em;
-	display: inline-block;
+	padding: 0.5em;
 }
 
 .attachment > a {
 	padding-right: 0.5em;
+}
+
+img.attachment {
+	max-width: 700px;
+	max-height: 400px;
+	image-orientation: from-image;
 }

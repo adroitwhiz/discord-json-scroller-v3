@@ -35,7 +35,7 @@ const deserializeToonMemeBotServer = json => {
 	const serverEmojis = server.emojis;
 	for (const emoji of json.emojis) {
 		const parsedEmoji = new Prims.Emoji();
-		
+
 		parsedEmoji.id = emoji.id;
 		parsedEmoji.name = emoji.name;
 		parsedEmoji.url = emoji.url; // explicitly null in serialized format if unset

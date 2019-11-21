@@ -19,8 +19,3 @@
 .username, .timestamp {
 	margin-right: 0.5em;
 }
-
-img.attachment {
-	max-width: 700px;
-	max-height: 400px;
-}

@@ -4,10 +4,12 @@
 			v-if="isImage()"
 			:src="attachment.url"
 			class="attachment"
+			:width="attachment.width"
+			:height="attachment.height"
 		>
 		<div
 			v-else
-			class="attachment"
+			class="attachment attachment-file"
 		>
 			<a :href="attachment.url">{{ attachment.name }}</a>
 			<span>{{ attachment.size }} bytes</span>
