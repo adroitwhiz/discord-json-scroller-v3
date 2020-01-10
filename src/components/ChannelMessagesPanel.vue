@@ -97,14 +97,16 @@ export default {
 
 			if (messageIndex === -1) return;
 
+			const currentChannel = this.server.channels.get(messageChannel.id);
+			messageIndex = currentChannel.messages.length - messageIndex;
+
 			const messageJumpContext = this.messageJumpContextAmount;
-			const messagesToRender = messageChannel.messages.slice(
-				Math.max(0, messageIndex - messageJumpContext),
-				messageIndex + messageJumpContext + 1
-			);
 
 			this.$store.commit('setActiveChannel', messageChannel.id);
-			this.messages = messagesToRender;
+			this.renderRangeMin = messageIndex - messageJumpContext;
+			this.renderRangeMax = messageIndex + messageJumpContext;
+
+			this.renderMessages();
 		},
 		handleScroll: function (event) {
 			const target = event.target;
