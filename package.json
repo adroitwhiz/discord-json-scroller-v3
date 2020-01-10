@@ -13,15 +13,15 @@
   "dependencies": {
     "linkifyjs": "^2.1.8",
     "moment": "^2.24.0",
-    "vue": "^2.6.10",
-    "vuex": "^3.1.1"
+    "vue": "^2.6.11",
+    "vuex": "^3.1.2"
   },
   "devDependencies": {
-    "@vue/cli-service": "^3.11.0",
+    "@vue/cli-service": "^4.1.2",
     "babel-eslint": "^10.0.3",
-    "eslint": "^6.4.0",
-    "eslint-plugin-vue": "^5.2.3",
-    "vue-template-compiler": "^2.6.10"
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^6.1.2",
+    "vue-template-compiler": "^2.6.11"
   },
   "postcss": {}
 }
