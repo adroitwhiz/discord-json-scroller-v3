@@ -111,11 +111,21 @@ export default {
 					messages = messages.filter(message => message.content.toLowerCase().includes(matchText));
 				}
 
+				const userFilter = this.userFilter.toLowerCase();
 				const members = this.server.members;
 				if (this.filterByUser) {
-					messages = messages.filter(message => message.author === this.userFilter ||
-						members[message.author].username === this.userFilter
-					);
+					messages = messages.filter(message => {
+						if (message.authorID === userFilter) return true;
+
+						if (!members.has(message.authorID)) return false;
+						const memberUser = members.get(message.authorID).user;
+
+						if (typeof memberUser === 'undefined') return false;
+						return (
+							members.has(message.authorID) &&
+							memberUser.username.toLowerCase() === userFilter
+						);
+					});
 				}
 
 				allMessages = allMessages.concat(messages);
