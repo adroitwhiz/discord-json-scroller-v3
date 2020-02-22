@@ -7,6 +7,8 @@ const deserializeArchiveBot = json => {
 	server.name = json.name;
 	server.iconURL = json.iconURL;
 
+	const archiveVersion = parseInt(json.version.replace('archivebot-v', ''));
+
 	// Parse roles
 	const serverRoles = server.roles;
 	for (const role of json.roles) {
@@ -22,6 +24,27 @@ const deserializeArchiveBot = json => {
 		serverRoles.set(parsedRole.id, parsedRole);
 	}
 
+	// Parse users
+	const serverUsers = server.users;
+
+	const parseAndAddUser = user => {
+		const parsedUser = new Prims.User();
+
+		parsedUser.id = user.id;
+		parsedUser.avatarURL = user.avatarURL;
+		parsedUser.username = user.username;
+		parsedUser.tag = user.tag;
+
+		Object.freeze(parsedUser);
+		serverUsers.set(parsedUser.id, parsedUser);
+	};
+
+	if (archiveVersion >= 6) {
+		for (const user of json.users) {
+			parseAndAddUser(user);
+		}
+	}
+
 	// Parse members
 	const serverMembers = server.members;
 	for (const member of json.members) {
@@ -31,7 +54,7 @@ const deserializeArchiveBot = json => {
 		parsedMember.nickname = member.nickname; // explicitly null in serialized format if unset
 
 		// V3 onwards stores role IDs; earlier versions store roles
-		if (json.version === 'archivebot-v1' || json.version === 'archivebot-v2') {
+		if (archiveVersion < 3) {
 			for (const role of member.roles) {
 				parsedMember.roles.push(serverRoles.get(role.id));
 			}
@@ -41,17 +64,10 @@ const deserializeArchiveBot = json => {
 			}
 		}
 
-		// perhaps store users somewhere else?
-		const parsedUser = new Prims.User();
+		if (archiveVersion < 6) {
+			parseAndAddUser(member.user);
+		}
 
-		parsedUser.id = member.user.id;
-		parsedUser.avatarURL = member.user.avatarURL;
-		parsedUser.username = member.user.username;
-		parsedUser.tag = member.user.tag;
-
-		parsedMember.user = parsedUser;
-
-		Object.freeze(parsedUser);
 		Object.freeze(parsedMember);
 		serverMembers.set(parsedMember.id, parsedMember);
 	}

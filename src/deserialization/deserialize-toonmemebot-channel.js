@@ -9,6 +9,7 @@ const deserializeToonMemeBotChannel = json => {
 
 	// Parse members
 	const serverMembers = server.members;
+	const serverUsers = server.users;
 
 	// Parse channels
 	const serverChannels = server.channels;
@@ -62,6 +63,7 @@ const deserializeToonMemeBotChannel = json => {
 			Object.freeze(parsedMember);
 
 			serverMembers.set(parsedMember.id, parsedMember);
+			serverUsers.set(parsedUser.id, parsedUser);
 		}
 
 		Object.freeze(parsedMessage);

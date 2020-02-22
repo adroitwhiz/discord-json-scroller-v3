@@ -9,11 +9,15 @@ const deserializeToonMemeBotServer = json => {
 
 	// Parse members
 	const serverMembers = server.members;
+	const serverUsers = server.users;
 	for (const member of json.members) {
 		const parsedMember = new Prims.Member();
 
 		parsedMember.id = member.user.id;
 		parsedMember.nickname = member.nickname; // explicitly null in serialized format if unset
+		Object.freeze(parsedMember);
+
+		serverMembers.set(parsedMember.id, parsedMember);
 
 		// perhaps store users somewhere else?
 		const parsedUser = new Prims.User();
@@ -23,12 +27,9 @@ const deserializeToonMemeBotServer = json => {
 		parsedUser.username = member.user.username;
 		// ToonMemeBot saves discriminator but not tag
 		parsedUser.tag = member.user.username + '#' + member.user.discriminator;
-
-		parsedMember.user = parsedUser;
-
 		Object.freeze(parsedUser);
-		Object.freeze(parsedMember);
-		serverMembers.set(parsedMember.id, parsedMember);
+
+		serverUsers.set(parsedUser.id, parsedUser);
 	}
 
 	// Parse emojis

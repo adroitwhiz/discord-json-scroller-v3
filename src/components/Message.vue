@@ -53,11 +53,15 @@ export default {
 	},
 	methods: {
 		getUsername: function () {
-			const member = this.server.members.get(this.message.authorID);
+			const authorID = this.message.authorID;
+			const member = this.server.members.get(authorID);
 
-			if (!member) return `<@${this.message.authorID}>`;
-			if (member.nickname !== null) return member.nickname;
-			return member.user.username;
+			if (member && member.nickname !== null) return member.nickname;
+
+			const user = this.server.users.get(authorID);
+			if (!user) return `<@${this.message.authorID}>`;
+
+			return user.username;
 		},
 
 		formatTimestamp: timestamp => {

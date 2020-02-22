@@ -40,7 +40,8 @@ const deserializeArchive = json => {
 		case 'archivebot-v2':
 		case 'archivebot-v3':
 		case 'archivebot-v4':
-		case 'archivebot-v5': {
+		case 'archivebot-v5':
+		case 'archivebot-v6': {
 			return deserializeArchiveBot(json);
 		}
 		case 'toonmemebot-server-snapshot': {

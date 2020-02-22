@@ -25,6 +25,12 @@ class Server {
 		this.members = new Map();
 
 		/**
+		 * Map of all users who have ever been in this server, keyed by ID.
+		 * @type {Map<Snowflake, User>}
+		 */
+		this.users = new Map();
+
+		/**
 		 * Map of server-specific custom emojis, keyed by ID.
 		 * @type {Map<Snowflake, Emoji>}
 		 */
@@ -161,12 +167,6 @@ class Member {
 		 * @type {Array<Role>}
 		 */
 		this.roles = [];
-
-		/**
-		 * The user.
-		 * @type {User}
-		 */
-		this.user = null;
 	}
 }
 
