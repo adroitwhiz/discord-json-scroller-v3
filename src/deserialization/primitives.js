@@ -257,6 +257,18 @@ class Attachment {
 		 * @type {String}
 		 */
 		this.url = null;
+
+		/**
+		 * If this attachment is an image, that image's width.
+		 * @type {String?}
+		 */
+		this.width = null;
+
+		/**
+		 * If this attachment is an image, that image's height.
+		 * @type {String?}
+		 */
+		this.height = null;
 	}
 }
 

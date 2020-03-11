@@ -122,6 +122,9 @@ const deserializeArchiveBot = json => {
 						parsedAttachment.size = attachment.size;
 						parsedAttachment.url = attachment.url;
 
+						if (attachment.hasOwnProperty('width')) parsedAttachment.width = attachment.width;
+						if (attachment.hasOwnProperty('height')) parsedAttachment.height = attachment.height;
+
 						parsedMessage.attachments.push(parsedAttachment);
 					}
 				}
