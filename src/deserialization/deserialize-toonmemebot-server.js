@@ -88,7 +88,12 @@ const deserializeToonMemeBotServer = json => {
 			channelMessages.push(parsedMessage);
 		}
 
-		channelMessages.reverse();
+		// Only reverse the messsages if they're in reverse order
+		// This is needed for one specific archive I created with a faulty conversion tool
+		if (channelMessages.length > 1 &&
+			channelMessages[1].createdTimestamp < channelMessages[0].createdTimestamp) {
+			channelMessages.reverse();
+		}
 
 		Object.freeze(channelMessages);
 		Object.freeze(parsedChannel);
