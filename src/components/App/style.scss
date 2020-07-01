@@ -1,0 +1,24 @@
+:global {
+	html, body {
+		height: 100%;
+	}
+
+	#app {
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.channels-and-messages {
+		display: flex;
+		flex-direction: row;
+		flex: 1 1 auto;
+		overflow: auto;
+	}
+
+	.channel-list-panel {
+		display: flex;
+		flex: 0 0 auto;
+	}
+}
+

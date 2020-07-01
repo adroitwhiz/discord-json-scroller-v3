@@ -1,7 +1,7 @@
 module.exports = {
 	extends: [
 		'eslint:recommended',
-		'plugin:vue/recommended'
+		'plugin:react/recommended'
 	],
 	env: {
 		'browser': true,
@@ -13,8 +13,7 @@ module.exports = {
 	},
 	rules: {
 		'no-prototype-builtins': 'off',
-		'no-unused-vars': ['off', {'args': 'after-used'}],
-		'no-useless-escape': 'off',
+		'no-unused-vars': ['error', {'args': 'after-used'}],
 		'no-constant-condition': ['error', {'checkLoops': false}],
 
 		'array-bracket-spacing': ['error', 'never'],
@@ -72,7 +71,8 @@ module.exports = {
 		'space-infix-ops': ['error'],
 		'space-unary-ops': ['error'],
 
-		'vue/html-indent': ['error', 'tab']
+		'react/react-in-jsx-scope': 'off',
+		'react/prop-types': 'off'
 	},
 	parserOptions: {
 		'ecmaVersion': 9,

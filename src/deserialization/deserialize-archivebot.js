@@ -7,7 +7,7 @@ const deserializeArchiveBot = json => {
 	server.name = json.name;
 	server.iconURL = json.iconURL;
 
-	const archiveVersion = parseInt(json.version.replace('archivebot-v', ''));
+	const archiveVersion = json.version ? parseInt(json.version.replace('archivebot-v', '')) : 1;
 
 	// Parse roles
 	const serverRoles = server.roles;

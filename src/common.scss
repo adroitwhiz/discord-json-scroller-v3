@@ -1,0 +1,15 @@
+@use './colors.scss' as col;
+
+@mixin detail-text {
+	font-size: 0.75em;
+	color: col.$text-color-detail;
+}
+
+@mixin no-scrollbar {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+
+	&::-webkit-scrollbar {
+		width: 0;
+	}
+}

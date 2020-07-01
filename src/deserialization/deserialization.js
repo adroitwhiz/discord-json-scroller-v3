@@ -8,7 +8,7 @@ import deserializeToonMemeBotChannel from './deserialize-toonmemebot-channel';
 // 'toonmemebot-server-snapshot': ToonMemeBot server snapshot
 // 'archivebot-v1': ArchiveBot server snapshot v1
 // 'archivebot-v2': ArchiveBot server snapshot v2 (v1 but with version tag)
-const getArchiveVersion = parsed => {
+const _getArchiveVersion = parsed => {
 	// If the archive gives us a version string, use that
 	if (parsed.version) {
 		return parsed.version;
@@ -33,7 +33,7 @@ const getArchiveVersion = parsed => {
 };
 
 const deserializeArchive = json => {
-	const version = getArchiveVersion(json);
+	const version = _getArchiveVersion(json);
 
 	switch (version) {
 		case 'archivebot-v1':

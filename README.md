@@ -9,12 +9,18 @@ npm install
 ```
 To set up and start a local development server:
 ```bash
-npm run serve
+npm run dev
 ```
-Output will be served from [localhost:8082](http://localhost:8082).
+Output will be served from [localhost:8080](http://localhost:8080).
 
 To build:
 ```bash
 npm run build
 ```
-Build output will be in `/dist`.
+Build output will be in `/build`.
+
+To do:
+- Collapse successive messages from the same user, but keep timestamps viewable in some way
+- Allow archives to be saved to a URL and loaded from one
+- Lazy-load images once they are scrolled to
+- Revamp message scrolling
