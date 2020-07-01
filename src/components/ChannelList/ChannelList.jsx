@@ -1,4 +1,4 @@
-import './style';
+import style from './style';
 
 import {Component} from 'preact';
 import {connect} from 'unistore/preact';
@@ -56,11 +56,11 @@ class _ChannelItem extends Component {
 			<li>
 				<div
 					className={classNames({
-						channel: true,
-						'text-channel': channel.channel.type === 'text',
-						'voice-channel': channel.channel.type === 'voice',
-						'category-channel': channel.channel.type === 'category',
-						selected: channel.channel.id === this.props.currentChannel
+						[style['channel']]: true,
+						[style['text-channel']]: channel.channel.type === 'text',
+						[style['voice-channel']]: channel.channel.type === 'voice',
+						[style['category-channel']]: channel.channel.type === 'category',
+						[style['selected']]: channel.channel.id === this.props.currentChannel
 					})}
 
 					onClick = {channel.channel.type === 'category' ? this.toggleCollapse : this.selectChannel}
@@ -77,8 +77,8 @@ class _ChannelItem extends Component {
 const ChannelItem = connect(['currentChannel'])(_ChannelItem);
 
 const ChannelSublist = props => <ul className={classNames({
-	'channel-list': true,
-	'collapsed': props.collapsed
+	[style['channel-list']]: true,
+	[style['collapsed']]: props.collapsed
 })}>
 	{
 		props.childChannels.map(channel =>

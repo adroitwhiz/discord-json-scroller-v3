@@ -1,38 +1,39 @@
 @use '../../colors.scss' as col;
 @use '../../common.scss';
 
-:global {
-	.message-list {
-		background-color: col.$base-color;
-		color: col.$text-color;
-	}
+.message-list {
+	background-color: col.$base-color;
+	color: col.$text-color;
+	overflow-x: hidden;
+	flex: 1 0 auto;
+	overflow-wrap: break-word;
+}
 
-	.message {
-		display: flex;
-		flex-direction: column;
-		padding: 0.25em 0.5em;
-		border-top: 1px solid col.$divider;
-		font-size: 90%;
-	}
+.message {
+	display: flex;
+	flex-direction: column;
+	padding: 0.25em 0.5em;
+	border-top: 1px solid col.$divider;
+	font-size: 90%;
+}
 
-	.message-header {
-		display: flex;
-		align-items: center;
-	}
+.message-header {
+	display: flex;
+	align-items: center;
+}
 
-	.message-poster {
-		font-weight: bold;
-	}
+.message-poster {
+	font-weight: bold;
+}
 
-	.message-timestamp, .message-id {
-		@include common.detail-text;
-	}
+.message-timestamp, .message-id {
+	@include common.detail-text;
+}
 
-	.message-poster, .message-timestamp {
-		margin-right: 0.5em;
-	}
+.message-poster, .message-timestamp {
+	margin-right: 0.5em;
+}
 
-	.message-content {
-		white-space: pre-line;
-	}
+.message-content {
+	white-space: pre-line;
 }

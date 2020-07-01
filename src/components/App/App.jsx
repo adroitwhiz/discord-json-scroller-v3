@@ -1,4 +1,4 @@
-import './style.scss';
+import style from './style.scss';
 import '../../../public/css/normalize.css';
 import {Component} from 'preact';
 import createStore from 'unistore';
@@ -36,9 +36,9 @@ class _App extends Component {
 
 	render () {
 		return (
-			<div id="app">
-				<div className="channels-and-messages">
-					<div className="channel-list-panel">
+			<div id={style.app}>
+				<div className={style['channels-and-messages']}>
+					<div className={style['channel-list-panel']}>
 						<ChannelList channels={this.props.archive ? this.props.archive.channels : null} />
 					</div>
 					<ChannelView channel={this.props.archive ?
@@ -47,7 +47,7 @@ class _App extends Component {
 					}/>
 				</div>
 
-				<div className="json-file-upload-form">
+				<div className={style['json-file-upload-form']}>
 					<span>.json or .zip log file: </span>
 					<input
 						type="file"

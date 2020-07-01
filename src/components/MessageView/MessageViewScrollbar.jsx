@@ -1,4 +1,4 @@
-import './style';
+import style from './style';
 
 import {Component, createRef} from 'preact';
 
@@ -11,9 +11,14 @@ class MessageViewScrollbar extends Component {
 
 	render () {
 		return (
-			<div className="message-view-scrollbar">
+			<div className={style['message-view-scrollbar']}>
 				<div
-					className="message-view-scrollbar-range"
+					className={style['message-view-scrollbar-top']}
+				>
+					{this.props.start}
+				</div>
+				<div
+					className={style['message-view-scrollbar-range']}
 					ref={this.rangeElem}
 					style={`top: ${(this.props.start / this.props.totalMessages) * 100}%; height: ${((this.props.end - this.props.start) / this.props.totalMessages) * 100}%;`}
 				></div>

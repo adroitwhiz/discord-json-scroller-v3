@@ -1,4 +1,4 @@
-import './style';
+import style from './style';
 
 import {Component} from 'preact';
 
@@ -8,7 +8,7 @@ export default class ChannelView extends Component {
 	render () {
 		const channel = this.props.channel;
 		return (
-			<div className="channel-view">{
+			<div className={style['channel-view']}>{
 				channel ?
 					<>
 						<div className="channel-header">
