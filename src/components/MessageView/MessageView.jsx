@@ -8,6 +8,8 @@ import MessageViewScrollbar from './MessageViewScrollbar';
 
 const CHUNK_SIZE = 50;
 
+const MAX_MESSAGES = 100;
+
 // eslint-disable-next-line no-unused-vars
 const timer = ms => new Promise(resolve => {
 	setTimeout(resolve, ms);
@@ -32,16 +34,20 @@ class MessageView extends Component {
 
 	loadMoreFromTop () {
 		this.setState(state => {
+			const newStart = Math.max(state.start - CHUNK_SIZE, 0);
 			return {
-				start: Math.max(state.start - CHUNK_SIZE, 0)
+				start: newStart,
+				end: Math.min(state.end, newStart + MAX_MESSAGES)
 			};
 		});
 	}
 
 	loadMoreFromBottom () {
 		this.setState((state, props) => {
+			const newEnd = Math.min(state.end + CHUNK_SIZE, props.messages.length - 1);
 			return {
-				end: Math.min(state.end + CHUNK_SIZE, props.messages.length - 1)
+				start: Math.max(state.start, newEnd - MAX_MESSAGES),
+				end: newEnd
 			};
 		});
 	}

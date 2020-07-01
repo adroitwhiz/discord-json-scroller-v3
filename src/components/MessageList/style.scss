@@ -37,3 +37,31 @@
 .message-content {
 	white-space: pre-line;
 }
+
+.attachment {
+	display: flex;
+}
+
+.attachment-file {
+	display: flex;
+	margin-right: auto;
+	padding: 0.5em;
+	border-radius: 0.25em;
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.25);
+	align-items: center;
+}
+
+.attachment-image {
+	width: auto;
+	height: auto;
+	max-width: 500px;
+	max-height: 500px;
+	border-radius: 0.25em;
+}
+
+.attachment-size {
+	font-size: 90%;
+	color: col.$text-color-detail;
+	margin-left: 0.5em;
+}

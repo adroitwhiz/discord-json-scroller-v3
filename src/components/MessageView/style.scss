@@ -16,14 +16,15 @@
 	flex: 1 1 auto;
 }
 
-.message-view-scrollbar {
+.scrollbar {
 	display: flex;
-	width: 1em;
 	position: relative;
 	flex: 0 0 auto;
+	overflow: visible;
+	padding: 2em 0;
 }
 
-.message-view-scrollbar-range {
+.scrollbar-indicator {
 	box-sizing: border-box;
 	position: absolute;
 	left: 0;
@@ -31,4 +32,58 @@
 	background-color: rgba(255, 0, 0, 0.5);
 	border-top: 1px solid red;
 	border-bottom: 1px solid red;
+}
+
+.scrollbar-indicator-wrapper {
+	position: relative;
+	width: 1em;
+}
+
+.scrollbar-range-wrapper {
+	position: relative;
+	width: 2em;
+}
+
+.scrollbar-range-top-wrapper, .scrollbar-range-bottom-wrapper {
+	position: absolute;
+	width: 100%;
+}
+
+$range-indicator-border-height: 1px;
+$range-indicator-border: $range-indicator-border-height solid #800;
+
+$range-indicator-border-radius: 0.25em;
+
+.scrollbar-range-indicator {
+	position: absolute;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.scrollbar-range-top {
+	bottom: -$range-indicator-border-height;
+	border-bottom: $range-indicator-border;
+}
+
+.scrollbar-range-bottom {
+	top: -$range-indicator-border-height;
+	border-top: $range-indicator-border;
+}
+
+.scrollbar-range-indicator-inner {
+	background-color: #ff2030;
+	color: white;
+	margin-right: auto;
+	padding: 0.25em;
+}
+
+.scrollbar-range-top .scrollbar-range-indicator-inner {
+	border-top-left-radius: $range-indicator-border-radius;
+	border-top-right-radius: $range-indicator-border-radius;
+}
+
+.scrollbar-range-bottom .scrollbar-range-indicator-inner {
+	border-bottom-left-radius: $range-indicator-border-radius;
+	border-bottom-right-radius: $range-indicator-border-radius;
 }

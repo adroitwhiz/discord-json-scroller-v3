@@ -19,3 +19,12 @@ html, body {
 	display: flex;
 	flex: 0 0 auto;
 }
+
+a {
+	color: #00b0f4;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}

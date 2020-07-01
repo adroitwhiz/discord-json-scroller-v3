@@ -2,6 +2,8 @@ import style from './style';
 
 import {connect} from 'unistore/preact';
 
+import Attachment from './Attachment';
+
 const getUsername = (archive, message) => {
 	const authorID = message.authorID;
 
@@ -31,6 +33,12 @@ const MessageList = props => {
 				<div className={style['message-body']}>
 					<div className={style['message-content']}>{message.content}</div>
 				</div>
+				{message.attachments.length === 0 ? null : message.attachments.map((attachment, index) =>
+					<Attachment
+						key={index}
+						attachment={attachment}
+					/>
+				)}
 			</div>
 		);
 	}
