@@ -1,0 +1,33 @@
+.find-panel {
+	display: flex;
+	max-width: 33%;
+}
+
+.find-inner {
+	display: flex;
+	flex-direction: column;
+}
+
+.collapsed {
+	flex-basis: 0;
+	overflow: auto;
+}
+
+.find-toggle {
+	position: absolute;
+	height: 2em;
+	width: 2em;
+	padding: 0.5em;
+	transform: translateX(-2em);
+	border-bottom-left-radius: 0.5em;
+	user-select: none;
+	cursor: pointer;
+	box-sizing: border-box;
+}
+
+.found-messages {
+	display: flex;
+	overflow: auto;
+	flex: 1 1 auto;
+	flex-direction: column;
+}
