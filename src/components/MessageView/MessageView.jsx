@@ -109,7 +109,7 @@ class MessageView extends Component {
 					key={props.messages[i].id}
 					messages={props.messages}
 					start={i}
-					end={i + CHUNK_SIZE}
+					end={Math.min(i + CHUNK_SIZE, end)}
 				/>
 			);
 		}
@@ -127,7 +127,7 @@ class MessageView extends Component {
 				<MessageViewScrollbar
 					totalMessages={this.props.messages.length}
 					start={this.state.start}
-					end={this.state.end}
+					end={end}
 				/>
 			</div>
 		);
