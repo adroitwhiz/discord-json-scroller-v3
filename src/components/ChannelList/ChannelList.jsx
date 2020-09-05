@@ -47,6 +47,7 @@ class _ChannelItem extends Component {
 	}
 
 	selectChannel () {
+		if (this.props.channel.channel.type !== 'text') return;
 		this.props.store.setState({currentChannel: this.props.channel.channel.id});
 	}
 
