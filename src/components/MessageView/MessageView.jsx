@@ -31,6 +31,8 @@ class MessageView extends Component {
 		this.loadMoreFromTop = this.loadMoreFromTop.bind(this);
 		this.loadMoreFromBottom = this.loadMoreFromBottom.bind(this);
 		this.handleScroll = this.handleScroll.bind(this);
+		this.setNewStart = this.setNewStart.bind(this);
+		this.setNewEnd = this.setNewEnd.bind(this);
 	}
 
 	handleScroll (e) {
@@ -67,7 +69,29 @@ class MessageView extends Component {
 		});
 	}
 
-	getSnapshotBeforeUpdate(prevProps, prevState) {
+	setNewStart (start) {
+		this.setState((state, props) => {
+			start = Math.min(props.messages.length - 1, Math.max(start, 0));
+
+			this.setState({
+				start,
+				end: Math.min(start + CHUNK_SIZE, props.messages.length)
+			});
+		});
+	}
+
+	setNewEnd (end) {
+		this.setState((state, props) => {
+			end = Math.min(props.messages.length - 1, Math.max(end, 0));
+
+			this.setState({
+				start: Math.max(0, end - CHUNK_SIZE),
+				end
+			});
+		});
+	}
+
+	getSnapshotBeforeUpdate (prevProps, prevState) {
 		// When adding messages at the top, maintain scroll position.
 		if (this.state.start !== prevState.start) {
 			const list = this.viewElem.current;
@@ -76,20 +100,23 @@ class MessageView extends Component {
 		return null;
 	}
 
-	componentDidUpdate(prevProps, prevState, snapshot) {
-		const {state} = this;
+	componentDidUpdate (prevProps, prevState, snapshot) {
 		if (snapshot !== null) {
 			const list = this.viewElem.current;
 			list.scrollTop = list.scrollHeight - snapshot;
 
 			// Now that we've properly positioned the top of the message list according to its bottom, we can trim old
 			// messages of the bottom of the list.
-			this.setState({
-				end: Math.min(state.end, state.start + MAX_MESSAGES)
+			this.setState(state => {
+				return {
+					end: Math.min(state.end, state.start + MAX_MESSAGES)
+				};
 			});
 		} else if (prevState.end !== this.state.end) {
-			this.setState({
-				start: Math.max(state.start, state.end - MAX_MESSAGES)
+			this.setState(state => {
+				return {
+					start: Math.max(state.start, state.end - MAX_MESSAGES)
+				};
 			});
 		}
 	}
@@ -102,14 +129,14 @@ class MessageView extends Component {
 		const atEnd = this.state.end === props.messages.length - 1;
 
 		const chunks = [];
-		const end = Math.min(this.state.end, props.messages.length);
-		for (let i = this.state.start; i < end; i += CHUNK_SIZE) {
+		const end = Math.min(this.state.end, props.messages.length - 1);
+		for (let i = this.state.start; i <= end; i += CHUNK_SIZE) {
 			chunks.push(
 				<MessageList
 					key={props.messages[i].id}
 					messages={props.messages}
 					start={i}
-					end={Math.min(i + CHUNK_SIZE, end)}
+					end={Math.min(i + CHUNK_SIZE, end + 1)}
 				/>
 			);
 		}
@@ -128,6 +155,8 @@ class MessageView extends Component {
 					totalMessages={this.props.messages.length}
 					start={this.state.start}
 					end={end}
+					setNewStart={this.setNewStart}
+					setNewEnd={this.setNewEnd}
 				/>
 			</div>
 		);

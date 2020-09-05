@@ -7,6 +7,21 @@ class MessageViewScrollbar extends Component {
 		super(props);
 
 		this.rangeElem = createRef();
+
+		this.handleSetStart = this.handleSetStart.bind(this);
+		this.handleSetEnd = this.handleSetEnd.bind(this);
+	}
+
+	handleSetStart (e) {
+		const {value} = e.target;
+		const numVal = parseInt(value);
+		this.props.setNewStart(numVal);
+	}
+
+	handleSetEnd (e) {
+		const {value} = e.target;
+		const numVal = parseInt(value);
+		this.props.setNewEnd(numVal);
 	}
 
 	render () {
@@ -18,7 +33,12 @@ class MessageViewScrollbar extends Component {
 						style={`top: ${(this.props.start / this.props.totalMessages) * 100}%;`}
 					>
 						<div className={`${style['scrollbar-range-top']} ${style['scrollbar-range-indicator']}`}>
-							<div className={style['scrollbar-range-indicator-inner']}>{this.props.start}</div>
+							<input
+								className={style['scrollbar-range-input']}
+								type="text"
+								value={this.props.start}
+								onChange={this.handleSetStart}
+							/>
 						</div>
 					</div>
 
@@ -27,7 +47,12 @@ class MessageViewScrollbar extends Component {
 						style={`top: ${(this.props.end / this.props.totalMessages) * 100}%;`}
 					>
 						<div className={`${style['scrollbar-range-bottom']} ${style['scrollbar-range-indicator']}`}>
-							<div className={style['scrollbar-range-indicator-inner']}>{this.props.end}</div>
+							<input
+								className={style['scrollbar-range-input']}
+								type="text"
+								value={this.props.end}
+								onChange={this.handleSetEnd}
+							/>
 						</div>
 					</div>
 				</div>
@@ -36,7 +61,8 @@ class MessageViewScrollbar extends Component {
 					<div
 						className={style['scrollbar-indicator']}
 						ref={this.rangeElem}
-						style={`top: ${(this.props.start / this.props.totalMessages) * 100}%; height: ${((this.props.end - this.props.start) / this.props.totalMessages) * 100}%;`}
+						style={`top: ${(this.props.start / this.props.totalMessages) * 100}%;
+							height: ${((this.props.end - this.props.start) / this.props.totalMessages) * 100}%;`}
 					></div>
 				</div>
 
