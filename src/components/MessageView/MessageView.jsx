@@ -7,8 +7,8 @@ import MessageList from '../MessageList/MessageList';
 import MessageViewScrollbar from './MessageViewScrollbar';
 
 const CHUNK_SIZE = 50;
-
 const MAX_MESSAGES = 100;
+const SLACK_SPACE = 100;
 
 // eslint-disable-next-line no-unused-vars
 const timer = ms => new Promise(resolve => {
@@ -30,6 +30,21 @@ class MessageView extends Component {
 
 		this.loadMoreFromTop = this.loadMoreFromTop.bind(this);
 		this.loadMoreFromBottom = this.loadMoreFromBottom.bind(this);
+		this.handleScroll = this.handleScroll.bind(this);
+	}
+
+	handleScroll (e) {
+		const currentView = this.viewElem.current;
+		const atBottom =
+			(currentView.scrollHeight - currentView.clientHeight) - currentView.scrollTop < SLACK_SPACE;
+		const atTop = currentView.scrollTop < SLACK_SPACE;
+
+		if (atTop && this.state.start > 0) {
+			this.loadMoreFromTop();
+		} else if (atBottom && this.state.end < (this.props.messages.length - 1)) {
+			this.loadMoreFromBottom();
+			e.preventDefault();
+		}
 	}
 
 	loadMoreFromTop () {
@@ -47,7 +62,6 @@ class MessageView extends Component {
 		this.setState((state, props) => {
 			const newEnd = Math.min(state.end + CHUNK_SIZE, props.messages.length - 1);
 			return {
-				start: Math.max(state.start, newEnd - MAX_MESSAGES),
 				end: newEnd
 			};
 		});
@@ -55,7 +69,7 @@ class MessageView extends Component {
 
 	getSnapshotBeforeUpdate(prevProps, prevState) {
 		// When adding messages at the top, maintain scroll position.
-		if (this.state.start < prevState.start) {
+		if (this.state.start !== prevState.start) {
 			const list = this.viewElem.current;
 			return list.scrollHeight - list.scrollTop;
 		}
@@ -63,6 +77,7 @@ class MessageView extends Component {
 	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
+		const {state} = this;
 		if (snapshot !== null) {
 			const list = this.viewElem.current;
 			list.scrollTop = list.scrollHeight - snapshot;
@@ -71,6 +86,10 @@ class MessageView extends Component {
 			// messages of the bottom of the list.
 			this.setState({
 				end: Math.min(state.end, state.start + MAX_MESSAGES)
+			});
+		} else if (prevState.end !== this.state.end) {
+			this.setState({
+				start: Math.max(state.start, state.end - MAX_MESSAGES)
 			});
 		}
 	}
