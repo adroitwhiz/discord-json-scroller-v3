@@ -1,6 +1,7 @@
 import style from './style';
 
 import {connect} from 'unistore/preact';
+import {memo} from 'preact/compat';
 
 import Attachment from './Attachment';
 
@@ -46,4 +47,4 @@ const MessageList = props => {
 	return <div className={style['message-list']}>{messageComponents}</div>;
 };
 
-export default connect(['archive'])(MessageList);
+export default connect(['archive'])(memo(MessageList));
