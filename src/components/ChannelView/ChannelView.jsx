@@ -11,9 +11,9 @@ export default class ChannelView extends Component {
 			<div className={style['channel-view']}>{
 				channel ?
 					<>
-						<div className="channel-header">
-							<div className="channel-name">{channel.name}</div>
-							<div className="channel-topic">{channel.topic}</div>
+						<div className={style['channel-header']}>
+							<div className={style['channel-name']}>{channel.name}</div>
+							<div className={style['channel-topic']}>{channel.topic}</div>
 						</div>
 						<MessageView key={channel.id} messages={channel.messages} />
 					</> : null

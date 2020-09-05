@@ -1,5 +1,19 @@
+@use '../../colors.scss' as col;
+
 .channel-view {
 	display: flex;
 	flex: 1 1 auto;
 	flex-direction: column;
+}
+
+.channel-header {
+	padding: 0.5em 1em;
+	background-color: col.$base-color;
+	border-bottom: 1px solid col.$border-color;
+	display: flex;
+}
+
+.channel-topic {
+	margin-left: 0.25em;
+	color: col.$text-color-detail;
 }
