@@ -33,11 +33,12 @@ class MessageView extends Component {
 	}
 
 	loadMoreFromTop () {
+		// We don't adjust the end position here because that would mess up the scrolling adjustment.
+		// Messages are removed from the bottom in componentDidUpdate after the scroll has been adjusted.
 		this.setState(state => {
 			const newStart = Math.max(state.start - CHUNK_SIZE, 0);
 			return {
-				start: newStart,
-				end: Math.min(state.end, newStart + MAX_MESSAGES)
+				start: newStart
 			};
 		});
 	}
@@ -51,6 +52,29 @@ class MessageView extends Component {
 			};
 		});
 	}
+
+	getSnapshotBeforeUpdate(prevProps, prevState) {
+		// When adding messages at the top, maintain scroll position.
+		if (this.state.start < prevState.start) {
+			const list = this.viewElem.current;
+			return list.scrollHeight - list.scrollTop;
+		}
+		return null;
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (snapshot !== null) {
+			const list = this.viewElem.current;
+			list.scrollTop = list.scrollHeight - snapshot;
+
+			// Now that we've properly positioned the top of the message list according to its bottom, we can trim old
+			// messages of the bottom of the list.
+			this.setState({
+				end: Math.min(state.end, state.start + MAX_MESSAGES)
+			});
+		}
+	}
+
 
 	render () {
 		const {props} = this;
