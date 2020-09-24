@@ -5,6 +5,8 @@ import {memo} from 'preact/compat';
 
 import Attachment from './Attachment';
 
+import getMemberColor from '../../util/member-role-color';
+
 const getUsername = (archive, message) => {
 	const authorID = message.authorID;
 
@@ -44,7 +46,12 @@ const MessageList = props => {
 	return (
 		<div className={style['message-list']}>
 			<div className={style['message-header']}>
-				<div className={style['message-poster']}>{getUsername(props.archive, messages[start])}</div>
+				<div
+					className={style['message-poster']}
+					style={`color: ${getMemberColor(messages[start].authorID, props.archive)}`}
+				>
+					{getUsername(props.archive, messages[start])}
+				</div>
 				<div className={style['message-timestamp']}>
 					{new Date(messages[start].createdTimestamp).toISOString()}
 				</div>
