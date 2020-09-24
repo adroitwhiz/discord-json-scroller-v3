@@ -8,13 +8,13 @@ class Server {
 
 		/**
 		 * The server name.
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.name = null;
 
 		/**
 		 * The server's icon URL.
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.iconURL = null;
 
@@ -60,7 +60,7 @@ class Channel {
 
 		/**
 		 * The channel name.
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.name = null;
 
@@ -78,25 +78,25 @@ class Channel {
 
 		/**
 		 * Whether this channel is an NSFW channel.
-		 * @type {?Boolean}
+		 * @type {Boolean}
 		 */
-		this.nsfw = null;
+		this.nsfw = false;
 
 		/**
 		 * The channel topic.
-		 * @type {?String}
+		 * @type {?string}
 		 */
 		this.topic = null;
 
 		/**
 		 * The position of the channel in the channel list.
-		 * @type {?String}
+		 * @type {number}
 		 */
-		this.position = null;
+		this.position = 0;
 
 		/**
 		 * The channel type (voice, text, etc).
-		 * @type {?String}
+		 * @type {?string}
 		 */
 		this.type = null;
 	}
@@ -118,19 +118,19 @@ class Message {
 
 		/**
 		 * The message contents.
-		 * @type {?String}
+		 * @type {?string}
 		 */
 		this.content = null;
 
 		/**
 		 * The time at which the message was posted.
-		 * @type {Number}
+		 * @type {number}
 		 */
 		this.createdTimestamp = null;
 
 		/**
 		 * The time at which the message was last edited, or null if unedited.
-		 * @type {?Number}
+		 * @type {?number}
 		 */
 		this.editedTimestamp = null;
 
@@ -142,7 +142,7 @@ class Message {
 
 		/**
 		 * The type of message (e.g. DEFAULT, USER_GUILD_JOIN).
-		 * @type {?String}
+		 * @type {?string}
 		 */
 		this.type = null;
 	}
@@ -158,7 +158,7 @@ class Member {
 
 		/**
 		 * The member's nickname, or null if they have none.
-		 * @type {?String}
+		 * @type {?string}
 		 */
 		this.nickname = null;
 
@@ -180,19 +180,19 @@ class User {
 
 		/**
 		 * The user's avatar URL.
-		 * @type {?String}
+		 * @type {?string}
 		 */
 		this.avatarURL = null;
 
 		/**
 		 * The user's username.
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.username = null;
 
 		/**
 		 * The user's Discord tag (username + discriminator).
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.tag = null;
 	}
@@ -208,25 +208,25 @@ class Role {
 
 		/**
 		 * The role name.
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.name = null;
 
 		/**
 		 * The role color.
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.color = null;
 
 		/**
 		 * The role permissions bitmask.
-		 * @type {Number}
+		 * @type {number}
 		 */
 		this.permissions = null;
 
 		/**
 		 * The position/rank of the role in the role list.
-		 * @type {Number}
+		 * @type {number}
 		 */
 		this.position = null;
 	}
@@ -242,31 +242,31 @@ class Attachment {
 
 		/**
 		 * The name of the attachment.
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.name = null;
 
 		/**
 		 * The size of the attachment, in bytes.
-		 * @type {Number}
+		 * @type {number}
 		 */
-		this.size = null;
+		this.size = 0;
 
 		/**
 		 * The URL of the attachment.
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.url = null;
 
 		/**
 		 * If this attachment is an image, that image's width.
-		 * @type {String?}
+		 * @type {?string}
 		 */
 		this.width = null;
 
 		/**
 		 * If this attachment is an image, that image's height.
-		 * @type {String?}
+		 * @type {?string}
 		 */
 		this.height = null;
 	}
@@ -282,13 +282,13 @@ class Emoji {
 
 		/**
 		 * The emoji name.
-		 * @type {String}
+		 * @type {string}
 		 */
 		this.name = null;
 
 		/**
 		 * The emoji URL.
-		 * @type {?String}
+		 * @type {?string}
 		 */
 		this.url = null;
 	}
