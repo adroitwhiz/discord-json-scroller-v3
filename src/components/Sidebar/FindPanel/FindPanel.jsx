@@ -163,11 +163,16 @@ class FindPanel extends Component {
 					</div>
 				</div>
 				<div className={style['found-messages']}>
-					<MessageList
-						start={0}
-						end={this.state.foundMessages.length - 1}
-						messages={this.state.foundMessages}
-					/>
+					{
+						this.state.foundMessages.map((message, i) =>
+							<MessageList
+								start={i}
+								end={i + 1}
+								messages={this.state.foundMessages}
+								key={this.state.foundMessages[i].id}
+							/>
+						)
+					}
 				</div>
 			</div>
 		);
