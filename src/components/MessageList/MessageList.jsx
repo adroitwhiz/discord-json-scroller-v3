@@ -22,15 +22,12 @@ const MessageList = props => {
 
 	const {messages, start, end} = props;
 
+	if (messages.length === 0) return null;
+
 	for (let i = start; i < end; i++) {
 		const message = messages[i];
 		messageComponents.push(
 			<div className={style.message} key={message.id}>
-				<div className={style['message-header']}>
-					<div className={style['message-poster']}>{getUsername(props.archive, message)}</div>
-					<div className={style['message-timestamp']}>{new Date(message.createdTimestamp).toISOString()}</div>
-					<div className={style['message-id']}>{message.id}</div>
-				</div>
 				<div className={style['message-body']}>
 					<div className={style['message-content']}>{message.content}</div>
 				</div>
@@ -44,7 +41,19 @@ const MessageList = props => {
 		);
 	}
 
-	return <div className={style['message-list']}>{messageComponents}</div>;
+	return (
+		<div className={style['message-list']}>
+			<div className={style['message-header']}>
+				<div className={style['message-poster']}>{getUsername(props.archive, messages[start])}</div>
+				<div className={style['message-timestamp']}>
+					{new Date(messages[start].createdTimestamp).toISOString()}
+				</div>
+			</div>
+			<div className={style['message-bodies']}>
+				{messageComponents}
+			</div>
+		</div>
+	);
 };
 
 export default connect(['archive'])(memo(MessageList));

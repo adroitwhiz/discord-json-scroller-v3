@@ -7,7 +7,7 @@ import MessageList from '../MessageList/MessageList';
 import MessageViewScrollbar from './MessageViewScrollbar';
 
 const CHUNK_SIZE = 50;
-const MAX_MESSAGES = 100;
+const MAX_MESSAGES = 200;
 const SLACK_SPACE = 100;
 
 // eslint-disable-next-line no-unused-vars
@@ -19,13 +19,6 @@ class MessageView extends Component {
 	constructor (props) {
 		super(props);
 
-		this.state = {
-			start: 0,
-			end: 50,
-			scrollStart: 0,
-			scrollEnd: 0
-		};
-
 		this.viewElem = createRef();
 
 		this.loadMoreFromTop = this.loadMoreFromTop.bind(this);
@@ -33,6 +26,44 @@ class MessageView extends Component {
 		this.handleScroll = this.handleScroll.bind(this);
 		this.setNewStart = this.setNewStart.bind(this);
 		this.setNewEnd = this.setNewEnd.bind(this);
+
+		this.fixupMessageStart = this.fixupMessageStart.bind(this);
+		this.fixupMessageEnd = this.fixupMessageEnd.bind(this);
+
+		this.state = {
+			start: 0,
+			end: this.fixupMessageEnd(50, props),
+			scrollStart: 0,
+			scrollEnd: 0
+		};
+	}
+
+	fixupMessageStart (start, props) {
+		// Clamp within valid message range
+		let fixed = Math.max(0, Math.min(start, props.messages.length - 1));
+
+		const startUser = props.messages[fixed].authorID;
+
+		// Extend so that all messages in "string" from that user are visible
+		while (fixed > 0 && props.messages[fixed - 1].authorID === startUser) {
+			fixed--;
+		}
+
+		return fixed;
+	}
+
+	fixupMessageEnd (end, props) {
+		// Clamp within valid message range
+		let fixed = Math.max(0, Math.min(end, props.messages.length - 1));
+
+		const startUser = props.messages[fixed].authorID;
+
+		// Extend so that all messages in "string" from that user are visible
+		while (fixed < props.messages.length - 1 && props.messages[fixed + 1].authorID === startUser) {
+			fixed++;
+		}
+
+		return fixed;
 	}
 
 	handleScroll (e) {
@@ -52,40 +83,38 @@ class MessageView extends Component {
 	loadMoreFromTop () {
 		// We don't adjust the end position here because that would mess up the scrolling adjustment.
 		// Messages are removed from the bottom in componentDidUpdate after the scroll has been adjusted.
-		this.setState(state => {
-			const newStart = Math.max(state.start - CHUNK_SIZE, 0);
+		this.setState((state, props) => {
 			return {
-				start: newStart
+				start: this.fixupMessageStart(state.start - CHUNK_SIZE, props)
 			};
 		});
 	}
 
 	loadMoreFromBottom () {
 		this.setState((state, props) => {
-			const newEnd = Math.min(state.end + CHUNK_SIZE, props.messages.length - 1);
 			return {
-				end: newEnd
+				end: this.fixupMessageEnd(state.end + CHUNK_SIZE, props)
 			};
 		});
 	}
 
 	setNewStart (start) {
 		this.setState((state, props) => {
-			start = Math.min(props.messages.length - 1, Math.max(start, 0));
+			start = this.fixupMessageStart(start, props);
 
 			this.setState({
 				start,
-				end: Math.min(start + CHUNK_SIZE, props.messages.length)
+				end: this.fixupMessageEnd(start + CHUNK_SIZE, props)
 			});
 		});
 	}
 
 	setNewEnd (end) {
 		this.setState((state, props) => {
-			end = Math.min(props.messages.length - 1, Math.max(end, 0));
+			end = this.fixupMessageEnd(end, props);
 
 			this.setState({
-				start: Math.max(0, end - CHUNK_SIZE),
+				start: this.fixupMessageStart(end - CHUNK_SIZE, props),
 				end
 			});
 		});
@@ -107,15 +136,15 @@ class MessageView extends Component {
 
 			// Now that we've properly positioned the top of the message list according to its bottom, we can trim old
 			// messages of the bottom of the list.
-			this.setState(state => {
+			this.setState((state, props) => {
 				return {
-					end: Math.min(state.end, state.start + MAX_MESSAGES)
+					end: this.fixupMessageEnd(Math.min(state.end, state.start + MAX_MESSAGES), props)
 				};
 			});
 		} else if (prevState.end !== this.state.end) {
-			this.setState(state => {
+			this.setState((state, props) => {
 				return {
-					start: Math.max(state.start, state.end - MAX_MESSAGES)
+					start: this.fixupMessageStart(Math.max(state.start, state.end - MAX_MESSAGES), props)
 				};
 			});
 		}
@@ -129,14 +158,26 @@ class MessageView extends Component {
 		const atEnd = this.state.end === props.messages.length - 1;
 
 		const chunks = [];
-		const end = Math.min(this.state.end, props.messages.length - 1);
-		for (let i = this.state.start; i <= end; i += CHUNK_SIZE) {
+		const {end} = this.state;
+
+		// there is probably at least one off-by-one error in here
+		let currentChunkStart, currentChunkAuthor;
+		let i = this.state.start;
+		while (i <= end) {
+			currentChunkStart = i;
+			currentChunkAuthor = props.messages[i].authorID;
+
+
+			while ((i > end || props.messages[i].authorID === currentChunkAuthor) && i <= end) {
+				i++;
+			}
+
 			chunks.push(
 				<MessageList
-					key={props.messages[i].id}
+					key={props.messages[currentChunkStart].id}
 					messages={props.messages}
-					start={i}
-					end={Math.min(i + CHUNK_SIZE, end + 1)}
+					start={currentChunkStart}
+					end={i}
 				/>
 			);
 		}

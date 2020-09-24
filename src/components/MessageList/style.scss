@@ -7,13 +7,13 @@
 	overflow-x: hidden;
 	flex: 1 0 auto;
 	overflow-wrap: break-word;
+	border-top: 1px solid col.$divider;
+	padding: 0.25em 0.5em;
 }
 
 .message {
 	display: flex;
 	flex-direction: column;
-	padding: 0.25em 0.5em;
-	border-top: 1px solid col.$divider;
 	font-size: 90%;
 }
 
