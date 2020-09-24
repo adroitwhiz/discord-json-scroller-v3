@@ -44,12 +44,14 @@ class MessageViewScrollbar extends Component {
 	handleSetStart (e) {
 		const {value} = e.target;
 		const numVal = parseInt(value);
+		if (!Number.isInteger(numVal)) return;
 		this.props.setNewStart(numVal);
 	}
 
 	handleSetEnd (e) {
 		const {value} = e.target;
 		const numVal = parseInt(value);
+		if (!Number.isInteger(numVal)) return;
 		this.props.setNewEnd(numVal);
 	}
 
