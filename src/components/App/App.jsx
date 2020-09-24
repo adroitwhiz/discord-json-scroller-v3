@@ -9,7 +9,7 @@ import deserializeArchive from '../../deserialization/deserialization';
 
 import ChannelList from '../ChannelList/ChannelList';
 import ChannelView from '../ChannelView/ChannelView';
-import FindPanel from '../FindPanel/FindPanel';
+import Sidebar from '../Sidebar/Sidebar';
 
 const store = createStore({
 	archive: null,
@@ -46,7 +46,7 @@ class _App extends Component {
 						this.props.archive.channels.get(this.props.currentChannel) :
 						null
 					}/>
-					<FindPanel />
+					<Sidebar />
 				</div>
 
 				<div className={style['json-file-upload-form']}>

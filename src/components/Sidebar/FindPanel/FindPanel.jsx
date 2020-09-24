@@ -3,9 +3,7 @@ import style from './style';
 import {Component} from 'preact';
 import {connect} from 'unistore/preact';
 
-import classNames from '../../util/class-names';
-
-import MessageList from '../MessageList/MessageList';
+import MessageList from '../../MessageList/MessageList';
 
 const makeCheckboxSetter = (prop, target) => {
 	return event => {
@@ -123,62 +121,53 @@ class FindPanel extends Component {
 		}
 
 		return (
-			<div className={classNames({
-				[style['find-panel']]: true,
-				[style['collapsed']]: this.state.collapsed
-			})}>
-				<div
-					className={style['find-toggle']}
-					onClick={this.toggleFindPanel}
-				>🔍</div>
-				<div className={style['find-inner']}>
-					<div className={style['find-controls']}>
-						<div>
-							<label>
-								<input
-									type="checkbox"
-									onChange={this.setFilterByText}
-								></input>
-								<span> Contains text: </span>
-							</label>
-							<input type="text" onChange={this.setFilterText}></input>
-						</div>
-						<div>
-							<label>
-								<input
-									type="checkbox"
-									onChange={this.setFilterByUser}
-								></input>
-								<span> From user (name or ID): </span>
-							</label>
-							<input type="text" onChange={this.setFilterUser} list={listID}></input>
-							<datalist id={listID}>
-								{userTagOptions}
-							</datalist>
-						</div>
-						<div>
-							<label>
-								<input
-									type="checkbox"
-									onChange={this.setFilterByChannel}
-								></input>
-								<span> In channel: </span>
-							</label>
-							<select type="text" onChange={this.setFilterChannel}>
-								{archiveChannelOptions}
-							</select>
-						</div>
-						<div>
-							<button onClick={this.searchMessages}>Find</button>
-						</div>
+			<div className={style['find-inner']}>
+				<div className={style['find-controls']}>
+					<div>
+						<label>
+							<input
+								type="checkbox"
+								onChange={this.setFilterByText}
+							></input>
+							<span> Contains text: </span>
+						</label>
+						<input type="text" onChange={this.setFilterText}></input>
 					</div>
-					<div className={style['found-messages']}>
-						<MessageList
-							start={0}
-							end={this.state.foundMessages.length - 1}
-							messages={this.state.foundMessages}
-						/>
+					<div>
+						<label>
+							<input
+								type="checkbox"
+								onChange={this.setFilterByUser}
+							></input>
+							<span> From user (name or ID): </span>
+						</label>
+						<input type="text" onChange={this.setFilterUser} list={listID}></input>
+						<datalist id={listID}>
+							{userTagOptions}
+						</datalist>
 					</div>
+					<div>
+						<label>
+							<input
+								type="checkbox"
+								onChange={this.setFilterByChannel}
+							></input>
+							<span> In channel: </span>
+						</label>
+						<select type="text" onChange={this.setFilterChannel}>
+							{archiveChannelOptions}
+						</select>
+					</div>
+					<div>
+						<button onClick={this.searchMessages}>Find</button>
+					</div>
+				</div>
+				<div className={style['found-messages']}>
+					<MessageList
+						start={0}
+						end={this.state.foundMessages.length - 1}
+						messages={this.state.foundMessages}
+					/>
 				</div>
 			</div>
 		);

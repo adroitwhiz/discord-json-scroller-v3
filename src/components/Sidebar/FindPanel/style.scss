@@ -1,0 +1,11 @@
+.find-inner {
+	display: flex;
+	flex-direction: column;
+}
+
+.found-messages {
+	display: flex;
+	overflow: auto;
+	flex: 1 1 auto;
+	flex-direction: column;
+}
