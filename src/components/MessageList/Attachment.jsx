@@ -4,7 +4,7 @@ const Attachment = props => {
 	return (
 		<div className={style.attachment}>
 			{
-				/\.(jpe?g|png|gif)$/.test(props.attachment.url) ?
+				/\.(jpe?g|png|gif)$/.test(props.attachment.url.toLowerCase()) ?
 					<img
 						width={props.attachment.width || null}
 						height={props.attachment.height || null}
