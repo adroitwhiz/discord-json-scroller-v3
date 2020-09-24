@@ -25,8 +25,7 @@ const deserializeToonMemeBotServer = json => {
 		parsedUser.id = member.user.id;
 		// parsedUser.avatarURL = null; // unsaved
 		parsedUser.username = member.user.username;
-		// ToonMemeBot saves discriminator but not tag
-		parsedUser.tag = member.user.username + '#' + member.user.discriminator;
+		parsedUser.discriminator = member.user.discriminator;
 		Object.freeze(parsedUser);
 
 		serverUsers.set(parsedUser.id, parsedUser);

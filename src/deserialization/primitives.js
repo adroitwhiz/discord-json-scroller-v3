@@ -191,10 +191,15 @@ class User {
 		this.username = null;
 
 		/**
-		 * The user's Discord tag (username + discriminator).
+		 * The user's discriminator (a 4-digit number used to distinguish between identical usernames).
+		 * The leading hash mark is not included here.
 		 * @type {string}
 		 */
-		this.tag = null;
+		this.discriminator = null;
+	}
+
+	get tag () {
+		return this.username + '#' + this.discriminator;
 	}
 }
 

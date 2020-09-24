@@ -55,7 +55,7 @@ const deserializeToonMemeBotChannel = json => {
 
 			parsedUser.id = jsonMessage.user.id;
 			parsedUser.username = jsonMessage.user.username;
-			parsedUser.tag = jsonMessage.user.username + '#' +  jsonMessage.user.discriminator;
+			parsedUser.discriminator = jsonMessage.user.discriminator;
 			Object.freeze(parsedUser);
 
 			parsedMember.id = jsonMessage.user.id;

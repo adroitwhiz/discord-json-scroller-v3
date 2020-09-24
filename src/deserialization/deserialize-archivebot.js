@@ -33,7 +33,12 @@ const deserializeArchiveBot = json => {
 		parsedUser.id = user.id;
 		parsedUser.avatarURL = user.avatarURL;
 		parsedUser.username = user.username;
-		parsedUser.tag = user.tag;
+		// Archives with a version < 3 do not save users' discriminators
+		if (user.discriminator) {
+			parsedUser.discriminator = user.discriminator;
+		} else {
+			parsedUser.discriminator = user.tag.slice(-4);
+		}
 
 		Object.freeze(parsedUser);
 		serverUsers.set(parsedUser.id, parsedUser);
