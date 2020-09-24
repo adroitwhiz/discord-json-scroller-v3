@@ -134,7 +134,8 @@ const deserializeArchiveBot = json => {
 					}
 				}
 
-				Object.freeze(parsedMessage);
+				// Freezing each message slows things down considerably
+				// Object.freeze(parsedMessage);
 				channelMessages.push(parsedMessage);
 			}
 

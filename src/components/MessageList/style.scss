@@ -9,12 +9,11 @@
 	overflow-wrap: break-word;
 	border-top: 1px solid col.$divider;
 	padding: 0.25em 0.5em;
+	display: flex;
 }
 
-.message {
-	display: flex;
-	flex-direction: column;
-	font-size: 90%;
+.message-avatar {
+	margin-right: 0.5em;
 }
 
 .message-header {
@@ -35,7 +34,9 @@
 }
 
 .message-content {
+	font-size: 90%;
 	white-space: pre-line;
+	padding: 0.125em 0;
 }
 
 .attachment {
