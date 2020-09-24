@@ -19,6 +19,7 @@ const deserializeArchiveBot = json => {
 		parsedRole.color = role.color;
 		parsedRole.permissions = role.permissions;
 		parsedRole.position = role.position;
+		parsedRole.hoist = Object.prototype.hasOwnProperty.call(role, 'hoist') ? role.hoist : true;
 
 		Object.freeze(parsedRole);
 		serverRoles.set(parsedRole.id, parsedRole);
@@ -75,6 +76,27 @@ const deserializeArchiveBot = json => {
 
 		Object.freeze(parsedMember);
 		serverMembers.set(parsedMember.id, parsedMember);
+	}
+
+	// Older archivebot versions treat offline users as not being members
+	if (archiveVersion < 7) {
+		let everyoneRole = null;
+		for (const role of serverRoles.values()) {
+			if (role.name === '@everyone') {
+				everyoneRole = role;
+				break;
+			}
+		}
+
+		for (const user of serverUsers.values()) {
+			if (!serverMembers.has(user.id)) {
+				const fakeMember = new Prims.Member();
+				fakeMember.id = user.id;
+				fakeMember.nickname = null;
+				fakeMember.roles.push(everyoneRole);
+				serverMembers.set(user.id, fakeMember);
+			}
+		}
 	}
 
 	// Parse emojis

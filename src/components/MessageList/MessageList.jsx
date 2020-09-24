@@ -6,19 +6,8 @@ import {memo} from 'preact/compat';
 import Attachment from './Attachment';
 import Avatar from '../Avatar/Avatar';
 
+import getMemberName from '../../util/get-member-name';
 import getMemberColor from '../../util/member-role-color';
-
-const getUsername = (archive, message) => {
-	const authorID = message.authorID;
-
-	const member = archive.members.get(authorID);
-	if (member && member.nickname !== null) return member.nickname;
-
-	const user = archive.users.get(authorID);
-	if (user && user.username !== 'Deleted User') return user.username;
-
-	return `<@${authorID}>`;
-};
 
 const MessageList = props => {
 	const messageComponents = [];
@@ -53,7 +42,7 @@ const MessageList = props => {
 						className={style['message-poster']}
 						style={`color: ${getMemberColor(messages[start].authorID, props.archive)}`}
 					>
-						{getUsername(props.archive, messages[start])}
+						{getMemberName(messages[start].authorID, props.archive)}
 					</div>
 					<div className={style['message-timestamp']}>
 						{new Date(messages[start].createdTimestamp).toISOString()}

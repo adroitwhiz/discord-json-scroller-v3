@@ -1,5 +1,9 @@
+@use '../../colors.scss' as col;
+
 .sidebar {
 	display: flex;
+	flex-direction: column;
+	background-color: col.$base-color-secondary;
 	max-width: 33%;
 }
 
@@ -18,4 +22,43 @@
 	user-select: none;
 	cursor: pointer;
 	box-sizing: border-box;
+}
+
+.tabs {
+	background-color: col.$base-color-tertiary;
+	padding: 0.25em 0 0 0;
+	display: flex;
+	flex: 0 1 auto;
+	justify-content: flex-end;
+}
+
+.tab {
+	padding: 0.25em 1em;
+	margin: 0 0.25em;
+	border-top-left-radius: 0.5em;
+	border-top-right-radius: 0.5em;
+	cursor: pointer;
+}
+
+.tab.selected {
+	background-color: col.$base-color-secondary;
+}
+
+.icon {
+	width: 24px;
+	height: 24px;
+	opacity: 0.5;
+}
+
+.icon-find {
+	background-image: url('icon-find.svg');
+}
+
+.icon-users {
+	background-image: url('icon-users.svg');
+}
+
+.panel {
+	overflow: auto;
+	flex: 1 1 auto;
 }

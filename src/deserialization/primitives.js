@@ -234,6 +234,12 @@ class Role {
 		 * @type {number}
 		 */
 		this.position = null;
+
+		/**
+		 * Whether the role creates a new separate category under the users list.
+		 * @type {boolean}
+		 */
+		this.hoist = true;
 	}
 }
 
