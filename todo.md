@@ -1,0 +1,10 @@
+- Messages in markdown by default
+- Move unmarkdowned messages, individual timestamps, last edited date, ID, etc. into "message details" view accessible by clicking on a message
+- User avatars
+- Clickable user details
+- Replace find panel with multiple side panels
+- Settings panel
+  - Timezone/time format
+  - Disable loading images
+- Bookmarks panel
+- Users panel
