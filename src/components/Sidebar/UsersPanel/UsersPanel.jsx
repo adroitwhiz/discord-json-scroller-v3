@@ -5,13 +5,18 @@ import {connect} from 'unistore/preact';
 
 import Avatar from '../../Avatar/Avatar';
 
+import setUserInfoID from '../../../actions/set-user-info-id';
+
 import getMemberName from '../../../util/get-member-name';
 import getMemberColor from '../../../util/member-role-color';
 
-const UserListing = props => {
+const UserListing = connect([], {setUserInfoID})(props => {
 	const {memberID, archive} = props;
 	return (
-		<div className={style['user']}>
+		<div
+			className={style['user']}
+			onClick={() => props.setUserInfoID(memberID)}
+		>
 			<div className={style['user-avatar']}>
 				<Avatar user={archive.users.get(memberID)} size={32}/>
 			</div>
@@ -23,7 +28,7 @@ const UserListing = props => {
 			</div>
 		</div>
 	);
-};
+});
 
 class UsersPanel extends Component {
 	constructor (props) {

@@ -10,11 +10,16 @@ import deserializeArchive from '../../deserialization/deserialization';
 import ChannelList from '../ChannelList/ChannelList';
 import ChannelView from '../ChannelView/ChannelView';
 import Sidebar from '../Sidebar/Sidebar';
+import Modal from '../Modal/Modal';
+import UserInfo from '../UserInfo/UserInfo';
+
+import setArchive from '../../actions/set-archive';
+import setUserInfoID from '../../actions/set-user-info-id';
 
 const store = createStore({
 	archive: null,
 	currentChannel: null,
-	channelScrollState: {}
+	showInfoOfUserID: null
 });
 
 class _App extends Component {
@@ -22,6 +27,7 @@ class _App extends Component {
 		super(props);
 
 		this.handleUpload = this.handleUpload.bind(this);
+		this.hideUserInfo = this.hideUserInfo.bind(this);
 	}
 
 	handleUpload (event) {
@@ -31,8 +37,12 @@ class _App extends Component {
 		readJSONFromFile(file)
 			.then(archiveJSON => {
 				const archive = deserializeArchive(archiveJSON);
-				this.props.store.setState({archive, channelScrollProgress: {}});
+				this.props.setArchive(archive);
 			});
+	}
+
+	hideUserInfo () {
+		this.props.setUserInfoID(null);
 	}
 
 	render () {
@@ -56,12 +66,18 @@ class _App extends Component {
 						onChange={this.handleUpload}
 					></input>
 				</div>
+
+				{this.props.showInfoOfUserID ?
+					<Modal onClose={this.hideUserInfo}>
+						<UserInfo userID={this.props.showInfoOfUserID}/>
+					</Modal> :
+					null}
 			</div>
 		);
 	}
 }
 
-const App = connect(['archive', 'currentChannel'])(_App);
+const App = connect(['archive', 'currentChannel', 'showInfoOfUserID'], {setUserInfoID, setArchive})(_App);
 
 export default class Main extends Component {
 	render () {

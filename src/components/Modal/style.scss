@@ -1,0 +1,33 @@
+@use '../../colors.scss' as col;
+
+.modal-bg {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	z-index: 1;
+	background-color: rgba(0, 0, 0, 0.5);
+	cursor: pointer;
+}
+
+.modal-positioner {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	pointer-events: none;
+	z-index: 2;
+}
+
+.modal {
+	border-radius: 0.25em;
+	background-color: col.$base-color;
+	pointer-events: auto;
+}

@@ -6,6 +6,8 @@ import {memo} from 'preact/compat';
 import Attachment from './Attachment';
 import Avatar from '../Avatar/Avatar';
 
+import setUserInfoID from '../../actions/set-user-info-id';
+
 import getMemberName from '../../util/get-member-name';
 import getMemberColor from '../../util/member-role-color';
 
@@ -41,6 +43,7 @@ const MessageList = props => {
 					<div
 						className={style['message-poster']}
 						style={`color: ${getMemberColor(messages[start].authorID, props.archive)}`}
+						onClick={() => props.setUserInfoID(messages[start].authorID)}
 					>
 						{getMemberName(messages[start].authorID, props.archive)}
 					</div>
@@ -56,4 +59,4 @@ const MessageList = props => {
 	);
 };
 
-export default connect(['archive'])(memo(MessageList));
+export default connect(['archive'], {setUserInfoID})(memo(MessageList));

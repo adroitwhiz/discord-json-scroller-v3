@@ -13,3 +13,7 @@
 		width: 0;
 	}
 }
+
+@mixin animate-bg-color {
+	transition: background-color 0.25s;
+}

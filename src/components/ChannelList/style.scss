@@ -1,9 +1,10 @@
 @use '../../colors.scss' as col;
+@use '../../common.scss' as common;
 
 .channel-list {
 	list-style-type: none;
-	padding: 0;
-	margin:0;
+	padding: 0 0.25em;
+	margin: 0;
 	flex-grow: 1;
 	overflow-y: auto;
 	background-color: col.$base-color-secondary;
@@ -17,7 +18,8 @@
 	align-items: center;
 
 	cursor: pointer;
-	transition: background-color 0.25s;
+	@include common.animate-bg-color;
+	border-radius: 0.25em;
 
 	&:hover {
 		background-color: rgba(255, 255, 255, 0.1);

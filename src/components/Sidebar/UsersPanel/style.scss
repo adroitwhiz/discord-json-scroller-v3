@@ -1,3 +1,5 @@
+@use '../../../common.scss';
+
 .users-list {
 	overflow: auto;
 	padding: 0 0.5em;
@@ -7,6 +9,14 @@
 	display: flex;
 	align-items: center;
 	padding: 0.25em;
+	border-radius: 0.25em;
+	cursor: pointer;
+
+	@include common.animate-bg-color;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.1);
+	}
 }
 
 .user-avatar {

@@ -1,10 +1,11 @@
 - Messages in markdown by default
 - Move unmarkdowned messages, individual timestamps, last edited date, ID, etc. into "message details" view accessible by clicking on a message
-- Clickable user details
-- Replace find panel with multiple side panels
+- More detailed user details
+  - Posting frequency by time?
+  - Social integrations
+  - Guild join date
 - Settings panel
   - Timezone/time format
   - Disable loading images
     - Click-to-load avatars (once per URL)
 - Bookmarks panel
-- Users panel

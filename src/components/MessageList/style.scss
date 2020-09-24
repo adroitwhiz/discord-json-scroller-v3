@@ -23,6 +23,11 @@
 
 .message-poster {
 	font-weight: bold;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
 }
 
 .message-timestamp, .message-id {
