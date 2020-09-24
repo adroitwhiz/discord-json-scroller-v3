@@ -61,11 +61,15 @@ class _ChannelItem extends Component {
 						[style['text-channel']]: channel.channel.type === 'text',
 						[style['voice-channel']]: channel.channel.type === 'voice',
 						[style['category-channel']]: channel.channel.type === 'category',
-						[style['selected']]: channel.channel.id === this.props.currentChannel
+						[style['selected']]: channel.channel.id === this.props.currentChannel,
+						[style['collapsed']]: this.state.collapsed
 					})}
 
 					onClick = {channel.channel.type === 'category' ? this.toggleCollapse : this.selectChannel}
-				>{channel.channel.name}</div>
+				>
+					<div className={style['channel-icon']}></div>
+					<div className={style['channel-name']}>{channel.channel.name}</div>
+				</div>
 				{channel.childChannels.length > 0 ?
 					<ChannelSublist childChannels={channel.childChannels} collapsed={this.state.collapsed} /> :
 					null
