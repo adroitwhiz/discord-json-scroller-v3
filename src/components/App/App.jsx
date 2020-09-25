@@ -1,5 +1,5 @@
 import style from './style.scss';
-import '../../../public/css/normalize.css';
+import '../../../vendor/normalize.css';
 import {Component} from 'preact';
 import createStore from 'unistore';
 import {Provider, connect} from 'unistore/preact';
