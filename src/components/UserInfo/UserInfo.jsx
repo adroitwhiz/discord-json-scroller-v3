@@ -14,10 +14,11 @@ const UserInfo = props => {
 			</div>
 			<div className={style['name-and-nick']}>
 				<div className={style['user-tag']}>
-					<span className={style['user-name']}>{user.username}</span>
-					<span className={style['user-discriminator']}>#{user.discriminator}</span>
+					<span className={style['user-name']}>{user ? user.username : 'Unknown user'}</span>
+					<span className={style['user-discriminator']}>#{user ? user.discriminator : '0000'}</span>
 				</div>
 				{member && member.nickname !== null ? <div className={style['user-nickname']}>{member.nickname}</div> : null}
+				<div className={style['user-id']}>{props.userID}</div>
 			</div>
 		</div>
 	);
