@@ -41,6 +41,7 @@ class MessageView extends Component {
 	fixupMessageStart (start, props) {
 		// Clamp within valid message range
 		let fixed = Math.max(0, Math.min(start, props.messages.length - 1));
+		if (props.messages.length === 0) return fixed;
 
 		const startUser = props.messages[fixed].authorID;
 
@@ -55,6 +56,7 @@ class MessageView extends Component {
 	fixupMessageEnd (end, props) {
 		// Clamp within valid message range
 		let fixed = Math.max(0, Math.min(end, props.messages.length - 1));
+		if (props.messages.length === 0) return fixed;
 
 		const startUser = props.messages[fixed].authorID;
 
@@ -160,27 +162,30 @@ class MessageView extends Component {
 		const chunks = [];
 		const {end} = this.state;
 
-		// there is probably at least one off-by-one error in here
-		let currentChunkStart, currentChunkAuthor;
-		let i = this.state.start;
-		while (i <= end) {
-			currentChunkStart = i;
-			currentChunkAuthor = props.messages[i].authorID;
+		if (props.messages.length > 0) {
+			// there is probably at least one off-by-one error in here
+			let currentChunkStart, currentChunkAuthor;
+			let i = this.state.start;
+			while (i <= end) {
+				currentChunkStart = i;
+				currentChunkAuthor = props.messages[i].authorID;
 
 
-			while ((i > end || props.messages[i].authorID === currentChunkAuthor) && i <= end) {
-				i++;
+				while ((i > end || props.messages[i].authorID === currentChunkAuthor) && i <= end) {
+					i++;
+				}
+
+				chunks.push(
+					<MessageList
+						key={props.messages[currentChunkStart].id}
+						messages={props.messages}
+						start={currentChunkStart}
+						end={i}
+					/>
+				);
 			}
-
-			chunks.push(
-				<MessageList
-					key={props.messages[currentChunkStart].id}
-					messages={props.messages}
-					start={currentChunkStart}
-					end={i}
-				/>
-			);
 		}
+
 		return (
 			<div className={style['messages-container']}>
 				<div className={style.messages} ref={this.viewElem} onScroll={this.handleScroll}>
