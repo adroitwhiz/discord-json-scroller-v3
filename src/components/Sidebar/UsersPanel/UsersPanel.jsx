@@ -69,8 +69,8 @@ class UsersPanel extends Component {
 		}
 
 		const roleGroupsElems = roleGroups.map(({role, members}) => (
-			<div className={style['role-group']} key={role.id}>
-				<div className={style['role-header']}>{role.name}</div>
+			<div className={style['role-group']} key={role ? role.id : null}>
+				{role ? <div className={style['role-header']}>{role.name}</div> : null}
 				<div className={style['role-members']}>
 					{
 						members.map(member => (
