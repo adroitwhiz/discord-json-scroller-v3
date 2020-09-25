@@ -4,7 +4,6 @@
 .message-list {
 	background-color: col.$base-color;
 	color: col.$text-color;
-	overflow-x: hidden;
 	flex: 1 0 auto;
 	overflow-wrap: break-word;
 	border-top: 1px solid col.$divider;
