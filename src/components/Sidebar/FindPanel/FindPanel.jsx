@@ -52,8 +52,6 @@ class FindPanel extends Component {
 	}
 
 	searchMessages () {
-		console.log(this.state);
-
 		const MAX_MESSAGES = 10000;
 		const allMessages = [];
 		const {channels} = this.props.archive;
@@ -72,17 +70,20 @@ class FindPanel extends Component {
 
 			if (this.state.filterByUser) {
 				const userFilter = this.state.filterUser.toLowerCase();
-				const members = this.server.members;
+				const {users} = this.props.archive;
 				messages = messages.filter(message => {
 					if (message.authorID === userFilter) return true;
 
-					if (!members.has(message.authorID)) return false;
-					const memberUser = members.get(message.authorID).user;
+					if (!users.has(message.authorID)) return false;
+					const memberUser = users.get(message.authorID);
 
 					if (typeof memberUser === 'undefined') return false;
 					return (
-						members.has(message.authorID) &&
-						memberUser.username.toLowerCase() === userFilter
+						users.has(message.authorID) &&
+						(
+							memberUser.username.toLowerCase() === userFilter ||
+							memberUser.tag.toLowerCase() === userFilter
+						)
 					);
 				});
 			}

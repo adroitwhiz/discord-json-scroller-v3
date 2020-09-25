@@ -1,6 +1,10 @@
 .find-inner {
 	display: flex;
 	flex-direction: column;
+	flex: 1 1 auto;
+}
+
+.find-controls {
 	padding: 0.25em 0.5em;
 }
 
