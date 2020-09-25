@@ -12,6 +12,7 @@ import ChannelView from '../ChannelView/ChannelView';
 import Sidebar from '../Sidebar/Sidebar';
 import Modal from '../Modal/Modal';
 import UserInfo from '../UserInfo/UserInfo';
+import {ErrorBoundaryHOC} from '../ErrorBoundary/ErrorBoundary';
 
 import setArchive from '../../actions/set-archive';
 import setUserInfoID from '../../actions/set-user-info-id';
@@ -77,7 +78,9 @@ class _App extends Component {
 	}
 }
 
-const App = connect(['archive', 'currentChannel', 'showInfoOfUserID'], {setUserInfoID, setArchive})(_App);
+const App = ErrorBoundaryHOC(
+	connect(['archive', 'currentChannel', 'showInfoOfUserID'], {setUserInfoID, setArchive})(_App)
+);
 
 export default class Main extends Component {
 	render () {

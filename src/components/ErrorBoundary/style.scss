@@ -1,0 +1,32 @@
+@use '../../common.scss';
+@use '../../colors.scss' as col;
+
+.crash-wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	color: col.$text-color;
+	background-color: col.$bsod;
+}
+
+.crash-header {
+	font-size: 300%;
+	font-weight: bold;
+}
+
+.error, .stack {
+	font-family: monospace;
+}
+
+.error {
+	font-size: 200%;
+}
+
+.stack {
+	white-space: pre-line;
+	overflow: auto;
+}
