@@ -3,6 +3,8 @@ import style from './style';
 import {Component} from 'preact';
 import {connect} from 'unistore/preact';
 
+import setCurrentChannel from '../../actions/set-current-channel';
+
 import classNames from '../../util/class-names';
 
 // Un-flatten a channel hierarchy.
@@ -48,7 +50,7 @@ class _ChannelItem extends Component {
 
 	selectChannel () {
 		if (this.props.channel.channel.type !== 'text') return;
-		this.props.store.setState({currentChannel: this.props.channel.channel.id});
+		this.props.setCurrentChannel(this.props.channel.channel.id);
 	}
 
 	render () {
@@ -79,7 +81,7 @@ class _ChannelItem extends Component {
 	}
 }
 
-const ChannelItem = connect(['currentChannel'])(_ChannelItem);
+const ChannelItem = connect(['currentChannel'], {setCurrentChannel})(_ChannelItem);
 
 const ChannelSublist = props => <ul className={classNames({
 	[style['channel-list']]: true,

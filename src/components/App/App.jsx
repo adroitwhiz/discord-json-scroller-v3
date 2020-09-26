@@ -20,7 +20,8 @@ import setUserInfoID from '../../actions/set-user-info-id';
 const store = createStore({
 	archive: null,
 	currentChannel: null,
-	showInfoOfUserID: null
+	showInfoOfUserID: null,
+	channelScrollState: {}
 });
 
 class _App extends Component {
