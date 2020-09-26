@@ -5,6 +5,9 @@ import {connect} from 'unistore/preact';
 
 import MessageList from '../../MessageList/MessageList';
 
+import setCurrentChannel from '../../../actions/set-current-channel';
+import setChannelScrollState from '../../../actions/set-channel-scroll-state';
+
 const makeCheckboxSetter = (prop, target) => {
 	return event => {
 		target.setState({[prop]: event.target.checked});
@@ -29,7 +32,9 @@ class FindPanel extends Component {
 			filterUser: null,
 			filterText: null,
 			filterChannel: null,
-			foundMessages: []
+
+			foundMessages: [],
+			foundMessageChannels: null
 		};
 
 		this.toggleFindPanel = this.toggleFindPanel.bind(this);
@@ -52,8 +57,13 @@ class FindPanel extends Component {
 	}
 
 	searchMessages () {
-		const MAX_MESSAGES = 10000;
+		const MAX_MESSAGES = 1000;
 		const allMessages = [];
+
+		// When we jump to a message we need to know what channel it belongs to. Since we search over all channels here,
+		// we may as well cache which channel each message belongs to so we don't have to loop over them all again.
+		const messageChannels = new Map();
+
 		const {channels} = this.props.archive;
 		for (const channel of channels.values()) {
 			if (
@@ -95,10 +105,26 @@ class FindPanel extends Component {
 
 			for (let i = 0; i < messages.length; i++) {
 				allMessages.push(messages[i]);
+				messageChannels.set(messages[i].id, channel.id);
 			}
 		}
 
-		this.setState({foundMessages: allMessages.sort((a, b) => a.createdTimestamp - b.createdTimestamp)});
+		this.setState({
+			foundMessages: allMessages.sort((a, b) => a.createdTimestamp - b.createdTimestamp),
+			foundMessageChannels: messageChannels
+		});
+	}
+
+	jumpToMessage (messageID) {
+		const messageChannel = this.state.foundMessageChannels.get(messageID);
+		if (messageChannel !== this.props.currentChannel) {
+			this.props.setCurrentChannel(messageChannel);
+		}
+
+		const messageIndex = this.props.archive.channels.get(messageChannel).messages.findIndex(
+			message => message.id === messageID);
+
+		this.props.setChannelScrollState(messageChannel, messageIndex - 25, messageIndex + 25);
 	}
 
 	render () {
@@ -166,12 +192,20 @@ class FindPanel extends Component {
 				<div className={style['found-messages']}>
 					{
 						this.state.foundMessages.map((message, i) =>
-							<MessageList
-								start={i}
-								end={i + 1}
-								messages={this.state.foundMessages}
+							<div
+								className={style['found-message']}
 								key={this.state.foundMessages[i].id}
-							/>
+								onClick={this.jumpToMessage.bind(this, this.state.foundMessages[i].id)}
+							>
+								<MessageList
+									start={i}
+									end={i + 1}
+									messages={this.state.foundMessages}
+								/>
+								<div className={style['jump']}>
+									Jump
+								</div>
+							</div>
 						)
 					}
 				</div>
@@ -180,4 +214,4 @@ class FindPanel extends Component {
 	}
 }
 
-export default connect('archive')(FindPanel);
+export default connect(['archive', 'currentChannel'], {setCurrentChannel, setChannelScrollState})(FindPanel);

@@ -1,3 +1,5 @@
+@use '../../../colors.scss' as col;
+
 .find-inner {
 	display: flex;
 	flex-direction: column;
@@ -13,4 +15,26 @@
 	overflow: auto;
 	flex: 0 1 auto;
 	flex-direction: column;
+}
+
+.found-message {
+	position: relative;
+	cursor: pointer;
+}
+
+.jump {
+	display: inline-block;
+	padding: 0.25em;
+	position: absolute;
+	top: 0.25em;
+	right: 0.25em;
+	background-color: col.$base-color-secondary;
+	border-radius: 0.25em;
+	font-size: 80%;
+
+	visibility: hidden;
+}
+
+.found-message:hover .jump {
+	visibility: visible;
 }
