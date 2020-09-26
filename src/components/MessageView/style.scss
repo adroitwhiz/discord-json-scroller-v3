@@ -78,14 +78,18 @@ $range-indicator-border-radius: 0.25em;
 .scrollbar-range-top .scrollbar-range-input {
 	border-top-left-radius: $range-indicator-border-radius;
 	border-top-right-radius: $range-indicator-border-radius;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
 }
 
 .scrollbar-range-bottom .scrollbar-range-input {
 	border-bottom-left-radius: $range-indicator-border-radius;
 	border-bottom-right-radius: $range-indicator-border-radius;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
 }
 
-.scrollbar-range-input {
+input[type=text].scrollbar-range-input {
 	background-color: #ff2030;
 	color: white;
 	margin: 0 auto 0 0;
@@ -94,8 +98,8 @@ $range-indicator-border-radius: 0.25em;
 	width: $input-width;
 	box-sizing: border-box;
 	height: 100%;
-}
 
-.scrollbar-range-input:focus {
-	background-color: rgb(148, 20, 33);
+	&:focus {
+		background-color: rgb(148, 20, 33);
+	}
 }
