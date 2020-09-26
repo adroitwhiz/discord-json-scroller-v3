@@ -1,0 +1,28 @@
+@use './colors.scss' as col;
+
+input[type=text], select {
+	border: none;
+	background: col.$base-color-tertiary;
+	color: col.$text-color;
+	padding: 0.5em;
+	border-radius: 0.25em;
+}
+
+button {
+	border: none;
+	padding: 0.5em 1em;
+	color: col.$text-color;
+	background-color: col.$blue;
+	cursor: pointer;
+	border-radius: 0.25em;
+
+	&:hover {
+		background-color: col.$blue-secondary;
+	}
+
+	&:active {
+		background-color: col.$blue-tertiary;
+	}
+
+	transition: background-color 0.125s linear;
+}
