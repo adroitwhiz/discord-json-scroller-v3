@@ -1,0 +1,38 @@
+@use '../../colors.scss' as col;
+
+.hidden-checkbox {
+	display: none;
+}
+
+.toggle {
+	display: inline-block;
+	width: 36px;
+	height: 18px;
+	background-color: col.$grey;
+	border-radius: 9px;
+	cursor: pointer;
+	position: relative;
+
+	transition: background-color 0.125s ease;
+
+	&.checked {
+		background-color: col.$blue;
+	}
+}
+
+.slider {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin: 2px;
+	background-color: white;
+	border-radius: 50%;
+	position: absolute;
+	left: 0;
+
+	transition: transform 0.125s ease;
+}
+
+.toggle.checked .slider {
+	transform: translateX(18px);
+}

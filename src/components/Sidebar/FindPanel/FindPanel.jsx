@@ -4,6 +4,7 @@ import {Component} from 'preact';
 import {connect} from 'unistore/preact';
 
 import MessageList from '../../MessageList/MessageList';
+import Toggle from '../../Toggle/Toggle';
 
 import setCurrentChannel from '../../../actions/set-current-channel';
 import setChannelScrollState from '../../../actions/set-channel-scroll-state';
@@ -150,22 +151,22 @@ class FindPanel extends Component {
 		return (
 			<div className={style['find-inner']}>
 				<div className={style['find-controls']}>
-					<div>
-						<label>
-							<input
-								type="checkbox"
+					<div className={style['form-row']}>
+						<label className={style['form-label']}>
+							<Toggle
 								onChange={this.setFilterByText}
-							></input>
+								checked={this.state.filterByText}
+							/>
 							<span> Contains text: </span>
 						</label>
 						<input type="text" onChange={this.setFilterText}></input>
 					</div>
-					<div>
-						<label>
-							<input
-								type="checkbox"
+					<div className={style['form-row']}>
+						<label className={style['form-label']}>
+							<Toggle
 								onChange={this.setFilterByUser}
-							></input>
+								checked={this.state.filterByUser}
+							/>
 							<span> From user (name or ID): </span>
 						</label>
 						<input type="text" onChange={this.setFilterUser} list={listID}></input>
@@ -173,12 +174,13 @@ class FindPanel extends Component {
 							{userTagOptions}
 						</datalist>
 					</div>
-					<div>
-						<label>
-							<input
+					<div className={style['form-row']}>
+						<label className={style['form-label']}>
+							<Toggle
 								type="checkbox"
 								onChange={this.setFilterByChannel}
-							></input>
+								checked={this.state.filterByChannel}
+							/>
 							<span> In channel: </span>
 						</label>
 						<select type="text" onChange={this.setFilterChannel}>
