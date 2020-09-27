@@ -1,4 +1,4 @@
-## discord-json-scroller-v2
+## discord-json-scroller-v3
 
 This is a web app that allows you to browse server archives created by my bots.
 
@@ -20,7 +20,5 @@ npm run build
 Build output will be in `/build`.
 
 To do:
-- Collapse successive messages from the same user, but keep timestamps viewable in some way
 - Allow archives to be saved to a URL and loaded from one
 - Lazy-load images once they are scrolled to
-- Revamp message scrolling
