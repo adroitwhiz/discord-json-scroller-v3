@@ -5,6 +5,7 @@ import {memo} from 'preact/compat';
 
 import Attachment from './Attachment';
 import Avatar from '../Avatar/Avatar';
+import Markdown from '../Markdown/Markdown';
 
 import setUserInfoID from '../../actions/set-user-info-id';
 
@@ -22,7 +23,9 @@ const MessageList = props => {
 		const message = messages[i];
 		messageComponents.push(
 			<div className={style.message} key={message.id}>
-				<div className={style['message-content']}>{message.content}</div>
+				<div className={style['message-content']}>
+					<Markdown text={message.content} />
+				</div>
 				{message.attachments.length === 0 ? null : message.attachments.map((attachment, index) =>
 					<Attachment
 						key={index}

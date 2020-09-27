@@ -1,0 +1,50 @@
+@use '../../colors.scss' as col;
+
+.spoiler {
+	color: transparent;
+	background-color: col.$base-color-tertiary;
+	border-radius: 0.25em;
+	cursor: pointer;
+
+	transition: background-color 0.125s;
+
+	&:hover {
+		background-color: col.$base-color-secondary;
+	}
+
+	&.open {
+		color: col.$text-color;
+		background-color: col.$grey-dark;
+
+		&:hover {
+			background-color: col.$grey;
+		}
+	}
+}
+
+.code {
+	background-color: col.$base-color-secondary;
+	border-radius: 0.25em;
+}
+
+.block-quote {
+	margin: 0;
+	padding-left: 0.5em;
+	border-left: 4px solid col.$grey-medium;
+}
+
+.mention {
+	color: col.$blue;
+	background-color: rgba(114,137,218,.1);
+	border-radius: 0.25em;
+	padding: 0 0.125em;
+
+	&.user {
+		cursor: pointer;
+
+		&:hover {
+			color: col.$text-color;
+			background-color: col.$blue;
+		}
+	}
+}

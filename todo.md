@@ -1,4 +1,5 @@
-- Messages in markdown by default
+- Markdown support:
+  - discordEmoji
 - Move unmarkdowned messages, individual timestamps, last edited date, ID, etc. into "message details" view accessible by clicking on a message
 - More detailed user details
   - Posting frequency by time?
