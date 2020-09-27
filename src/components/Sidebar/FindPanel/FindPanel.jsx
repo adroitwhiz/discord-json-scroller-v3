@@ -58,6 +58,8 @@ class FindPanel extends Component {
 	}
 
 	searchMessages () {
+		if (!this.props.archive) return;
+
 		const MAX_MESSAGES = 1000;
 		const allMessages = [];
 
