@@ -1,7 +1,9 @@
 import {fixupMessageStart, fixupMessageEnd} from './set-channel-scroll-state';
 
 export default (state, currentChannel) => {
-	const {messages} = state.archive.channels.get(currentChannel);
+	if (currentChannel === null) return {currentChannel};
+	const channel = state.archive.channels.get(currentChannel);
+	const {messages} = channel;
 	const newState = {...state, currentChannel};
 
 	if (!Object.prototype.hasOwnProperty.call(newState.channelScrollState, currentChannel)) {

@@ -1,3 +1,30 @@
+class Archive {
+	constructor () {
+		/**
+		 * The archive type (server or channel).
+		 * @type {string}
+		 */
+		this.type = null;
+
+		/**
+		 * Map of all users encountered during archiving, keyed by ID.
+		 * @type {Map<Snowflake, User>}
+		 */
+		this.users = new Map();
+
+		/**
+		 * Map of all channels encountered during archiving, keyed by ID.
+		 * @type {Map<Snowflake, Channel>}
+		 */
+		this.channels = new Map();
+
+		/**
+		 * @type {Server|Channel}
+		 */
+		this.data = null;
+	}
+}
+
 class Server {
 	constructor () {
 		/**
@@ -25,12 +52,6 @@ class Server {
 		this.members = new Map();
 
 		/**
-		 * Map of all users who have ever been in this server, keyed by ID.
-		 * @type {Map<Snowflake, User>}
-		 */
-		this.users = new Map();
-
-		/**
 		 * Map of server-specific custom emojis, keyed by ID.
 		 * @type {Map<Snowflake, Emoji>}
 		 */
@@ -43,10 +64,10 @@ class Server {
 		this.roles = new Map();
 
 		/**
-		 * Map of channels in the server, keyed by ID.
-		 * @type {Map<Snowflake, Channel>}
+		 * Set of channels in the server, keyed by ID.
+		 * @type {Set<Snowflake>}
 		 */
-		this.channels = new Map();
+		this.channels = new Set();
 	}
 }
 
@@ -305,4 +326,4 @@ class Emoji {
 	}
 }
 
-export {Server, Channel, Message, Member, User, Role, Attachment, Emoji};
+export {Archive, Server, Channel, Message, Member, User, Role, Attachment, Emoji};

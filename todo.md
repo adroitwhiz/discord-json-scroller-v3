@@ -10,3 +10,4 @@
   - Disable loading images
     - Click-to-load avatars (once per URL)
 - Bookmarks panel
+- Fix users list in group DMs

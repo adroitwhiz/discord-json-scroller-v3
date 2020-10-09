@@ -1,4 +1,5 @@
-import deserializeArchiveBot from './deserialize-archivebot';
+import deserializeArchiveBotArchive from './deserialize-archivebot-archive';
+import deserializeArchiveBotServer from './deserialize-archivebot-server';
 import deserializeToonMemeBotServer from './deserialize-toonmemebot-server';
 import deserializeToonMemeBotChannel from './deserialize-toonmemebot-channel';
 
@@ -41,8 +42,13 @@ const deserializeArchive = json => {
 		case 'archivebot-v3':
 		case 'archivebot-v4':
 		case 'archivebot-v5':
-		case 'archivebot-v6': {
-			return deserializeArchiveBot(json);
+		case 'archivebot-v6':
+		case 'archivebot-v7':
+		case 'archivebot-v8': {
+			return deserializeArchiveBotServer(json);
+		}
+		case 'archivebot-v9': {
+			return deserializeArchiveBotArchive(json);
 		}
 		case 'toonmemebot-server-snapshot': {
 			return deserializeToonMemeBotServer(json);

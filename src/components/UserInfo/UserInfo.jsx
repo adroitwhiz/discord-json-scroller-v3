@@ -6,7 +6,7 @@ import Avatar from '../Avatar/Avatar';
 
 const UserInfo = props => {
 	const user = props.archive.users.get(props.userID);
-	const member = props.archive.members.get(props.userID);
+	const member = props.archive.type === 'server' && props.archive.data.members.get(props.userID);
 	return (
 		<div className={style['user-info']}>
 			<div className={style['avatar']}>

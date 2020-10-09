@@ -16,6 +16,7 @@ import {ErrorBoundaryHOC} from '../ErrorBoundary/ErrorBoundary';
 
 import setArchive from '../../actions/set-archive';
 import setUserInfoID from '../../actions/set-user-info-id';
+import setCurrentChannel from '../../actions/set-current-channel';
 
 const store = createStore({
 	archive: null,
@@ -40,6 +41,9 @@ class _App extends Component {
 			.then(archiveJSON => {
 				const archive = deserializeArchive(archiveJSON);
 				this.props.setArchive(archive);
+				this.props.setCurrentChannel(archive.channels.size === 1 ?
+					archive.channels.values().next().value.id :
+					null);
 			});
 	}
 
@@ -50,16 +54,24 @@ class _App extends Component {
 	render () {
 		return (
 			<div id={style.app}>
-				<div className={style['channels-and-messages']}>
-					<div className={style['channel-list-panel']}>
-						<ChannelList channels={this.props.archive ? this.props.archive.channels : null} />
-					</div>
-					<ChannelView channel={this.props.archive ?
-						this.props.archive.channels.get(this.props.currentChannel) :
-						null
-					}/>
-					<Sidebar />
-				</div>
+				{this.props.archive ?
+					<div className={style['channels-and-messages']}>
+						{
+							this.props.archive.type === 'server' ?
+								<div className={style['channel-list-panel']}>
+									<ChannelList channels={this.props.archive ? this.props.archive.channels : null} />
+								</div> :
+								null
+						}
+						<ChannelView channel={this.props.archive ?
+							this.props.archive.channels.get(this.props.currentChannel) :
+							null
+						}/>
+						<Sidebar />
+					</div> :
+					null
+				}
+
 
 				<div className={style['json-file-upload-form']}>
 					<span>.json or .zip log file: </span>
@@ -80,7 +92,7 @@ class _App extends Component {
 }
 
 const App = ErrorBoundaryHOC(
-	connect(['archive', 'currentChannel', 'showInfoOfUserID'], {setUserInfoID, setArchive})(_App)
+	connect(['archive', 'currentChannel', 'showInfoOfUserID'], {setUserInfoID, setArchive, setCurrentChannel})(_App)
 );
 
 export default class Main extends Component {

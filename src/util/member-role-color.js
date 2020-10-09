@@ -1,7 +1,7 @@
 // TODO: return null if there's no color-- such usernames appear white in chat but grey in Discord's user list
 const getMemberColor = (memberID, archive) => {
-	if (!archive.members.has(memberID)) return 'white';
-	const member = archive.members.get(memberID);
+	if (archive.type !== 'server' || !archive.data.members.has(memberID)) return 'white';
+	const member = archive.data.members.get(memberID);
 
 	let highestRolePosition = -1;
 	let highestRoleColor = 'white';

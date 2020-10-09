@@ -38,12 +38,14 @@ class UsersPanel extends Component {
 	render () {
 		const {archive} = this.props;
 
-		if (archive === null) return null;
+		if (archive === null || archive.type !== 'server') return null;
+
+		const server = archive.data;
 
 		const roleGroups = [];
 		const roleMap = new Map();
 
-		for (const member of archive.members.values()) {
+		for (const member of server.members.values()) {
 			const highestRole = member.roles.reduce((prevRole, curRole) =>
 				prevRole && (prevRole.position > curRole.position) ? prevRole : curRole, null);
 
@@ -64,7 +66,7 @@ class UsersPanel extends Component {
 		const nonMembers = [];
 
 		for (const user of archive.users.values()) {
-			if (archive.members.has(user.id)) continue;
+			if (server.members.has(user.id)) continue;
 			nonMembers.push(user);
 		}
 

@@ -1,6 +1,8 @@
 import * as Prims from './primitives';
 
 const deserializeToonMemeBotServer = json => {
+	const archive = new Prims.Archive();
+
 	const server = new Prims.Server();
 
 	// server.id = null; // unsaved
@@ -9,7 +11,7 @@ const deserializeToonMemeBotServer = json => {
 
 	// Parse members
 	const serverMembers = server.members;
-	const serverUsers = server.users;
+	const archiveUsers = archive.users;
 	for (const member of json.members) {
 		const parsedMember = new Prims.Member();
 
@@ -28,7 +30,7 @@ const deserializeToonMemeBotServer = json => {
 		parsedUser.discriminator = member.user.discriminator;
 		Object.freeze(parsedUser);
 
-		serverUsers.set(parsedUser.id, parsedUser);
+		archiveUsers.set(parsedUser.id, parsedUser);
 	}
 
 	// Parse emojis
@@ -96,10 +98,14 @@ const deserializeToonMemeBotServer = json => {
 
 		Object.freeze(channelMessages);
 		Object.freeze(parsedChannel);
-		serverChannels.set(parsedChannel.id, parsedChannel);
+		archive.channels.set(parsedChannel.id, parsedChannel);
+		serverChannels.add(parsedChannel.id);
 	}
 
-	return server;
+	archive.type = 'server';
+	archive.data = server;
+
+	return archive;
 };
 
 export default deserializeToonMemeBotServer;

@@ -1,6 +1,8 @@
 import * as Prims from './primitives';
 
-const deserializeArchiveBot = json => {
+const deserializeArchiveBotServer = json => {
+	const archive = new Prims.Archive();
+
 	const server = new Prims.Server();
 
 	server.id = json.id;
@@ -26,7 +28,7 @@ const deserializeArchiveBot = json => {
 	}
 
 	// Parse users
-	const serverUsers = server.users;
+	const archiveUsers = archive.users;
 
 	const parseAndAddUser = user => {
 		const parsedUser = new Prims.User();
@@ -42,7 +44,7 @@ const deserializeArchiveBot = json => {
 		}
 
 		Object.freeze(parsedUser);
-		serverUsers.set(parsedUser.id, parsedUser);
+		archiveUsers.set(parsedUser.id, parsedUser);
 	};
 
 	if (archiveVersion >= 6) {
@@ -88,7 +90,7 @@ const deserializeArchiveBot = json => {
 			}
 		}
 
-		for (const user of serverUsers.values()) {
+		for (const user of archiveUsers.values()) {
 			if (!serverMembers.has(user.id)) {
 				const fakeMember = new Prims.Member();
 				fakeMember.id = user.id;
@@ -165,10 +167,14 @@ const deserializeArchiveBot = json => {
 		}
 
 		Object.freeze(parsedChannel);
-		serverChannels.set(parsedChannel.id, parsedChannel);
+		serverChannels.add(parsedChannel.id);
+		archive.channels.set(parsedChannel.id, parsedChannel);
 	}
 
-	return server;
+	archive.type = 'server';
+	archive.data = server;
+
+	return archive;
 };
 
-export default deserializeArchiveBot;
+export default deserializeArchiveBotServer;

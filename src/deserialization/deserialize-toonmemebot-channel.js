@@ -1,18 +1,7 @@
 import * as Prims from './primitives';
 
 const deserializeToonMemeBotChannel = json => {
-	const server = new Prims.Server();
-
-	// server.id = null; // unsaved
-	// server.name = null; // unsaved
-	// server.iconURL = null; // unsaved
-
-	// Parse members
-	const serverMembers = server.members;
-	const serverUsers = server.users;
-
-	// Parse channels
-	const serverChannels = server.channels;
+	const archive = new Prims.Archive();
 
 	// Dummy channel
 	const channel = new Prims.Channel();
@@ -49,8 +38,7 @@ const deserializeToonMemeBotChannel = json => {
 		}
 
 		// Single-channel archives do not contain member lists
-		if (!serverMembers.has(jsonMessage.user.id)) {
-			const parsedMember = new Prims.Member();
+		if (!archive.users.has(jsonMessage.user.id)) {
 			const parsedUser = new Prims.User();
 
 			parsedUser.id = jsonMessage.user.id;
@@ -58,12 +46,7 @@ const deserializeToonMemeBotChannel = json => {
 			parsedUser.discriminator = jsonMessage.user.discriminator;
 			Object.freeze(parsedUser);
 
-			parsedMember.id = jsonMessage.user.id;
-			parsedMember.user = parsedUser;
-			Object.freeze(parsedMember);
-
-			serverMembers.set(parsedMember.id, parsedMember);
-			serverUsers.set(parsedUser.id, parsedUser);
+			archive.users.set(parsedUser.id, parsedUser);
 		}
 
 		Object.freeze(parsedMessage);
@@ -71,9 +54,11 @@ const deserializeToonMemeBotChannel = json => {
 	}
 	Object.freeze(channelMessages);
 
-	serverChannels.set(channel.id, channel);
+	archive.type = 'channel';
+	archive.data = channel;
+	archive.channels.set(channel.id, channel);
 
-	return server;
+	return archive;
 };
 
 export default deserializeToonMemeBotChannel;

@@ -47,7 +47,7 @@ const UserMention = connect('archive', {setUserInfoID})(props =>
 );
 
 const RoleMention = connect('archive')(props => {
-	const role = props.archive.roles.get(props.id);
+	const role = props.archive.data.roles.get(props.id);
 	if (!role) return '@deleted-role';
 
 	// If the role has no color, use the default blue. Otherwise, define a custom style.
