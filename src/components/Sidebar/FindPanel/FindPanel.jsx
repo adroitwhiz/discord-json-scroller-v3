@@ -70,7 +70,7 @@ class FindPanel extends Component {
 		const {channels} = this.props.archive;
 		for (const channel of channels.values()) {
 			if (
-				channel.type !== 'text' ||
+				(!channel.messages) ||
 				(this.state.filterByChannel && this.state.filterChannel !== channel.id)
 			) continue;
 
