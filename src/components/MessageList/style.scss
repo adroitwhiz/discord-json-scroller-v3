@@ -29,12 +29,26 @@
 	}
 }
 
-.message-timestamp, .message-id {
+.message-timestamp, .message-id, .edited {
 	@include common.detail-text;
 }
 
-.message-poster, .message-timestamp {
-	margin-right: 0.5em;
+.edited {
+	margin-left: 0.5em;
+	position: relative;
+	cursor: pointer;
+
+	&.open {
+		color: col.$blue;
+	}
+}
+
+.edited.closed:not(:hover) .edited-date {
+	display: none;
+}
+
+.edited-date {
+	cursor: initial;
 }
 
 .message-content {

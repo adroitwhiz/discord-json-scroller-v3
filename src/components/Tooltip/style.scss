@@ -1,0 +1,25 @@
+.tooltip {
+	position: absolute;
+
+	top: 0;
+	left: 100%;
+
+	background-color: black;
+	color: white;
+	border-radius: 0.25em;
+	padding: 0.25em;
+	margin-left: 1em;
+}
+
+.tooltip::before {
+	content: "";
+	border-right: 4px solid black;
+	height: 0;
+	position: absolute;
+	left: -4px;
+	top: 0%;
+	border-top: 4px solid transparent;
+	border-bottom: 4px solid transparent;
+	margin-top: 4px;
+
+}

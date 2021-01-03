@@ -5,9 +5,12 @@
   - Posting frequency by time?
   - Social integrations
   - Guild join date
+  - Roles
 - Settings panel
   - Timezone/time format
   - Disable loading images
     - Click-to-load avatars (once per URL)
 - Bookmarks panel
 - Fix users list in group DMs
+- Click-to-zoom images
+- Audio player for audio attachments
