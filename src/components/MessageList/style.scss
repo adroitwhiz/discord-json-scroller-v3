@@ -29,6 +29,10 @@
 	}
 }
 
+.message-timestamp {
+	margin-left: 0.5em;
+}
+
 .message-timestamp, .message-id, .edited {
 	@include common.detail-text;
 }

@@ -4,6 +4,8 @@ import {connect} from 'unistore/preact';
 
 import Avatar from '../Avatar/Avatar';
 
+import formatTimestamp from '../../util/format-timestamp';
+
 const UserInfo = props => {
 	const user = props.archive.users.get(props.userID);
 	const member = props.archive.type === 'server' && props.archive.data.members.get(props.userID);
@@ -17,7 +19,18 @@ const UserInfo = props => {
 					<span className={style['user-name']}>{user ? user.username : 'Unknown user'}</span>
 					<span className={style['user-discriminator']}>#{user ? user.discriminator : '0000'}</span>
 				</div>
-				{member && member.nickname !== null ? <div className={style['user-nickname']}>{member.nickname}</div> : null}
+				{
+					member && member.nickname !== null ?
+						<div className={style['user-nickname']}>{member.nickname}</div> :
+						null
+				}
+				{
+					member && member.joinedTimestamp !== null ?
+						<div
+							className={style['user-joined-timestamp']}
+						>Joined this server {formatTimestamp(member.joinedTimestamp)}</div> :
+						null
+				}
 				<div className={style['user-id']}>{props.userID}</div>
 			</div>
 		</div>

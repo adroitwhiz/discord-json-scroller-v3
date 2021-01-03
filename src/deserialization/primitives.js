@@ -188,6 +188,13 @@ class Member {
 		 * @type {Array<Role>}
 		 */
 		this.roles = [];
+
+		/**
+		 * Time at which this member joined the server.
+		 * Null if the archive is too old to store it.
+		 * @type {?number}
+		 */
+		this.joinedTimestamp = null;
 	}
 }
 

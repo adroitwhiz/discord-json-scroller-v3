@@ -1,3 +1,5 @@
+@use '../../common';
+
 .user-info {
 	padding: 1em;
 	display: flex;
@@ -12,7 +14,6 @@
 	opacity: 0.5;
 }
 
-.user-nickname, .user-id {
-	font-size: 80%;
-	opacity: 0.75;
+.user-nickname, .user-id, .user-joined-timestamp {
+	@include common.detail-text;
 }

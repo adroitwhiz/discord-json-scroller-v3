@@ -75,6 +75,7 @@ const deserializeServer = (server, archive) => {
 
 		parsedMember.id = member.id;
 		parsedMember.nickname = member.nickname; // explicitly null in serialized format if unset
+		parsedMember.joinedTimestamp = member.joinedTimestamp; // explicitly null in serialized format if unset
 
 		for (const roleID of member.roles) {
 			parsedMember.roles.push(serverRoles.get(roleID));
