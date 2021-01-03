@@ -1,6 +1,7 @@
 @use '../../common';
+@use '../../colors' as col;
 
-.user-info {
+.user-infobox {
 	padding: 1em;
 	display: flex;
 	align-items: center;
@@ -16,4 +17,31 @@
 
 .user-nickname, .user-id, .user-joined-timestamp {
 	@include common.detail-text;
+}
+
+.role {
+	display: inline-flex;
+	padding: 0.25em;
+	border-width: 1px;
+	border-style: solid;
+	border-color: col.$text-color;
+	border-radius: 500px;
+	align-items: center;
+	margin-right: 0.5em;
+
+	&:last-child {
+		margin-right: 0;
+	}
+}
+
+.role-color {
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	display: inline-block;
+	background-color: col.$text-color;
+}
+
+.role-name {
+	padding: 0 0.25em;
 }

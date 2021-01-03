@@ -81,6 +81,8 @@ const deserializeServer = (server, archive) => {
 			parsedMember.roles.push(serverRoles.get(roleID));
 		}
 
+		parsedMember.roles.sort((a, b) => b.position - a.position);
+
 		serverMembers.set(parsedMember.id, parsedMember);
 	}
 

@@ -4,8 +4,6 @@
 - More detailed user details
   - Posting frequency by time?
   - Social integrations
-  - Guild join date
-  - Roles
 - Settings panel
   - Timezone/time format
   - Disable loading images

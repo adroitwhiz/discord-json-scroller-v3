@@ -184,7 +184,7 @@ class Member {
 		this.nickname = null;
 
 		/**
-		 * Array of roles this member belongs to.
+		 * Array of roles this member belongs to, ordered highest to lowest.
 		 * @type {Array<Role>}
 		 */
 		this.roles = [];

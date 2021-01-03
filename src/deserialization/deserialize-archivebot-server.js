@@ -72,6 +72,8 @@ const deserializeArchiveBotServer = json => {
 			}
 		}
 
+		parsedMember.roles.sort((a, b) => b.position - a.position);
+
 		if (archiveVersion < 6) {
 			parseAndAddUser(member.user);
 		}
