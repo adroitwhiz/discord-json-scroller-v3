@@ -135,6 +135,12 @@ class Channel {
 		 * @type {?string}
 		 */
 		this.type = null;
+
+		/**
+		 * This channel's pinned messages, if this is a text channel and the archive supports them.
+		 * @type {?Array<Message>}
+		 */
+		this.pinnedMessages = null;
 	}
 }
 

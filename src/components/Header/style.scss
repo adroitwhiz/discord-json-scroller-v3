@@ -6,6 +6,7 @@
 	border-bottom: 1px solid col.$border-color;
 	display: flex;
 	align-items: center;
+	position: relative;
 }
 
 .channel-info {
@@ -18,16 +19,29 @@
 	color: col.$text-color-detail;
 }
 
+.buttons {
+	display: flex;
+}
+
 .button {
 	width: 24px;
 	height: 24px;
 	opacity: 0.375;
 	cursor: pointer;
 	border-radius: 0.25em;
+	margin-right: 1em;
+
+	&:last-child {
+		margin-right: 0;
+	}
 
 	&:hover {
 		opacity: 0.675;
 		cursor: pointer;
+	}
+
+	&.active {
+		opacity: 1;
 	}
 }
 
@@ -39,6 +53,22 @@
 	background-image: url('icon-sidebar-close.svg');
 }
 
-.button.pinned-messages {
+.button.icon-pinned-messages {
 	background-image: url('icon-pinned-messages.svg');
+}
+
+.pinned-messages {
+	width: 500px;
+	height: 500px;
+	max-height: 70vh;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+	position: absolute;
+	top: 100%;
+	right: 0;
+	margin: 0.5em;
+	border: 1px solid col.$border-color;
+	border-radius: 0.25em;
+	z-index: 1;
 }

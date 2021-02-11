@@ -3,11 +3,8 @@ import style from './style';
 import {Component} from 'preact';
 import {connect} from 'unistore/preact';
 
-import MessageList from '../../MessageList/MessageList';
+import JumpableMessage from '../../JumpableMessage/JumpableMessage';
 import Toggle from '../../Toggle/Toggle';
-
-import setCurrentChannel from '../../../actions/set-current-channel';
-import setChannelScrollState from '../../../actions/set-channel-scroll-state';
 
 const makeCheckboxSetter = (prop, target) => {
 	return event => {
@@ -118,18 +115,6 @@ class FindPanel extends Component {
 		});
 	}
 
-	jumpToMessage (messageID) {
-		const messageChannel = this.state.foundMessageChannels.get(messageID);
-		if (messageChannel !== this.props.currentChannel) {
-			this.props.setCurrentChannel(messageChannel);
-		}
-
-		const messageIndex = this.props.archive.channels.get(messageChannel).messages.findIndex(
-			message => message.id === messageID);
-
-		this.props.setChannelScrollState(messageChannel, messageIndex - 25, messageIndex + 25);
-	}
-
 	render () {
 		const listID = Math.random().toString(36);
 
@@ -196,20 +181,12 @@ class FindPanel extends Component {
 				<div className={style['found-messages']}>
 					{
 						this.state.foundMessages.map((message, i) =>
-							<div
-								className={style['found-message']}
+							<JumpableMessage
 								key={this.state.foundMessages[i].id}
-								onClick={this.jumpToMessage.bind(this, this.state.foundMessages[i].id)}
-							>
-								<MessageList
-									start={i}
-									end={i + 1}
-									messages={this.state.foundMessages}
-								/>
-								<div className={style['jump']}>
-									Jump
-								</div>
-							</div>
+								index={i}
+								messages={this.state.foundMessages}
+								channelID={this.state.foundMessageChannels.get(this.state.foundMessages[i].id)}
+							/>
 						)
 					}
 				</div>
@@ -218,4 +195,4 @@ class FindPanel extends Component {
 	}
 }
 
-export default connect(['archive', 'currentChannel'], {setCurrentChannel, setChannelScrollState})(FindPanel);
+export default connect(['archive', 'currentChannel'])(FindPanel);

@@ -1,0 +1,23 @@
+@use '../../colors.scss' as col;
+
+.jumpable-message {
+	position: relative;
+	cursor: pointer;
+
+	&:hover .jump {
+		visibility: visible;
+	}
+}
+
+.jump {
+	display: inline-block;
+	padding: 0.25em;
+	position: absolute;
+	top: 0.25em;
+	right: 0.25em;
+	background-color: col.$base-color-secondary;
+	border-radius: 0.25em;
+	font-size: 80%;
+
+	visibility: hidden;
+}

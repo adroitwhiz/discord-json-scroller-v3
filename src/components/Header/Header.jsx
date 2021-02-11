@@ -7,7 +7,25 @@ import classNames from '../../util/class-names';
 
 import toggleSidebar from '../../actions/toggle-sidebar';
 
+import JumpableMessage from '../JumpableMessage/JumpableMessage';
+
 class Header extends Component {
+	constructor (props) {
+		super(props);
+
+		this.state = {
+			showPinnedMessages: false
+		};
+
+		this.toggleShowPinnedMessages = this.toggleShowPinnedMessages.bind(this);
+	}
+
+	toggleShowPinnedMessages () {
+		this.setState(prevState => ({
+			showPinnedMessages: !prevState.showPinnedMessages
+		}));
+	}
+
 	render () {
 		const {channel} = this.props;
 		return (
@@ -18,7 +36,19 @@ class Header extends Component {
 						<div className={style['channel-topic']}>{channel.topic}</div>
 					</> : null}
 				</div>
-				<div className={style['controls']}>
+				<div className={style['buttons']}>
+					{channel && channel.pinnedMessages ?
+						<div
+							onClick={this.toggleShowPinnedMessages}
+							className={classNames({
+								[style['button']]: true,
+								[style['icon-pinned-messages']]: true,
+								[style['active']]: this.state.showPinnedMessages
+							})}
+							title="Pinned messages"
+						></div> :
+						null
+					}
 					<div
 						onClick={this.props.toggleSidebar}
 						className={classNames({
@@ -29,6 +59,21 @@ class Header extends Component {
 						title="Toggle sidebar"
 					></div>
 				</div>
+				{this.state.showPinnedMessages ?
+					<div className={style['pinned-messages']}>
+						{
+							channel.pinnedMessages.map((message, i) =>
+								<JumpableMessage
+									key={channel.pinnedMessages[i].id}
+									index={i}
+									messages={channel.pinnedMessages}
+									channelID={channel.id}
+								/>
+							)
+						}
+					</div> :
+					null
+				}
 			</div>
 		);
 	}

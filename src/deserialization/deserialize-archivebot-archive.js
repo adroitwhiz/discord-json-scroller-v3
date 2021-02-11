@@ -10,6 +10,15 @@ const deserializeChannel = channel => {
 	parsedChannel.topic = channel.topic;
 	parsedChannel.position = channel.position;
 	parsedChannel.type = channel.type;
+	let pinnedMessageIDs;
+	const hasPinnedMessages = 'pinnedMessages' in channel;
+	if (hasPinnedMessages) {
+		parsedChannel.pinnedMessages = [];
+		pinnedMessageIDs = new Set();
+		for (const pinnedMessageID of channel.pinnedMessages) {
+			pinnedMessageIDs.add(pinnedMessageID);
+		}
+	}
 
 	if (channel.hasOwnProperty('messages')) {
 		const channelMessages = parsedChannel.messages;
@@ -41,6 +50,10 @@ const deserializeChannel = channel => {
 
 					parsedMessage.attachments.push(parsedAttachment);
 				}
+			}
+
+			if (hasPinnedMessages && pinnedMessageIDs.has(message.id)) {
+				parsedChannel.pinnedMessages.push(parsedMessage);
 			}
 
 			channelMessages.push(parsedMessage);
