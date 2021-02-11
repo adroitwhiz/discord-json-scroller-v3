@@ -22,6 +22,21 @@ class Archive {
 		 * @type {Server|Channel}
 		 */
 		this.data = null;
+
+		/**
+		 * Blob URLs for every saved avatar.
+		 * @type {Map<Snowflake, string>}
+		 */
+		this.avatars = new Map();
+	}
+
+	/**
+	 * Call this method once you're done using the archive
+	 */
+	dispose () {
+		for (const avatar of this.avatars.values()) {
+			URL.revokeObjectURL(avatar);
+		}
 	}
 }
 

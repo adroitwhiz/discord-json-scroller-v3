@@ -1,3 +1,5 @@
+import JSZip from 'jszip';
+
 import deserializeArchiveBotArchive from './deserialize-archivebot-archive';
 import deserializeArchiveBotServer from './deserialize-archivebot-server';
 import deserializeToonMemeBotServer from './deserialize-toonmemebot-server';
@@ -33,32 +35,87 @@ const _getArchiveVersion = parsed => {
 	return null;
 };
 
-const deserializeArchive = json => {
-	const version = _getArchiveVersion(json);
+/**
+ * Deserialize archive from a file
+ * @param {File} file
+ */
+const deserializeArchiveFile = file => {
+	const reader = new FileReader();
+	return new Promise((resolve, reject) => {
+		reader.addEventListener('load', () => {
+			resolve(reader.result);
+		});
+		reader.addEventListener('error', () => {
+			reject(reader.error);
+		});
+		reader.readAsArrayBuffer(file);
+	})
+		.then(buffer => {
+			const dv = new DataView(buffer);
 
-	switch (version) {
-		case 'archivebot-v1':
-		case 'archivebot-v2':
-		case 'archivebot-v3':
-		case 'archivebot-v4':
-		case 'archivebot-v5':
-		case 'archivebot-v6':
-		case 'archivebot-v7':
-		case 'archivebot-v8': {
-			return deserializeArchiveBotServer(json);
-		}
-		case 'archivebot-v9': {
-			return deserializeArchiveBotArchive(json);
-		}
-		case 'toonmemebot-server-snapshot': {
-			return deserializeToonMemeBotServer(json);
-		}
-		case 'toonmemebot-channel-snapshot': {
-			return deserializeToonMemeBotChannel(json);
-		}
-		default:
-			throw new Error(`Unknown archive version ${version}`);
-	}
+			const resolveText = data => ({type: 'text', data: (new TextDecoder()).decode(data)});
+
+			if (
+				// zip file signature
+				dv.getInt8(0) === 0x50 &&
+				dv.getInt8(1) === 0x4b &&
+				dv.getInt8(2) === 0x03 &&
+				dv.getInt8(3) === 0x04
+			) {
+				return JSZip.loadAsync(buffer)
+					.then(zip => {
+						const files = Object.values(zip.files);
+						if (files.length === 1) {
+							return zip.file(files[0].name).async('arraybuffer')
+								.then(resolveText);
+						}
+
+						if (Object.prototype.hasOwnProperty.call(zip.files, 'archive.json')) {
+							return {type: 'zip-archive', data: zip};
+						} else {
+							throw 'Invalid .zip archive';
+						}
+					});
+			} else {
+				return resolveText(buffer);
+			}
+		})
+		.then(async ({type, data}) => {
+			let json;
+			if (type === 'text') {
+				json = JSON.parse(data);
+			} else {
+				const archiveText = await data.file('archive.json').async('arraybuffer');
+				json = JSON.parse((new TextDecoder()).decode(archiveText));
+			}
+
+			const version = _getArchiveVersion(json);
+
+			switch (version) {
+				case 'archivebot-v1':
+				case 'archivebot-v2':
+				case 'archivebot-v3':
+				case 'archivebot-v4':
+				case 'archivebot-v5':
+				case 'archivebot-v6':
+				case 'archivebot-v7':
+				case 'archivebot-v8': {
+					return deserializeArchiveBotServer(json);
+				}
+				case 'archivebot-v9':
+				case 'archivebot-v10': {
+					return deserializeArchiveBotArchive(json, type === 'zip' ? data : null);
+				}
+				case 'toonmemebot-server-snapshot': {
+					return deserializeToonMemeBotServer(json);
+				}
+				case 'toonmemebot-channel-snapshot': {
+					return deserializeToonMemeBotChannel(json);
+				}
+				default:
+					throw new Error(`Unknown archive version ${version}`);
+			}
+		});
 };
 
-export default deserializeArchive;
+export default deserializeArchiveFile;

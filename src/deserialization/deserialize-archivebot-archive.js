@@ -110,7 +110,7 @@ const deserializeServer = (server, archive) => {
 	return parsedServer;
 };
 
-const deserializeArchiveBotArchive = json => {
+const deserializeArchiveBotArchive = async (json, zip) => {
 	const archive = new Prims.Archive();
 
 	archive.type = json.archiveType;
@@ -135,6 +135,20 @@ const deserializeArchiveBotArchive = json => {
 			archive.data = deserializeChannel(json.archiveData);
 			archive.channels.set(archive.data.id, archive.data);
 			break;
+		}
+	}
+
+	if (zip) {
+		const avatarsFolder = zip.folder('avatars');
+		if (avatarsFolder) {
+			const filePromises = [];
+			avatarsFolder.forEach((relativePath, file) => {
+				filePromises.push(file.async('blob').then(blob => {
+					const avatarURL = URL.createObjectURL(blob);
+					archive.avatars.set(relativePath, avatarURL);
+				}));
+			});
+			await Promise.all(filePromises);
 		}
 	}
 

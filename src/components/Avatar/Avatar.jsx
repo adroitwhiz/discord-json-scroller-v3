@@ -1,8 +1,12 @@
 import style from './style.scss';
 
 import {Component} from 'preact';
+import {connect} from 'unistore/preact';
 
-const avatarRegistry = new Map();
+// Keep track of which avatars already failed to load so we don't make a new request to Discord every time they appear.
+// This differs on a per-archive basis (some archives store avatars, some don't, and some store out-of-date avatars),
+// so store a WeakMap mapping archives to their avatar registries.
+const metaAvatarRegistry = new WeakMap();
 
 // Generate an SVG image for a pseudorandomly-colored default avatar.
 const defaultAvatar = name => {
@@ -37,22 +41,43 @@ class Avatar extends Component {
 			handledError: false
 		};
 
+		this.getUserID = this.getUserID.bind(this);
 		this.handleError = this.handleError.bind(this);
-		this.getUnsizedURL = this.getUnsizedURL.bind(this);
+		this.getAvatarURL = this.getAvatarURL.bind(this);
 		this.getDefaultAvatar = this.getDefaultAvatar.bind(this);
+		this.getAvatarRegistry = this.getAvatarRegistry.bind(this);
 	}
 
-	getUnsizedURL () {
-		return this.props.user.avatarURL.replace(/\?size=\d+/, '');
+	getUserID () {
+		return this.props.userID || this.props.user.id;
+	}
+
+	getAvatarURL (size) {
+		if (this.props.archive.avatars.has(this.getUserID())) {
+			return this.props.archive.avatars.get(this.getUserID());
+		}
+		return this.props.user.avatarURL.replace(/\?size=\d+/, '') + `?size=${size}`;
 	}
 
 	getDefaultAvatar () {
-		const svg =  defaultAvatar(this.props.user ? this.props.user.tag : this.props.userID ? this.props.userID : '✖');
+		const svg =  defaultAvatar(
+			this.props.user ? this.props.user.tag :
+				this.props.userID ? this.props.userID :
+					'✖');
 		return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 	}
 
+	getAvatarRegistry () {
+		if (metaAvatarRegistry.has(this.props.archive)) {
+			return metaAvatarRegistry.get(this.props.archive);
+		}
+		const registry = new Map();
+		metaAvatarRegistry.set(this.props.archive, registry);
+		return registry;
+	}
+
 	handleError (e) {
-		avatarRegistry.set(this.getUnsizedURL(), false);
+		this.getAvatarRegistry().set(this.getUserID(), false);
 		e.target.src = this.getDefaultAvatar();
 
 		this.setState({handledError: true});
@@ -60,16 +85,17 @@ class Avatar extends Component {
 
 	render () {
 		const {props} = this;
+		const registry = this.getAvatarRegistry();
 
 		const hasAvatar = !!(props.user && props.user.avatarURL);
-		const unsizedURL = hasAvatar && this.getUnsizedURL();
-		const loadResultKnown = hasAvatar && avatarRegistry.has(unsizedURL);
-		const knownUnsuccessful = hasAvatar && loadResultKnown && !avatarRegistry.get(unsizedURL);
+		const avatarURL = hasAvatar && this.getAvatarURL(props.size);
+		const loadResultKnown = hasAvatar && registry.has(this.getUserID());
+		const knownUnsuccessful = hasAvatar && loadResultKnown && !registry.get(this.getUserID());
 
 		return (
 			<img
 				className={style['avatar']}
-				src={hasAvatar && !knownUnsuccessful ? `${unsizedURL}?size=${props.size}` : this.getDefaultAvatar()}
+				src={hasAvatar && !knownUnsuccessful ? avatarURL : this.getDefaultAvatar()}
 				onError={this.state.handledError ? null : this.handleError}
 				width={props.size}
 				height={props.size}
@@ -79,4 +105,4 @@ class Avatar extends Component {
 	}
 }
 
-export default Avatar;
+export default connect('archive')(Avatar);

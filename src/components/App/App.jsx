@@ -4,8 +4,7 @@ import {Component} from 'preact';
 import createStore from 'unistore';
 import {Provider, connect} from 'unistore/preact';
 
-import readJSONFromFile from '../../util/read-json-from-file';
-import deserializeArchive from '../../deserialization/deserialization';
+import deserializeArchiveFile from '../../deserialization/deserialization';
 
 import ChannelList from '../ChannelList/ChannelList';
 import ChannelView from '../ChannelView/ChannelView';
@@ -37,9 +36,10 @@ class _App extends Component {
 		const file = event.target.files[0];
 		if (!file) return;
 
-		readJSONFromFile(file)
-			.then(archiveJSON => {
-				const archive = deserializeArchive(archiveJSON);
+		deserializeArchiveFile(file)
+			.then(archive => {
+				// TODO: race condition from disposing new archive before old one is set?
+				if (this.props.archive) this.props.archive.dispose();
 				this.props.setArchive(archive);
 				this.props.setCurrentChannel(archive.channels.size === 1 ?
 					archive.channels.values().next().value.id :

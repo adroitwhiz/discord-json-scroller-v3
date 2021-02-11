@@ -12,3 +12,5 @@
 - Fix users list in group DMs
 - Click-to-zoom images
 - Audio player for audio attachments
+- Pinned messages
+- Embeds
