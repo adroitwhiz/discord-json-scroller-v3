@@ -21,7 +21,8 @@ const store = createStore({
 	archive: null,
 	currentChannel: null,
 	showInfoOfUserID: null,
-	channelScrollState: {}
+	channelScrollState: {},
+	showSidebar: true
 });
 
 class _App extends Component {

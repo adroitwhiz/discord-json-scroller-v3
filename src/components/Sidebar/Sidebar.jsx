@@ -1,6 +1,7 @@
 import style from './style';
 
 import {Component} from 'preact';
+import {connect} from 'unistore/preact';
 
 import FindPanel from './FindPanel/FindPanel';
 import UsersPanel from './UsersPanel/UsersPanel';
@@ -12,20 +13,12 @@ class Sidebar extends Component {
 		super(props);
 
 		this.state = {
-			collapsed: false,
 			activeTab: 'users'
 		};
 
-		this.toggleSidebar = this.toggleSidebar.bind(this);
 		this.getActivePanel = this.getActivePanel.bind(this);
 		this.setUsersTab = this.setActiveTab.bind(this, 'users');
 		this.setFindTab = this.setActiveTab.bind(this, 'find');
-	}
-
-	toggleSidebar () {
-		this.setState(state => {
-			return {collapsed: !state.collapsed};
-		});
 	}
 
 	getActivePanel () {
@@ -45,13 +38,9 @@ class Sidebar extends Component {
 			<div
 				className={classNames({
 					[style['sidebar']]: true,
-					[style['collapsed']]: this.state.collapsed
+					[style['collapsed']]: !this.props.showSidebar
 				})}
 			>
-				<div
-					className={style['sidebar-toggle']}
-					onClick={this.toggleSidebar}
-				>{this.state.collapsed ? '«' : '»'}</div>
 				<div className={style['tabs']}>
 					<div
 						className={classNames({
@@ -80,4 +69,4 @@ class Sidebar extends Component {
 	}
 }
 
-export default Sidebar;
+export default connect('showSidebar')(Sidebar);
