@@ -6,6 +6,8 @@ import {connect} from 'unistore/preact';
 import JumpableMessage from '../../JumpableMessage/JumpableMessage';
 import Toggle from '../../Toggle/Toggle';
 
+import classNames from '../../../util/class-names';
+
 const makeCheckboxSetter = (prop, target) => {
 	return event => {
 		target.setState({[prop]: event.target.checked});
@@ -17,6 +19,8 @@ const makeInputSetter = (prop, target) => {
 		target.setState({[prop]: event.target.value});
 	};
 };
+
+const MESSAGES_PER_PAGE = 100;
 
 class FindPanel extends Component {
 	constructor (props) {
@@ -32,7 +36,9 @@ class FindPanel extends Component {
 			filterChannel: null,
 
 			foundMessages: [],
-			foundMessageChannels: null
+			foundMessageChannels: null,
+			pageNumber: -1,
+			numPages: 0
 		};
 
 		this.toggleFindPanel = this.toggleFindPanel.bind(this);
@@ -46,6 +52,9 @@ class FindPanel extends Component {
 
 		this.setFilterByChannel = makeCheckboxSetter('filterByChannel', this);
 		this.setFilterChannel = makeInputSetter('filterChannel', this);
+
+		this.prevPage = this.prevPage.bind(this);
+		this.nextPage = this.nextPage.bind(this);
 	}
 
 	toggleFindPanel () {
@@ -54,10 +63,27 @@ class FindPanel extends Component {
 		});
 	}
 
+	prevPage () {
+		this.setState(state => {
+			if (state.pageNumber < 1) return {};
+			return {
+				pageNumber: state.pageNumber - 1
+			};
+		});
+	}
+
+	nextPage () {
+		this.setState(state => {
+			if (state.pageNumber >= state.numPages - 1) return {};
+			return {
+				pageNumber: state.pageNumber + 1
+			};
+		});
+	}
+
 	searchMessages () {
 		if (!this.props.archive) return;
 
-		const MAX_MESSAGES = 1000;
 		const allMessages = [];
 
 		// When we jump to a message we need to know what channel it belongs to. Since we search over all channels here,
@@ -98,11 +124,6 @@ class FindPanel extends Component {
 				});
 			}
 
-			if (allMessages.length + messages.length > MAX_MESSAGES) {
-				alert(`More than ${MAX_MESSAGES} messages found. Not displaying results.`);
-				return;
-			}
-
 			for (let i = 0; i < messages.length; i++) {
 				allMessages.push(messages[i]);
 				messageChannels.set(messages[i].id, channel.id);
@@ -111,7 +132,9 @@ class FindPanel extends Component {
 
 		this.setState({
 			foundMessages: allMessages.sort((a, b) => a.createdTimestamp - b.createdTimestamp),
-			foundMessageChannels: messageChannels
+			foundMessageChannels: messageChannels,
+			pageNumber: 0,
+			numPages: Math.ceil(allMessages.length / MESSAGES_PER_PAGE)
 		});
 	}
 
@@ -134,6 +157,9 @@ class FindPanel extends Component {
 				);
 			}
 		}
+
+		const start = this.state.pageNumber * MESSAGES_PER_PAGE;
+		const end = start + MESSAGES_PER_PAGE;
 
 		return (
 			<div className={style['find-inner']}>
@@ -180,15 +206,33 @@ class FindPanel extends Component {
 				</div>
 				<div className={style['found-messages']}>
 					{
-						this.state.foundMessages.map((message, i) =>
+						this.state.foundMessages.slice(start, end).map(message =>
 							<JumpableMessage
-								key={this.state.foundMessages[i].id}
-								index={i}
-								messages={this.state.foundMessages}
-								channelID={this.state.foundMessageChannels.get(this.state.foundMessages[i].id)}
+								key={message.id}
+								message={message}
+								channelID={this.state.foundMessageChannels.get(message.id)}
 							/>
 						)
 					}
+				</div>
+				<div className={style['paginator']}>
+					<div
+						className={classNames({
+							[style['page-button']]: true,
+							[style['prev']]: true,
+							[style['disabled']]: this.state.pageNumber < 1
+						})}
+						onClick={this.prevPage}
+					></div>
+					<div className={style['page-num']}>Page {this.state.pageNumber + 1} of {this.state.numPages}</div>
+					<div
+						className={classNames({
+							[style['page-button']]: true,
+							[style['next']]: true,
+							[style['disabled']]: this.state.pageNumber >= this.state.numPages - 1
+						})}
+						onClick={this.nextPage}
+					></div>
 				</div>
 			</div>
 		);

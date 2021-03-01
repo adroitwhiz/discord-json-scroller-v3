@@ -21,17 +21,13 @@ class JumpableMessage extends Component {
 	}
 
 	render () {
-		const {index, messages, channelID} = this.props;
+		const {message, channelID} = this.props;
 		return (
 			<div
 				className={style['jumpable-message']}
-				onClick={this.jumpToMessage.bind(this, messages[index].id, channelID)}
+				onClick={this.jumpToMessage.bind(this, message.id, channelID)}
 			>
-				<MessageList
-					start={index}
-					end={index + 1}
-					messages={messages}
-				/>
+				<MessageList message={message}/>
 				<div className={style['jump']}>
 					Jump
 				</div>

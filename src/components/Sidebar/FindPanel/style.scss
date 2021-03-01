@@ -1,9 +1,11 @@
 @use '../../../colors.scss' as col;
+@use '../../../common.scss';
 
 .find-inner {
 	display: flex;
 	flex-direction: column;
 	flex: 1 1 auto;
+	overflow: auto;
 }
 
 .find-controls {
@@ -28,4 +30,25 @@
 	overflow: auto;
 	flex: 0 1 auto;
 	flex-direction: column;
+}
+
+.paginator {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1em 0;
+}
+
+.page-button {
+	@include common.icon-button;
+	width: 24px;
+	height: 24px;
+}
+
+.prev {
+	background-image: url('icon-prev.svg');
+}
+
+.next {
+	background-image: url('icon-next.svg');
 }

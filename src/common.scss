@@ -17,3 +17,24 @@
 @mixin animate-bg-color {
 	transition: background-color 0.25s;
 }
+
+@mixin icon-button {
+	opacity: 0.375;
+	cursor: pointer;
+
+	&:hover {
+		opacity: 0.675;
+		cursor: pointer;
+	}
+
+	&.active {
+		opacity: 1;
+	}
+
+	&.disabled {
+		opacity: 0.175;
+		cursor: not-allowed;
+	}
+
+	transition: opacity 0.125s ease;
+}

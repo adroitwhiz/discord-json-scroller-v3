@@ -65,8 +65,7 @@ class Header extends Component {
 							channel.pinnedMessages.map((message, i) =>
 								<JumpableMessage
 									key={channel.pinnedMessages[i].id}
-									index={i}
-									messages={channel.pinnedMessages}
+									message={channel.pinnedMessages[i]}
 									channelID={channel.id}
 								/>
 							)

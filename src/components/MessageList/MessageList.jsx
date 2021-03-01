@@ -49,50 +49,61 @@ class Edited extends Component {
 	}
 }
 
+const MessageContents = ({message}) => (
+	<div className={style.message} key={message.id}>
+		<div className={style['message-content']}>
+			<span><Markdown text={message.content} /></span>
+			{message.editedTimestamp ?
+				<Edited timestamp={message.editedTimestamp}></Edited> :
+				null
+			}
+		</div>
+		{message.attachments.length === 0 ? null : message.attachments.map((attachment, index) =>
+			<Attachment
+				key={index}
+				attachment={attachment}
+			/>
+		)}
+	</div>
+);
+
 const MessageList = props => {
 	const messageComponents = [];
 
-	const {messages, start, end} = props;
+	const {messages, message, start, end} = props;
 
-	if (messages.length === 0) return null;
-
-	for (let i = start; i < end; i++) {
-		const message = messages[i];
-		messageComponents.push(
-			<div className={style.message} key={message.id}>
-				<div className={style['message-content']}>
-					<span><Markdown text={message.content} /></span>
-					{message.editedTimestamp ?
-						<Edited timestamp={message.editedTimestamp}></Edited> :
-						null
-					}
-				</div>
-				{message.attachments.length === 0 ? null : message.attachments.map((attachment, index) =>
-					<Attachment
-						key={index}
-						attachment={attachment}
-					/>
-				)}
-			</div>
-		);
+	let firstMessage;
+	if (messages) {
+		if (messages.length === 0) return null;
+		for (let i = start; i < end; i++) {
+			messageComponents.push(<MessageContents message={messages[i]} />);
+		}
+		firstMessage = messages[start];
+	} else {
+		messageComponents.push(<MessageContents message={message} />);
+		firstMessage = message;
 	}
 
 	return (
 		<div className={style['message-list']}>
 			<div className={style['message-avatar']}>
-				<Avatar user={props.archive.users.get(messages[start].authorID)} size={32} userID={messages[start].authorID}/>
+				<Avatar
+					user={props.archive.users.get(firstMessage.authorID)}
+					size={32}
+					userID={firstMessage.authorID}
+				/>
 			</div>
 			<div className={style['message-right']}>
 				<div className={style['message-header']}>
 					<div
 						className={style['message-poster']}
-						style={`color: ${getMemberColor(messages[start].authorID, props.archive)}`}
-						onClick={() => props.setUserInfoID(messages[start].authorID)}
+						style={`color: ${getMemberColor(firstMessage.authorID, props.archive)}`}
+						onClick={() => props.setUserInfoID(firstMessage.authorID)}
 					>
-						{getMemberName(messages[start].authorID, props.archive)}
+						{getMemberName(firstMessage.authorID, props.archive)}
 					</div>
 					<div className={style['message-timestamp']}>
-						{formatTimestamp(messages[start].createdTimestamp)}
+						{formatTimestamp(firstMessage.createdTimestamp)}
 					</div>
 				</div>
 				<div className={style['message-bodies']}>
