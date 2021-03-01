@@ -6,6 +6,7 @@ import {connect} from 'unistore/preact';
 import {parser, markdownEngine} from 'discord-markdown';
 
 import setUserInfoID from '../../actions/set-user-info-id';
+import setCurrentChannel from '../../actions/set-current-channel';
 
 import classNames from '../../util/class-names';
 import getMemberName from '../../util/get-member-name';
@@ -45,6 +46,19 @@ const UserMention = connect('archive', {setUserInfoID})(props =>
 		{getMemberName(props.id, props.archive, true)}
 	</span>
 );
+
+const ChannelMention = connect('archive', {setCurrentChannel})(props => {
+	const hasChannel = props.archive.channels.has(props.id);
+	const channel = props.archive.channels.get(props.id);
+	return (
+		<span
+			className={`${style['mention']} ${style['channel']}`}
+			onClick={hasChannel ? () => props.setCurrentChannel(props.id) : null}
+		>
+			{hasChannel ? `#${channel.name}` : '#deleted-channel'}
+		</span>
+	);
+});
 
 const RoleMention = connect('archive')(props => {
 	const role = props.archive.data.roles.get(props.id);
@@ -95,7 +109,8 @@ const reactRules = {
 	discordUser: (content, node) => <UserMention id={node.id} />,
 	discordEveryone: () => <span className={style['mention']}>@everyone</span>,
 	discordHere: () => <span className={style['mention']}>@here</span>,
-	discordRole: (content, node) => <RoleMention id={node.id} />
+	discordRole: (content, node) => <RoleMention id={node.id} />,
+	discordChannel: (content, node) => <ChannelMention id={node.id} />
 };
 
 const reactify = nodeArray => nodeArray.map(node => {

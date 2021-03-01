@@ -39,12 +39,15 @@
 	border-radius: 0.25em;
 	padding: 0 0.125em;
 
-	&.user {
+	&.user, &.channel {
 		cursor: pointer;
 
 		&:hover {
 			color: col.$text-color;
 			background-color: col.$blue;
 		}
+
+		transition: all 0.125s ease;
+		transition-property: color, background-color;
 	}
 }
