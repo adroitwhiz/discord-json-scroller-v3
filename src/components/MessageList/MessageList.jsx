@@ -4,7 +4,7 @@ import {Component} from 'preact';
 import {connect} from 'unistore/preact';
 import {memo} from 'preact/compat';
 
-import Attachment from './Attachment';
+import Attachment from '../Attachment/Attachment';
 import Avatar from '../Avatar/Avatar';
 import Markdown from '../Markdown/Markdown';
 import Tooltip from '../Tooltip/Tooltip';
