@@ -71,7 +71,7 @@ const deserializeArchiveFile = file => {
 						}
 
 						if (Object.prototype.hasOwnProperty.call(zip.files, 'archive.json')) {
-							return {type: 'zip-archive', data: zip};
+							return {type: 'zip', data: zip};
 						} else {
 							throw 'Invalid .zip archive';
 						}
