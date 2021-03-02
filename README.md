@@ -19,6 +19,4 @@ npm run build
 ```
 Build output will be in `/build`.
 
-To do:
-- Allow archives to be saved to a URL and loaded from one
-- Lazy-load images once they are scrolled to
+[To do](./todo.md)
