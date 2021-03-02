@@ -39,9 +39,9 @@ const _getArchiveVersion = parsed => {
  * Deserialize archive from a file
  * @param {File} file
  */
-const deserializeArchiveFile = file => {
+const deserializeArchiveFile = async file => {
 	const reader = new FileReader();
-	return new Promise((resolve, reject) => {
+	const buffer = await new Promise((resolve, reject) => {
 		reader.addEventListener('load', () => {
 			resolve(reader.result);
 		});
@@ -49,70 +49,64 @@ const deserializeArchiveFile = file => {
 			reject(reader.error);
 		});
 		reader.readAsArrayBuffer(file);
-	})
-		.then(buffer => {
-			const dv = new DataView(buffer);
-			if (
-				// zip file signature
-				dv.getInt8(0) === 0x50 &&
-				dv.getInt8(1) === 0x4b &&
-				dv.getInt8(2) === 0x03 &&
-				dv.getInt8(3) === 0x04
-			) {
-				return unzip(buffer)
-					.then(zip => {
-						const {entries} = zip;
-						const files = Object.values(entries);
-						if (files.length === 1) {
-							return files[0].text().then(data => ({type: 'text', data}));
-						}
-
-						if (Object.prototype.hasOwnProperty.call(entries, 'archive.json')) {
-							return {type: 'zip', data: zip};
-						} else {
-							throw 'Invalid .zip archive';
-						}
-					});
+	});
+	const dv = new DataView(buffer);
+	let type, jsonText;
+	let zipData = null;
+	if (
+		// zip file signature
+		dv.getInt8(0) === 0x50 &&
+		dv.getInt8(1) === 0x4b &&
+		dv.getInt8(2) === 0x03 &&
+		dv.getInt8(3) === 0x04
+	) {
+		const zip = await unzip(buffer);
+		const {entries} = zip;
+		const files = Object.values(entries);
+		if (files.length === 1) {
+			type = 'text';
+			jsonText = await files[0].text();
+		} else {
+			if (Object.prototype.hasOwnProperty.call(entries, 'archive.json')) {
+				type = 'zip';
+				jsonText = await entries['archive.json'].text();
+				zipData = zip;
 			} else {
-				return {type: 'text', data: (new TextDecoder()).decode(buffer)};
+				throw 'Invalid .zip archive';
 			}
-		})
-		.then(async ({type, data}) => {
-			let json;
-			if (type === 'text') {
-				json = JSON.parse(data);
-			} else {
-				const archiveText = await data.entries['archive.json'].text();
-				json = JSON.parse(archiveText);
-			}
+		}
+	} else {
+		type = 'text';
+		jsonText = (new TextDecoder()).decode(buffer);
+	}
+	const json = JSON.parse(jsonText);
 
-			const version = _getArchiveVersion(json);
+	const version = _getArchiveVersion(json);
 
-			switch (version) {
-				case 'archivebot-v1':
-				case 'archivebot-v2':
-				case 'archivebot-v3':
-				case 'archivebot-v4':
-				case 'archivebot-v5':
-				case 'archivebot-v6':
-				case 'archivebot-v7':
-				case 'archivebot-v8': {
-					return deserializeArchiveBotServer(json);
-				}
-				case 'archivebot-v9':
-				case 'archivebot-v10': {
-					return deserializeArchiveBotArchive(json, type === 'zip' ? data : null);
-				}
-				case 'toonmemebot-server-snapshot': {
-					return deserializeToonMemeBotServer(json);
-				}
-				case 'toonmemebot-channel-snapshot': {
-					return deserializeToonMemeBotChannel(json);
-				}
-				default:
-					throw new Error(`Unknown archive version ${version}`);
-			}
-		});
+	switch (version) {
+		case 'archivebot-v1':
+		case 'archivebot-v2':
+		case 'archivebot-v3':
+		case 'archivebot-v4':
+		case 'archivebot-v5':
+		case 'archivebot-v6':
+		case 'archivebot-v7':
+		case 'archivebot-v8': {
+			return deserializeArchiveBotServer(json);
+		}
+		case 'archivebot-v9':
+		case 'archivebot-v10': {
+			return deserializeArchiveBotArchive(json, type === 'zip' ? zipData : null);
+		}
+		case 'toonmemebot-server-snapshot': {
+			return deserializeToonMemeBotServer(json);
+		}
+		case 'toonmemebot-channel-snapshot': {
+			return deserializeToonMemeBotChannel(json);
+		}
+		default:
+			throw new Error(`Unknown archive version ${version}`);
+	}
 };
 
 export default deserializeArchiveFile;
