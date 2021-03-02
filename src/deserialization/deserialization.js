@@ -1,4 +1,4 @@
-import JSZip from 'jszip';
+import {unzip} from 'unzipit';
 
 import deserializeArchiveBotArchive from './deserialize-archivebot-archive';
 import deserializeArchiveBotServer from './deserialize-archivebot-server';
@@ -52,9 +52,6 @@ const deserializeArchiveFile = file => {
 	})
 		.then(buffer => {
 			const dv = new DataView(buffer);
-
-			const resolveText = data => ({type: 'text', data: (new TextDecoder()).decode(data)});
-
 			if (
 				// zip file signature
 				dv.getInt8(0) === 0x50 &&
@@ -62,22 +59,22 @@ const deserializeArchiveFile = file => {
 				dv.getInt8(2) === 0x03 &&
 				dv.getInt8(3) === 0x04
 			) {
-				return JSZip.loadAsync(buffer)
+				return unzip(buffer)
 					.then(zip => {
-						const files = Object.values(zip.files);
+						const {entries} = zip;
+						const files = Object.values(entries);
 						if (files.length === 1) {
-							return zip.file(files[0].name).async('arraybuffer')
-								.then(resolveText);
+							return files[0].text().then(data => ({type: 'text', data}));
 						}
 
-						if (Object.prototype.hasOwnProperty.call(zip.files, 'archive.json')) {
+						if (Object.prototype.hasOwnProperty.call(entries, 'archive.json')) {
 							return {type: 'zip', data: zip};
 						} else {
 							throw 'Invalid .zip archive';
 						}
 					});
 			} else {
-				return resolveText(buffer);
+				return {type: 'text', data: (new TextDecoder()).decode(buffer)};
 			}
 		})
 		.then(async ({type, data}) => {
@@ -85,8 +82,8 @@ const deserializeArchiveFile = file => {
 			if (type === 'text') {
 				json = JSON.parse(data);
 			} else {
-				const archiveText = await data.file('archive.json').async('arraybuffer');
-				json = JSON.parse((new TextDecoder()).decode(archiveText));
+				const archiveText = await data.entries['archive.json'].text();
+				json = JSON.parse(archiveText);
 			}
 
 			const version = _getArchiveVersion(json);

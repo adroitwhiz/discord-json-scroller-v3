@@ -152,15 +152,18 @@ const deserializeArchiveBotArchive = async (json, zip) => {
 	}
 
 	if (zip) {
-		const avatarsFolder = zip.folder('avatars');
-		if (avatarsFolder) {
+		const {entries} = zip;
+		if (Object.prototype.hasOwnProperty.call(entries, 'avatars/')) {
 			const filePromises = [];
-			avatarsFolder.forEach((relativePath, file) => {
-				filePromises.push(file.async('blob').then(blob => {
+			for (const path of Object.keys(entries)) {
+				if (!path.startsWith('avatars/')) continue;
+				const entry = entries[path];
+				if (entry.isDirectory) continue;
+				filePromises.push(entry.blob().then(blob => {
 					const avatarURL = URL.createObjectURL(blob);
-					archive.avatars.set(relativePath, avatarURL);
+					archive.avatars.set(path.replace('avatars/', ''), avatarURL);
 				}));
-			});
+			}
 			await Promise.all(filePromises);
 		}
 	}
