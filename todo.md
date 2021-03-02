@@ -9,10 +9,10 @@
   - Disable loading images
     - Click-to-load avatars (once per URL)
 - Bookmarks panel
-- Fix users list in group DMs
 - Click-to-zoom images
 - Audio player for audio attachments
 - Video player for video attachments
 - Embeds
 - Deserialize in worker thread
   - Loading spinner
+- Display server/group DM owners

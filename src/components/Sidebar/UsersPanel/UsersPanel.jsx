@@ -38,77 +38,94 @@ class UsersPanel extends Component {
 	render () {
 		const {archive} = this.props;
 
-		if (archive === null || archive.type !== 'server') return null;
+		if (archive === null) return null;
 
-		const server = archive.data;
+		let panelInner;
+		if (archive.type === 'server') {
+			const server = archive.data;
 
-		const roleGroups = [];
-		const roleMap = new Map();
-
-		for (const member of server.members.values()) {
-			const highestRole = member.roles.reduce((prevRole, curRole) =>
-				prevRole && (prevRole.position > curRole.position) ? prevRole : curRole, null);
-
-			if (roleMap.has(highestRole)) {
-				roleMap.get(highestRole).push(member);
-			} else {
-				roleMap.set(highestRole, [member]);
+			const roleGroups = [];
+			const roleMap = new Map();
+	
+			for (const member of server.members.values()) {
+				const highestRole = member.roles.reduce((prevRole, curRole) =>
+					prevRole && (prevRole.position > curRole.position) ? prevRole : curRole, null);
+	
+				if (roleMap.has(highestRole)) {
+					roleMap.get(highestRole).push(member);
+				} else {
+					roleMap.set(highestRole, [member]);
+				}
 			}
-		}
-
-		for (const [role, members] of roleMap) {
-			members.sort((a, b) => a.name < b.name ? 1 : -1);
-			roleGroups.push({role, members});
-		}
-
-		roleGroups.sort((a, b) => b.role.position - a.role.position);
-
-		const nonMembers = [];
-
-		for (const user of archive.users.values()) {
-			if (server.members.has(user.id)) continue;
-			nonMembers.push(user);
-		}
-
-		const roleGroupsElems = roleGroups.map(({role, members}) => (
-			<div className={style['role-group']} key={role ? role.id : null}>
-				{role ? <div className={style['role-header']}>{role.name}</div> : null}
-				<div className={style['role-members']}>
-					{
-						members.map(member => (
-							<UserListing
-								memberID={member.id}
-								archive={archive}
-								key={member.id}
-							/>
-						))
-					}
-				</div>
-			</div>
-		));
-
-		const panelInner = nonMembers.length > 0 ? (
-			<>
-				<section>
-					<header>Current members</header>
-					<div>{roleGroupsElems}</div>
-				</section>
-				<section>
-					<header>Past users</header>
-					<div>
+	
+			for (const [role, members] of roleMap) {
+				members.sort((a, b) => a.name < b.name ? 1 : -1);
+				roleGroups.push({role, members});
+			}
+	
+			roleGroups.sort((a, b) => b.role.position - a.role.position);
+	
+			const nonMembers = [];
+	
+			for (const user of archive.users.values()) {
+				if (server.members.has(user.id)) continue;
+				nonMembers.push(user);
+			}
+	
+			const roleGroupsElems = roleGroups.map(({role, members}) => (
+				<div className={style['role-group']} key={role ? role.id : null}>
+					{role ? <div className={style['role-header']}>{role.name}</div> : null}
+					<div className={style['role-members']}>
 						{
-							nonMembers.map(user => (
+							members.map(member => (
 								<UserListing
-									memberID={user.id}
+									memberID={member.id}
 									archive={archive}
-									key={user.id}
+									key={member.id}
 								/>
 							))
 						}
 					</div>
-				</section>
-			</>
-		) : roleGroupsElems;
+				</div>
+			));
+	
+			panelInner = nonMembers.length > 0 ? (
+				<>
+					<section>
+						<header>Current members</header>
+						<div>{roleGroupsElems}</div>
+					</section>
+					<section>
+						<header>Past users</header>
+						<div>
+							{
+								nonMembers.map(user => (
+									<UserListing
+										memberID={user.id}
+										archive={archive}
+										key={user.id}
+									/>
+								))
+							}
+						</div>
+					</section>
+				</>
+			) : roleGroupsElems;
+		} else {
+			const channel = archive.data;
+			if (!channel.recipients) return null;
+			panelInner = (
+				<div>
+					{channel.recipients.map(id => (
+						<UserListing
+							memberID={id}
+							archive={archive}
+							key={id}
+						/>
+					))}
+				</div>
+			);
+		}
 
 		return (
 			<div className={style['users-list']}>

@@ -141,6 +141,12 @@ class Channel {
 		 * @type {?Array<Message>}
 		 */
 		this.pinnedMessages = null;
+
+		/**
+		 * This channel's current members, if this is a group channel.
+		 * @type {?Array<Snowflake>}
+		 */
+		this.recipients = null;
 	}
 }
 

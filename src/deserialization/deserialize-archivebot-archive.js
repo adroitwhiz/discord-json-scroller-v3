@@ -60,6 +60,10 @@ const deserializeChannel = channel => {
 		}
 	}
 
+	if (channel.type === 'group') {
+		parsedChannel.recipients = channel.recipients;
+	}
+
 	return parsedChannel;
 };
 
