@@ -211,6 +211,12 @@ class Message {
 		 * @type {?Array<MessageReaction>}
 		 */
 		this.reactions = null;
+
+		/**
+		 * If this message is a reply, the message it's replying to. Not an ID for performance reasons.
+		 * @type {?Message}
+		 */
+		this.referencedMessage = null;
 	}
 }
 

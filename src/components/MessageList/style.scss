@@ -1,6 +1,8 @@
 @use '../../colors.scss' as col;
 @use '../../common.scss';
 
+$avatar-margin-right: 0.5em;
+
 .message-list {
 	background-color: col.$base-color;
 	color: col.$text-color;
@@ -9,10 +11,15 @@
 	border-top: 1px solid col.$divider;
 	padding: 0.25em 0.5em;
 	display: flex;
+	flex-direction: column;
+}
+
+.message-inner {
+	display: flex;
 }
 
 .message-avatar {
-	margin-right: 0.5em;
+	margin-right: $avatar-margin-right;
 }
 
 .message-header {
@@ -86,4 +93,66 @@
 	font-size: 87.5%;
 	margin-left: 0.375em;
 	color: col.$grey;
+}
+
+.replied-message {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.25em;
+	margin-left: calc(32px + #{$avatar-margin-right});
+	position: relative;
+
+	& > * {
+		margin-right: 0.5em;
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+
+	&::before {
+		$reply-line-radius: 2px;
+		$reply-line-border: 2px;
+		content: "";
+		position: absolute;
+		top: calc(50% - #{$reply-line-radius / 2});
+		right: 100%;
+		width: 16px - $reply-line-radius / 2;
+		margin-right: $avatar-margin-right;
+		height: calc(50% + #{$reply-line-radius / 2} - #{$reply-line-border});
+
+		border-top: $reply-line-radius solid col.$grey-medium;
+		border-left: $reply-line-radius solid col.$grey-medium;
+		border-top-left-radius: 4px;
+	}
+}
+
+.replied-poster {
+	font-size: 82.5%;
+	opacity: 0.64;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.replied-content {
+	font-size: 75%;
+	color: col.$interactive-normal;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+	cursor: pointer;
+
+	&:hover {
+		color: col.$interactive-hover;
+	}
+}
+
+.replied-attachments-icon {
+	width: 16px;
+	height: 16px;
+	background-image: url('icon-attachment.svg');
+	opacity: 0.5;
 }

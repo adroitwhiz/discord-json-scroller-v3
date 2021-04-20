@@ -35,6 +35,16 @@ const deserializeChannel = channel => {
 			parsedMessage.createdTimestamp = message.createdTimestamp;
 			parsedMessage.editedTimestamp = message.editedTimestamp || null;
 			parsedMessage.type = message.type || 'DEFAULT'; // if DEFAULT, not explicitly set to save space
+			if (message.referencedMessage) {
+				// Scan backwards to find the referenced message
+				// TODO: binary search based on timestamps? or just map messages by ID
+				for (let j = i - 1; j >= 0; j--) {
+					if (channelMessages[j].id === message.referencedMessage) {
+						parsedMessage.referencedMessage = channelMessages[j];
+						break;
+					}
+				}
+			}
 
 			if (message.hasOwnProperty('attachments') && message.attachments.length > 0) {
 				parsedMessage.attachments = [];

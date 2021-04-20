@@ -9,6 +9,7 @@ import Avatar from '../Avatar/Avatar';
 import {ReactionEmoji} from '../Emoji/Emoji';
 import Markdown from '../Markdown/Markdown';
 import Tooltip from '../Tooltip/Tooltip';
+import JumpableMessageHOC from '../JumpableMessage/JumpableMessageHOC';
 
 import setUserInfoID from '../../actions/set-user-info-id';
 import setReactionInfo from '../../actions/set-reaction-info';
@@ -93,6 +94,40 @@ const MessageContents = ({message}) => (
 	</div>
 );
 
+//console.log(JumpableMessageHOC);
+
+const RepliedContent = JumpableMessageHOC(({text, jumpToMessage, messageID, hasAttachments}) => (
+	<div className={style['replied-content']} onClick={() => jumpToMessage(messageID)}>
+		{(!text && hasAttachments) ? <i>Click to see attachment</i> : <Markdown text={text} />}
+	</div>
+));
+
+const RepliedMessage = connect('archive', {setUserInfoID})(({message, archive, setUserInfoID}) => {
+	const hasAttachments = message.attachments && message.attachments.length > 0;
+	return (
+		<div className={style['replied-message']}>
+			<div className={style['replied-avatar']}>
+				<Avatar
+					user={archive.users.get(message.authorID)}
+					size={16}
+					userID={message.authorID}
+				/>
+			</div>
+			<div
+				className={style['replied-poster']}
+				style={`color: ${getMemberColor(message.authorID, archive)}`}
+				onClick={() => setUserInfoID(message.authorID)}
+			>
+				{getMemberName(message.authorID, archive)}
+			</div>
+			<RepliedContent text={message.content} hasAttachments={hasAttachments} messageID={message.id} />
+			{hasAttachments ?
+				<div className={style['replied-attachments-icon']} /> :
+				null}
+		</div>
+	);
+});
+
 const MessageList = props => {
 	const messageComponents = [];
 
@@ -112,30 +147,34 @@ const MessageList = props => {
 
 	return (
 		<div className={style['message-list']}>
-			<div className={style['message-avatar']}>
-				<Avatar
-					user={props.archive.users.get(firstMessage.authorID)}
-					size={32}
-					userID={firstMessage.authorID}
-				/>
-			</div>
-			<div className={style['message-right']}>
-				<div className={style['message-header']}>
-					<div
-						className={style['message-poster']}
-						style={`color: ${getMemberColor(firstMessage.authorID, props.archive)}`}
-						onClick={() => props.setUserInfoID(firstMessage.authorID)}
-					>
-						{getMemberName(firstMessage.authorID, props.archive)}
+			{firstMessage.referencedMessage ? <RepliedMessage message={firstMessage.referencedMessage} /> : null}
+			<div className={style['message-inner']}>
+				<div className={style['message-avatar']}>
+					<Avatar
+						user={props.archive.users.get(firstMessage.authorID)}
+						size={32}
+						userID={firstMessage.authorID}
+					/>
+				</div>
+				<div className={style['message-right']}>
+					<div className={style['message-header']}>
+						<div
+							className={style['message-poster']}
+							style={`color: ${getMemberColor(firstMessage.authorID, props.archive)}`}
+							onClick={() => props.setUserInfoID(firstMessage.authorID)}
+						>
+							{getMemberName(firstMessage.authorID, props.archive)}
+						</div>
+						<div className={style['message-timestamp']}>
+							{formatTimestamp(firstMessage.createdTimestamp)}
+						</div>
 					</div>
-					<div className={style['message-timestamp']}>
-						{formatTimestamp(firstMessage.createdTimestamp)}
+					<div className={style['message-bodies']}>
+						{messageComponents}
 					</div>
 				</div>
-				<div className={style['message-bodies']}>
-					{messageComponents}
-				</div>
 			</div>
+			
 		</div>
 	);
 };

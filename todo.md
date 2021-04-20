@@ -22,4 +22,4 @@
   - CHANNEL_ICON_CHANGE (group DM icon changed)
   - CHANNEL_PINNED_MESSAGE (PINS_ADD in discord.js) (message was pinned)
   - GUILD_MEMBER_JOIN (member joined server)
-- Replies
+- Store all messages by ID for easier cross-referencing?
