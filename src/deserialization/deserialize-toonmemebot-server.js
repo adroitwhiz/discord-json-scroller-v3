@@ -73,6 +73,7 @@ const deserializeToonMemeBotServer = json => {
 			parsedMessage.type = 'DEFAULT'; // unsaved
 
 			if (message.attachments.length > 0) {
+				parsedMessage.attachments = [];
 				for (const attachment of message.attachments) {
 					const parsedAttachment = new Prims.Attachment();
 

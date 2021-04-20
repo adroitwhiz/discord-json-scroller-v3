@@ -16,3 +16,11 @@
 - Deserialize in worker thread
   - Loading spinner
 - Display server/group DM owners
+- Non-text message types
+  - RECIPIENT_ADD (add member to group DM)
+  - RECIPIENT_REMOVE (remove member from group DM)
+  - CALL (call started (maybe only in group DM?))
+  - CHANNEL_NAME_CHANGE (group DM name changed)
+  - CHANNEL_ICON_CHANGE (group DM icon changed)
+  - CHANNEL_PINNED_MESSAGE (PINS_ADD in discord.js) (message was pinned)
+  - GUILD_MEMBER_JOIN (member joined server)

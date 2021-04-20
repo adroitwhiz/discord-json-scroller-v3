@@ -58,7 +58,7 @@ const MessageContents = ({message}) => (
 				null
 			}
 		</div>
-		{message.attachments.length === 0 ? null : message.attachments.map((attachment, index) =>
+		{message.attachments === null ? null : message.attachments.map((attachment, index) =>
 			<Attachment
 				key={index}
 				attachment={attachment}

@@ -145,6 +145,7 @@ const deserializeArchiveBotServer = json => {
 				parsedMessage.type = message.type || 'DEFAULT'; // if DEFAULT, not explicitly set to save space
 
 				if (message.hasOwnProperty('attachments') && message.attachments.length > 0) {
+					parsedMessage.attachments = [];
 					for (const attachment of message.attachments) {
 						const parsedAttachment = new Prims.Attachment();
 

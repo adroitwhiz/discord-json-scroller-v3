@@ -184,9 +184,9 @@ class Message {
 
 		/**
 		 * Array of message attachments.
-		 * @type {Array<Attachment>}
+		 * @type {?Array<Attachment>}
 		 */
-		this.attachments = [];
+		this.attachments = null;
 
 		/**
 		 * The type of message (e.g. DEFAULT, USER_GUILD_JOIN).
