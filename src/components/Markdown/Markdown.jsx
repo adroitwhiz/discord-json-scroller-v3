@@ -4,6 +4,9 @@ import style from './style.scss';
 import {Component} from 'preact';
 import {connect} from 'unistore/preact';
 import {parser, markdownEngine} from 'discord-markdown';
+import emojiRegex from 'twemoji-parser/dist/lib/regex';
+
+import Emoji from '../Emoji/Emoji';
 
 import setUserInfoID from '../../actions/set-user-info-id';
 import setCurrentChannel from '../../actions/set-current-channel';
@@ -93,8 +96,30 @@ const makeLink = (content, node) => {
 		<span>{content}</span>;
 };
 
+const toTwemoji = text => {
+	emojiRegex.lastIndex = 0;
+	const nodes = [];
+	let result;
+	let lastLastIndex = 0;
+	// eslint-disable-next-line no-cond-assign
+	while (result = emojiRegex.exec(text)) {
+		const emojiText = result[0];
+		nodes.push(text.slice(lastLastIndex, result.index));
+		nodes.push(<Emoji emoji={emojiText} />);
+		lastLastIndex = emojiRegex.lastIndex;
+	}
+
+	if (lastLastIndex !== text.length) {
+		nodes.push(text.slice(lastLastIndex));
+	}
+
+	return nodes;
+};
+
+window.toTwemoji = toTwemoji;
+
 const reactRules = {
-	text: content => content,
+	text: content => toTwemoji(content),
 	em: content => <em>{content}</em>,
 	strong: content => <strong>{content}</strong>,
 	u: content => <u>{content}</u>,
@@ -110,7 +135,8 @@ const reactRules = {
 	discordEveryone: () => <span className={style['mention']}>@everyone</span>,
 	discordHere: () => <span className={style['mention']}>@here</span>,
 	discordRole: (content, node) => <RoleMention id={node.id} />,
-	discordChannel: (content, node) => <ChannelMention id={node.id} />
+	discordChannel: (content, node) => <ChannelMention id={node.id} />,
+	discordEmoji: (content, node) => <Emoji emoji={node} />
 };
 
 const reactify = nodeArray => nodeArray.map(node => {
@@ -128,6 +154,10 @@ const reactify = nodeArray => nodeArray.map(node => {
 	return nodeHasContent ? reactRules.text(content) : null;
 });
 
-const Markdown = props => reactify(parser(props.text));
+//const Markdown = props => reactify(parser(props.text));
+const Markdown = props => {
+	const parsed = parser(props.text);
+	return reactify(parsed);
+};
 
 export default Markdown;
