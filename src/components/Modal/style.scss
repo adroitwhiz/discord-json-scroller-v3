@@ -10,6 +10,18 @@
 	z-index: 1;
 	background-color: rgba(0, 0, 0, 0.5);
 	cursor: pointer;
+	animation-duration: 0.125s;
+	animation-name: fade;
+}
+
+@keyframes fade {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
 }
 
 .modal-positioner {
@@ -31,4 +43,18 @@
 	background-color: col.$base-color;
 	pointer-events: auto;
 	overflow: auto;
+
+	animation-duration: 0.125s;
+	animation-name: popup;
+	animation-timing-function: cubic-bezier(.3,1.25,.6,1);
+}
+
+@keyframes popup {
+	from {
+		transform: scale(0)
+	}
+
+	to {
+		transform: scale(1)
+	}
 }
