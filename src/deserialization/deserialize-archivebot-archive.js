@@ -86,6 +86,7 @@ const deserializeChannel = channel => {
 
 	if (channel.type === 'group') {
 		parsedChannel.recipients = channel.recipients;
+		parsedChannel.owner = channel.owner;
 	}
 
 	return parsedChannel;
@@ -93,6 +94,11 @@ const deserializeChannel = channel => {
 
 const deserializeServer = (server, archive, archiveVersion) => {
 	const parsedServer = new Prims.Server();
+
+	parsedServer.id = server.id;
+	parsedServer.name = server.name;
+	parsedServer.iconURL = server.iconURL;
+	if (server.hasOwnProperty('owner')) parsedServer.owner = server.owner;
 
 	// Parse roles
 	const serverRoles = parsedServer.roles;

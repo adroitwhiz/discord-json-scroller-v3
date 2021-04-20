@@ -11,7 +11,7 @@ import getMemberName from '../../../util/get-member-name';
 import getMemberColor from '../../../util/member-role-color';
 
 const UserListing = connect([], {setUserInfoID})(props => {
-	const {memberID, archive} = props;
+	const {memberID, archive, isOwner} = props;
 	return (
 		<div
 			className={style['user']}
@@ -26,6 +26,9 @@ const UserListing = connect([], {setUserInfoID})(props => {
 			>
 				{getMemberName(memberID, archive)}
 			</div>
+			{isOwner ?
+				<div className={style['icon-owner']} /> :
+				null}
 		</div>
 	);
 });
@@ -82,6 +85,7 @@ class UsersPanel extends Component {
 									memberID={member.id}
 									archive={archive}
 									key={member.id}
+									isOwner={server.owner === member.id}
 								/>
 							))
 						}
@@ -121,6 +125,7 @@ class UsersPanel extends Component {
 							memberID={id}
 							archive={archive}
 							key={id}
+							isOwner={channel.owner === id}
 						/>
 					))}
 				</div>

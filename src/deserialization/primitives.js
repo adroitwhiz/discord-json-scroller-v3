@@ -95,6 +95,12 @@ class Server {
 		 * @type {Set<Snowflake>}
 		 */
 		this.channels = new Set();
+
+		/**
+		 * The ID of this server's owner. Only present in Archivebot >=v11 archives.
+		 * @type {?Snowflake}
+		 */
+		this.owner = null;
 	}
 }
 
@@ -159,6 +165,12 @@ class Channel {
 		 * @type {?Array<Snowflake>}
 		 */
 		this.recipients = null;
+
+		/**
+		 * This channel's current owner, if this is a group channel.
+		 * @type {?Snowflake}
+		 */
+		this.owner = null;
 	}
 }
 

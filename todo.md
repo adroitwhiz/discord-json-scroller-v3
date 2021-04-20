@@ -13,7 +13,6 @@
 - Embeds
 - Deserialize in worker thread
   - Loading spinner
-- Display server/group DM owners
 - Non-text message types
   - RECIPIENT_ADD (add member to group DM)
   - RECIPIENT_REMOVE (remove member from group DM)
