@@ -8,6 +8,7 @@ import MessageViewScrollbar from './MessageViewScrollbar';
 
 import setChannelScrollState from '../../actions/set-channel-scroll-state';
 
+import shouldSplitMessages from '../../util/should-split-messages';
 import {fixupMessageStart, fixupMessageEnd} from '../../util/fixup-message-boundaries';
 
 const CHUNK_SIZE = 50;
@@ -115,7 +116,6 @@ class MessageView extends Component {
 		}
 	}
 
-
 	render () {
 		const {props} = this;
 
@@ -127,16 +127,16 @@ class MessageView extends Component {
 
 		if (props.messages.length > 0) {
 			// there is probably at least one off-by-one error in here
-			let currentChunkStart, currentChunkAuthor;
+			let currentChunkStart;
 			let i = start;
 			while (i <= end) {
 				currentChunkStart = i;
-				currentChunkAuthor = props.messages[i].authorID;
 
-
-				while ((i > end || props.messages[i].authorID === currentChunkAuthor) && i <= end) {
+				while (i < end && (!shouldSplitMessages(props.messages[i], props.messages[i + 1]))) {
 					i++;
 				}
+
+				i++;
 
 				chunks.push(
 					<MessageList
