@@ -125,7 +125,7 @@ const deserializeServer = (server, archive, archiveVersion) => {
 	
 			parsedEmoji.id = emoji.id;
 			parsedEmoji.name = emoji.name;
-			parsedEmoji.url = emoji.url;
+			parsedEmoji.url = emoji.url || `https://cdn.discordapp.com/emojis/${emoji.id}`;
 	
 			serverEmojis.set(parsedEmoji.id, parsedEmoji);
 			archive.emojis.set(parsedEmoji.id, parsedEmoji);
@@ -177,7 +177,7 @@ const deserializeArchiveBotArchive = async (json, zip) => {
 			parsedEmoji.id = emoji.id;
 			parsedEmoji.identifier = emoji.identifier;
 			parsedEmoji.name = emoji.name;
-			parsedEmoji.url = emoji.url;
+			parsedEmoji.url = emoji.url || `https://cdn.discordapp.com/emojis/${emoji.id}`;
 
 			archive.emojis.set(emoji.id, parsedEmoji);
 		}
