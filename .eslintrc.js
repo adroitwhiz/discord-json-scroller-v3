@@ -45,6 +45,7 @@ module.exports = {
 		}],
 		'new-parens': ['error'],
 		'newline-per-chained-call': ['error'],
+		'no-console': ['error'],
 		'no-mixed-operators': ['error'],
 		'no-multiple-empty-lines': ['error', {
 			max: 2,
