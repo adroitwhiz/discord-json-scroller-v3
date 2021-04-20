@@ -20,13 +20,16 @@
 	cursor: pointer;
 	@include common.animate-bg-color;
 	border-radius: 0.25em;
+	color: col.$text-color-detail;
 
 	&:hover {
-		background-color: rgba(255, 255, 255, 0.1);
+		background-color: col.$background-modifier-hover;
+		color: col.$interactive-hover;
 	}
 
 	&.selected {
-		background-color: rgba(255, 255, 255, 0.2);
+		background-color: col.$background-modifier-selected;
+		color: col.$interactive-active;
 	}
 }
 
@@ -37,7 +40,8 @@
 .category-channel {
 	padding: 0.25em 1em;
 	text-transform: uppercase;
-	font-size:0.75em;
+	font-size: 0.75em;
+	font-weight: bold;
 }
 
 .channel-icon {
