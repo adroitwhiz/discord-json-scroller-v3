@@ -150,6 +150,7 @@ const reactify = nodeArray => nodeArray.map(node => {
 		return reactRules[node.type](content, node);
 	}
 
+	// eslint-disable-next-line no-console
 	console.warn(`Unknown Markdown node type: ${node.type}`);
 	return nodeHasContent ? reactRules.text(content) : null;
 });
