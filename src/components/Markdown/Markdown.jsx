@@ -6,7 +6,7 @@ import {connect} from 'unistore/preact';
 import {parser, markdownEngine} from 'discord-markdown';
 import emojiRegex from 'twemoji-parser/dist/lib/regex';
 
-import Emoji from '../Emoji/Emoji';
+import {TooltipEmoji} from '../Emoji/Emoji';
 
 import setUserInfoID from '../../actions/set-user-info-id';
 import setCurrentChannel from '../../actions/set-current-channel';
@@ -105,7 +105,7 @@ const toTwemoji = text => {
 	while (result = emojiRegex.exec(text)) {
 		const emojiText = result[0];
 		nodes.push(text.slice(lastLastIndex, result.index));
-		nodes.push(<Emoji emoji={emojiText} />);
+		nodes.push(<TooltipEmoji emoji={emojiText} />);
 		lastLastIndex = emojiRegex.lastIndex;
 	}
 
@@ -136,7 +136,7 @@ const reactRules = {
 	discordHere: () => <span className={style['mention']}>@here</span>,
 	discordRole: (content, node) => <RoleMention id={node.id} />,
 	discordChannel: (content, node) => <ChannelMention id={node.id} />,
-	discordEmoji: (content, node) => <Emoji emoji={node} />
+	discordEmoji: (content, node) => <TooltipEmoji emoji={node} />
 };
 
 const reactify = nodeArray => nodeArray.map(node => {

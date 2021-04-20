@@ -1,0 +1,80 @@
+@use '../../common.scss';
+@use '../../colors.scss' as col;
+
+.reaction-info {
+	display: flex;
+	max-height: 50vh;
+	width: 50vh;
+}
+
+.reactions {
+	padding: 0.25em;
+	background-color: col.$base-color-secondary;
+	min-height: 0;
+	overflow-y: auto;
+	scrollbar-width: thin;
+}
+
+.reaction {
+	padding: 0.25em 0.5em;
+	border-radius: 0.25em;
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.25em;
+	cursor: pointer;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	&:hover {
+		background-color: col.$background-modifier-hover;
+	}
+
+	&.selected {
+		background-color: col.$background-modifier-selected;
+
+		& .count {
+			color: col.$text-color;
+		}
+	}
+}
+
+.count {
+	font-size: 87.5%;
+	margin-left: 0.375em;
+	color: col.$grey;
+}
+
+.reaction-users {
+	min-height: 0;
+	overflow-y: auto;
+	scrollbar-width: thin;
+	flex: 1 0 0;
+	padding: 0.25em;
+	display: flex;
+	flex-direction: column;
+}
+
+.reaction-user {
+	display: flex;
+	align-items: center;
+
+	& > * {
+		margin-right: 0.5em;
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+
+	padding: 0.25em;
+}
+
+.user-nickname {
+	font-weight: bold;
+}
+
+.username {
+	@include common.detail-text;
+}

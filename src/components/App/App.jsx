@@ -11,16 +11,20 @@ import ChannelView from '../ChannelView/ChannelView';
 import Sidebar from '../Sidebar/Sidebar';
 import Modal from '../Modal/Modal';
 import UserInfo from '../UserInfo/UserInfo';
+import ReactionInfo from '../ReactionInfo/ReactionInfo';
 import {ErrorBoundaryHOC} from '../ErrorBoundary/ErrorBoundary';
 
 import setArchive from '../../actions/set-archive';
 import setUserInfoID from '../../actions/set-user-info-id';
+import setReactionInfo from '../../actions/set-reaction-info';
 import setCurrentChannel from '../../actions/set-current-channel';
 
 const store = createStore({
 	archive: null,
 	currentChannel: null,
 	showInfoOfUserID: null,
+	reactionsToShow: null,
+	showReactionIndex: null,
 	channelScrollState: {},
 	showSidebar: true
 });
@@ -31,6 +35,7 @@ class _App extends Component {
 
 		this.handleUpload = this.handleUpload.bind(this);
 		this.hideUserInfo = this.hideUserInfo.bind(this);
+		this.hideReactionInfo = this.hideReactionInfo.bind(this);
 	}
 
 	handleUpload (event) {
@@ -50,6 +55,10 @@ class _App extends Component {
 
 	hideUserInfo () {
 		this.props.setUserInfoID(null);
+	}
+
+	hideReactionInfo () {
+		this.props.setReactionInfo(null, null);
 	}
 
 	render () {
@@ -87,13 +96,22 @@ class _App extends Component {
 						<UserInfo userID={this.props.showInfoOfUserID}/>
 					</Modal> :
 					null}
+
+				{this.props.reactionsToShow ?
+					<Modal onClose={this.hideReactionInfo}>
+						<ReactionInfo />
+					</Modal> :
+					null}
 			</div>
 		);
 	}
 }
 
 const App = ErrorBoundaryHOC(
-	connect(['archive', 'currentChannel', 'showInfoOfUserID'], {setUserInfoID, setArchive, setCurrentChannel})(_App)
+	connect(
+		['archive', 'currentChannel', 'showInfoOfUserID', 'reactionsToShow'],
+		{setUserInfoID, setReactionInfo, setArchive, setCurrentChannel}
+	)(_App)
 );
 
 export default class Main extends Component {

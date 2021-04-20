@@ -13,6 +13,12 @@ class Archive {
 		this.users = new Map();
 
 		/**
+		 * Map of all emojis encountered during archiving, keyed by ID.
+		 * @type {Map<Snowflake, CustomEmoji>}
+		 */
+		this.emojis = new Map();
+
+		/**
 		 * Map of all channels encountered during archiving, keyed by ID.
 		 * @type {Map<Snowflake, Channel>}
 		 */
@@ -28,6 +34,12 @@ class Archive {
 		 * @type {Map<Snowflake, string>}
 		 */
 		this.avatars = new Map();
+
+		/**
+		 * Blob URLs for every saved emoji.
+		 * @type {Map<Snowflake, string>}
+		 */
+		this.emojiURLs = new Map();
 	}
 
 	/**
@@ -68,7 +80,7 @@ class Server {
 
 		/**
 		 * Map of server-specific custom emojis, keyed by ID.
-		 * @type {Map<Snowflake, Emoji>}
+		 * @type {Map<Snowflake, CustomEmoji>}
 		 */
 		this.emojis = new Map();
 
@@ -193,6 +205,40 @@ class Message {
 		 * @type {?string}
 		 */
 		this.type = null;
+
+		/**
+		 * Array of reactions to this message.
+		 * @type {?Array<MessageReaction>}
+		 */
+		this.reactions = null;
+	}
+}
+
+class MessageReaction {
+	constructor () {
+		/**
+		 * The number of people who have reacted with this reaction.
+		 * @type {number}
+		 */
+		this.count = 0;
+
+		/**
+		 * This reaction's emoji. An ID if this is a custom emoji, or its Unicode representation if not.
+		 * @type {Snowflake|string}
+		 */
+		this.emoji = null;
+
+		/**
+		 * Whether this reaction uses a custom emoji.
+		 * @type {boolean}
+		 */
+		this.emojiIsCustom = false;
+
+		/**
+		 * The IDs of the users which have reacted with this reaction. The length may be less than `count`.
+		 * @type {?Array<Snowflake>}
+		 */
+		this.users = null;
 	}
 }
 
@@ -338,13 +384,37 @@ class Attachment {
 	}
 }
 
-class Emoji {
+class CustomEmoji {
 	constructor () {
+		/**
+		 * Whether this is an animated emoji. Only present in Archivebot >=v11 archives.
+		 * @type {?boolean}
+		 */
+		this.animated = null;
+
+		/**
+		 * The time at which this emoji was created. Only present in Archivebot >=v11 archives.
+		 * @type {?number}
+		 */
+		this.createdTimestamp = null;
+
+		/**
+		 * The ID of the guild that this emoji belongs to.
+		 * @type {Snowflake}
+		 */
+		this.guild = null;
+
 		/**
 		 * The emoji ID.
 		 * @type {Snowflake}
 		 */
 		this.id = null;
+
+		/**
+		 * The identifier of this emoji, used for message reactions. Only present in Archivebot >=v11 archives.
+		 * @type {?string}
+		 */
+		this.identifier = null;
 
 		/**
 		 * The emoji name.
@@ -354,10 +424,10 @@ class Emoji {
 
 		/**
 		 * The emoji URL.
-		 * @type {?string}
+		 * @type {string}
 		 */
 		this.url = null;
 	}
 }
 
-export {Archive, Server, Channel, Message, Member, User, Role, Attachment, Emoji};
+export {Archive, Server, Channel, Message, MessageReaction, Member, User, Role, Attachment, CustomEmoji};

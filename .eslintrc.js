@@ -13,7 +13,7 @@ module.exports = {
 	},
 	rules: {
 		'no-prototype-builtins': 'off',
-		'no-unused-vars': ['error', {'args': 'after-used'}],
+		'no-unused-vars': ['error', {'args': 'after-used', 'varsIgnorePattern': '__.*$'}],
 		'no-constant-condition': ['error', {'checkLoops': false}],
 
 		'array-bracket-spacing': ['error', 'never'],

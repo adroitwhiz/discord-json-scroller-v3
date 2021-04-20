@@ -6,10 +6,12 @@ import {memo} from 'preact/compat';
 
 import Attachment from '../Attachment/Attachment';
 import Avatar from '../Avatar/Avatar';
+import {ReactionEmoji} from '../Emoji/Emoji';
 import Markdown from '../Markdown/Markdown';
 import Tooltip from '../Tooltip/Tooltip';
 
 import setUserInfoID from '../../actions/set-user-info-id';
+import setReactionInfo from '../../actions/set-reaction-info';
 
 import getMemberName from '../../util/get-member-name';
 import getMemberColor from '../../util/member-role-color';
@@ -49,6 +51,18 @@ class Edited extends Component {
 	}
 }
 
+const MessageReaction = connect('archive', {setReactionInfo})(
+	({reactions, archive, reaction, reactionIndex, setReactionInfo}) => {
+		const {count, emoji, emojiIsCustom} = reaction;
+		return (
+			<div className={style['reaction']} onClick={() => setReactionInfo(reactions, reactionIndex)}>
+				<ReactionEmoji emoji={emojiIsCustom ? archive.emojis.get(emoji) : emoji} />
+				<span className={style['reaction-count']}>{count}</span>
+			</div>
+		);
+	}
+);
+
 const MessageContents = ({message}) => (
 	<div className={style.message} key={message.id}>
 		<div className={style['message-content']}>
@@ -64,6 +78,18 @@ const MessageContents = ({message}) => (
 				attachment={attachment}
 			/>
 		)}
+		{message.reactions === null ? null :
+			<div className={style['message-reactions']}>
+				{message.reactions.map((reaction, index) =>
+					<MessageReaction
+						key={reaction.emoji}
+						reaction={reaction}
+						reactions={message.reactions}
+						reactionIndex={index}
+					/>
+				)}
+			</div>
+		}
 	</div>
 );
 

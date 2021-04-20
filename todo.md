@@ -1,5 +1,3 @@
-- Markdown support:
-  - discordEmoji
 - Move unmarkdowned messages, individual timestamps, last edited date, ID, etc. into "message details" view accessible by clicking on a message
 - More detailed user details
   - Posting frequency by time?
@@ -24,3 +22,4 @@
   - CHANNEL_ICON_CHANGE (group DM icon changed)
   - CHANNEL_PINNED_MESSAGE (PINS_ADD in discord.js) (message was pinned)
   - GUILD_MEMBER_JOIN (member joined server)
+- Replies

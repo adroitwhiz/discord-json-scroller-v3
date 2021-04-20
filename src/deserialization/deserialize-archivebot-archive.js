@@ -53,6 +53,19 @@ const deserializeChannel = channel => {
 				}
 			}
 
+			if (message.hasOwnProperty('reactions') && message.reactions.length > 0) {
+				parsedMessage.reactions = [];
+				for (const reaction of message.reactions) {
+					const parsedReaction = new Prims.MessageReaction();
+
+					parsedReaction.count = reaction.count;
+					parsedReaction.emoji = reaction.emoji;
+					parsedReaction.emojiIsCustom = reaction.emojiIsCustom;
+					if (reaction.hasOwnProperty('users')) parsedReaction.users = reaction.users;
+					parsedMessage.reactions.push(parsedReaction);
+				}
+			}
+
 			if (hasPinnedMessages && pinnedMessageIDs.has(message.id)) {
 				parsedChannel.pinnedMessages.push(parsedMessage);
 			}
@@ -68,7 +81,7 @@ const deserializeChannel = channel => {
 	return parsedChannel;
 };
 
-const deserializeServer = (server, archive) => {
+const deserializeServer = (server, archive, archiveVersion) => {
 	const parsedServer = new Prims.Server();
 
 	// Parse roles
@@ -106,16 +119,23 @@ const deserializeServer = (server, archive) => {
 
 	// Parse emojis
 	const serverEmojis = parsedServer.emojis;
-	for (const emoji of server.emojis) {
-		const parsedEmoji = new Prims.Emoji();
-
-		parsedEmoji.id = emoji.id;
-		parsedEmoji.name = emoji.name;
-		parsedEmoji.url = emoji.url; // explicitly null in serialized format if unset
-
-		Object.freeze(parsedEmoji);
-		serverEmojis.set(parsedEmoji.id, parsedEmoji);
+	if (archiveVersion < 11) {
+		for (const emoji of server.emojis) {
+			const parsedEmoji = new Prims.CustomEmoji();
+	
+			parsedEmoji.id = emoji.id;
+			parsedEmoji.name = emoji.name;
+			parsedEmoji.url = emoji.url;
+	
+			serverEmojis.set(parsedEmoji.id, parsedEmoji);
+			archive.emojis.set(parsedEmoji.id, parsedEmoji);
+		}
+	} else {
+		for (const emojiID of server.emojis) {
+			serverEmojis.set(emojiID, archive.emojis.get(emojiID));
+		}
 	}
+	
 
 	// Parse channels
 	const serverChannels = parsedServer.channels;
@@ -129,7 +149,10 @@ const deserializeServer = (server, archive) => {
 };
 
 const deserializeArchiveBotArchive = async (json, zip) => {
+	const archiveVersion = json.version ? parseInt(json.version.replace('archivebot-v', '')) : 1;
+
 	const archive = new Prims.Archive();
+	window.archive = archive;
 
 	archive.type = json.archiveType;
 
@@ -144,9 +167,25 @@ const deserializeArchiveBotArchive = async (json, zip) => {
 		archive.users.set(user.id, parsedUser);
 	}
 
+	if (archiveVersion >= 11) {
+		for (const emoji of json.emojis) {
+			const parsedEmoji = new Prims.CustomEmoji();
+	
+			parsedEmoji.animated = emoji.animated;
+			parsedEmoji.createdTimestamp = emoji.createdTimestamp;
+			parsedEmoji.guild = emoji.guild; // explicitly null in serialized format if unset
+			parsedEmoji.id = emoji.id;
+			parsedEmoji.identifier = emoji.identifier;
+			parsedEmoji.name = emoji.name;
+			parsedEmoji.url = emoji.url;
+
+			archive.emojis.set(emoji.id, parsedEmoji);
+		}
+	}
+
 	switch (archive.type) {
 		case 'server': {
-			archive.data = deserializeServer(json.archiveData, archive);
+			archive.data = deserializeServer(json.archiveData, archive, archiveVersion);
 			break;
 		}
 		case 'channel': {
@@ -158,15 +197,31 @@ const deserializeArchiveBotArchive = async (json, zip) => {
 
 	if (zip) {
 		const {entries} = zip;
+		// Currently, an avatars folder is created even if no avatars are saved, so it's okay to only check for it.
 		if (Object.prototype.hasOwnProperty.call(entries, 'avatars/')) {
 			const filePromises = [];
 			for (const path of Object.keys(entries)) {
-				if (!path.startsWith('avatars/')) continue;
+				// regex matches the first folder in the path (it must be a folder because it's followed by a slash),
+				// and the filename after it
+				const pathMatch = /^([^/]+)\/(.+)$/.exec(path);
+				if (!pathMatch) continue;
+				const [__, leadingFolder, filePath] = pathMatch;
+
+				if (leadingFolder !== 'avatars' && leadingFolder !== 'emojis') continue;
+
 				const entry = entries[path];
 				if (entry.isDirectory) continue;
 				filePromises.push(entry.blob().then(blob => {
-					const avatarURL = URL.createObjectURL(blob);
-					archive.avatars.set(path.replace('avatars/', ''), avatarURL);
+					const blobURL = URL.createObjectURL(blob);
+					switch (leadingFolder) {
+						case 'avatars':
+							archive.avatars.set(filePath, blobURL);
+							break;
+						case 'emojis':
+							archive.emojiURLs.set(filePath, blobURL);
+							break;
+					}
+					
 				}));
 			}
 			await Promise.all(filePromises);

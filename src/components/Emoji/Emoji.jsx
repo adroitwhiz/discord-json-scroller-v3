@@ -1,10 +1,12 @@
 import style from './style';
 
 import {Component} from 'preact';
+import {connect} from 'unistore/preact';
 import {toCodePoints} from 'twemoji-parser';
 
-import getEmojiName from '../../util/get-emoji-name';
 import Tooltip from '../Tooltip/Tooltip';
+
+import getEmojiName from '../../util/get-emoji-name';
 
 // Copied in from twemoji-parser because they don't export it
 const vs16RegExp = /\uFE0F/g;
@@ -15,7 +17,38 @@ const removeVS16s = rawEmoji => {
 	return rawEmoji.indexOf(zeroWidthJoiner) < 0 ? rawEmoji.replace(vs16RegExp, '') : rawEmoji;
 };
 
-class Emoji extends Component {
+const useEmoji = Component => {
+	return connect('archive')(props => {
+		const {emoji, archive, ...rest} = props;
+		let emojiName;
+		let emojiURL;
+		if (typeof emoji === 'string') {
+			emojiName = getEmojiName(emoji);
+			// TODO: self-host twemoji
+			const codepoints = toCodePoints(removeVS16s(emoji)).join('-');
+			emojiURL = `https://twemoji.maxcdn.com/v/latest/svg/${codepoints}.svg`;
+		} else {
+			emojiURL = archive.emojiURLs.has(emoji.id) ?
+				archive.emojiURLs.get(emoji.id) :
+				`https://cdn.discordapp.com/emojis/${emoji.id}`;
+
+			emojiName = archive.emojis.has(emoji.id) ?
+				archive.emojis.get(emoji.id).name :
+				emoji.name;
+		}
+		return <Component emojiName={emojiName} emojiURL={emojiURL} {...rest} />;
+	});
+};
+
+const ReactionEmoji = useEmoji(({emojiName, emojiURL}) =>
+	<img
+		draggable={false}
+		className={`${style['emoji']} ${style['reaction-emoji']}`}
+		src={emojiURL}
+		alt={`:${emojiName}:`}
+	/>);
+
+class _TooltipEmoji extends Component {
 	constructor (props) {
 		super(props);
 
@@ -36,18 +69,7 @@ class Emoji extends Component {
 	}
 
 	render () {
-		const {emoji} = this.props;
-		let emojiName;
-		let emojiURL;
-		if (typeof emoji === 'string') {
-			emojiName = getEmojiName(emoji);
-			// TODO: self-host twemoji
-			const codepoints = toCodePoints(removeVS16s(emoji)).join('-');
-			emojiURL = `https://twemoji.maxcdn.com/v/latest/svg/${codepoints}.svg`;
-		} else {
-			// TODO
-		}
-
+		const {emojiURL, emojiName} = this.props;
 		return (
 			<span
 				className={style['emoji-container']}
@@ -61,4 +83,6 @@ class Emoji extends Component {
 	}
 }
 
-export default Emoji;
+const TooltipEmoji = useEmoji(_TooltipEmoji);
+
+export {TooltipEmoji, ReactionEmoji};

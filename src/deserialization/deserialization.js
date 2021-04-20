@@ -95,7 +95,8 @@ const deserializeArchiveFile = async file => {
 			return deserializeArchiveBotServer(json);
 		}
 		case 'archivebot-v9':
-		case 'archivebot-v10': {
+		case 'archivebot-v10':
+		case 'archivebot-v11': {
 			return deserializeArchiveBotArchive(json, type === 'zip' ? zipData : null);
 		}
 		case 'toonmemebot-server-snapshot': {

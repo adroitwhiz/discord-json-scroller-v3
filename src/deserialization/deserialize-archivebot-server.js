@@ -106,7 +106,7 @@ const deserializeArchiveBotServer = json => {
 	// Parse emojis
 	const serverEmojis = server.emojis;
 	for (const emoji of json.emojis) {
-		const parsedEmoji = new Prims.Emoji();
+		const parsedEmoji = new Prims.CustomEmoji();
 
 		parsedEmoji.id = emoji.id;
 		parsedEmoji.name = emoji.name;

@@ -59,4 +59,31 @@
 	font-size: 90%;
 	white-space: pre-line;
 	padding: 0.125em 0;
+	user-select: text;
+}
+
+.message-reactions {
+	display: flex;
+}
+
+.reaction {
+	border-radius: 0.25em;
+	background-color: col.$background-modifier-accent;
+	box-sizing: border-box;
+	margin: 0 0.125em 0.0125em 0;
+	user-select: none;
+	display: flex;
+	align-items: center;
+	padding: 0 0.375em;
+	cursor: pointer;
+
+	&:hover .reaction-count {
+		color: col.$text-color;
+	}
+}
+
+.reaction-count {
+	font-size: 87.5%;
+	margin-left: 0.375em;
+	color: col.$grey;
 }

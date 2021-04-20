@@ -34,16 +34,24 @@ const deserializeToonMemeBotServer = json => {
 	}
 
 	// Parse emojis
+	const archiveEmojis = archive.emojis;
 	const serverEmojis = server.emojis;
-	for (const emoji of json.emojis) {
-		const parsedEmoji = new Prims.Emoji();
+
+	const parseEmoji = emoji => {
+		if (archiveEmojis.has(emoji.id)) return archiveEmojis.get(emoji.id);
+
+		const parsedEmoji = new Prims.CustomEmoji();
 
 		parsedEmoji.id = emoji.id;
 		parsedEmoji.name = emoji.name;
-		parsedEmoji.url = emoji.url; // explicitly null in serialized format if unset
+		parsedEmoji.url = emoji.url || `https://cdn.discordapp.com/emojis/${emoji.id}`;
 
-		Object.freeze(parsedEmoji);
-		serverEmojis.set(parsedEmoji.id, parsedEmoji);
+		archiveEmojis.set(parsedEmoji.id, parsedEmoji);
+		return parsedEmoji;
+	};
+
+	for (const emoji of json.emojis) {
+		serverEmojis.set(emoji.id, parseEmoji(emoji));
 	}
 
 	// Parse channels
@@ -83,6 +91,18 @@ const deserializeToonMemeBotServer = json => {
 					parsedAttachment.url = attachment.url;
 
 					parsedMessage.attachments.push(parsedAttachment);
+				}
+			}
+
+			if (message.reactions.length > 0) {
+				parsedMessage.reactions = [];
+				for (const reaction of message.reactions) {
+					const parsedReaction = new Prims.MessageReaction();
+					
+					parsedReaction.count = reaction.count;
+					const emojiIsCustom = !!reaction.emoji.id;
+					parsedReaction.emoji = emojiIsCustom ? parseEmoji(reaction.emoji).id : reaction.emoji.name;
+					parsedMessage.reactions.push(parsedReaction);
 				}
 			}
 
