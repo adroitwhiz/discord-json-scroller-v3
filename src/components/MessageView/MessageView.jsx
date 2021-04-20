@@ -8,6 +8,8 @@ import MessageViewScrollbar from './MessageViewScrollbar';
 
 import setChannelScrollState from '../../actions/set-channel-scroll-state';
 
+import {fixupMessageStart, fixupMessageEnd} from '../../util/fixup-message-boundaries';
+
 const CHUNK_SIZE = 50;
 const MAX_MESSAGES = 200;
 const SLACK_SPACE = 100;
@@ -28,39 +30,6 @@ class MessageView extends Component {
 		this.handleScroll = this.handleScroll.bind(this);
 		this.setNewStart = this.setNewStart.bind(this);
 		this.setNewEnd = this.setNewEnd.bind(this);
-
-		this.fixupMessageStart = this.fixupMessageStart.bind(this);
-		this.fixupMessageEnd = this.fixupMessageEnd.bind(this);
-	}
-
-	fixupMessageStart (start, props) {
-		// Clamp within valid message range
-		let fixed = Math.max(0, Math.min(start, props.messages.length - 1));
-		if (props.messages.length === 0) return fixed;
-
-		const startUser = props.messages[fixed].authorID;
-
-		// Extend so that all messages in "string" from that user are visible
-		while (fixed > 0 && props.messages[fixed - 1].authorID === startUser) {
-			fixed--;
-		}
-
-		return fixed;
-	}
-
-	fixupMessageEnd (end, props) {
-		// Clamp within valid message range
-		let fixed = Math.max(0, Math.min(end, props.messages.length - 1));
-		if (props.messages.length === 0) return fixed;
-
-		const startUser = props.messages[fixed].authorID;
-
-		// Extend so that all messages in "string" from that user are visible
-		while (fixed < props.messages.length - 1 && props.messages[fixed + 1].authorID === startUser) {
-			fixed++;
-		}
-
-		return fixed;
 	}
 
 	handleScroll (e) {
@@ -83,7 +52,7 @@ class MessageView extends Component {
 		const {props} = this;
 		props.setChannelScrollState(
 			props.currentChannel,
-			this.fixupMessageStart(props.start - CHUNK_SIZE, props),
+			fixupMessageStart(props.start - CHUNK_SIZE, props.messages),
 			props.end
 		);
 	}
@@ -93,7 +62,7 @@ class MessageView extends Component {
 		props.setChannelScrollState(
 			props.currentChannel,
 			props.start,
-			this.fixupMessageEnd(props.end + CHUNK_SIZE, props)
+			fixupMessageEnd(props.end + CHUNK_SIZE, props.messages)
 		);
 	}
 
@@ -101,8 +70,8 @@ class MessageView extends Component {
 		const {props} = this;
 		props.setChannelScrollState(
 			props.currentChannel,
-			this.fixupMessageStart(start, props),
-			this.fixupMessageEnd(start + CHUNK_SIZE, props)
+			fixupMessageStart(start, props.messages),
+			fixupMessageEnd(start + CHUNK_SIZE, props.messages)
 		);
 	}
 
@@ -110,8 +79,8 @@ class MessageView extends Component {
 		const {props} = this;
 		props.setChannelScrollState(
 			props.currentChannel,
-			this.fixupMessageStart(end - CHUNK_SIZE, props),
-			this.fixupMessageEnd(end, props)
+			fixupMessageStart(end - CHUNK_SIZE, props.messages),
+			fixupMessageEnd(end, props.messages)
 		);
 	}
 
@@ -135,12 +104,12 @@ class MessageView extends Component {
 			props.setChannelScrollState(
 				props.currentChannel,
 				props.start,
-				this.fixupMessageEnd(Math.min(props.end, props.start + MAX_MESSAGES), props)
+				fixupMessageEnd(Math.min(props.end, props.start + MAX_MESSAGES), props.messages)
 			);
 		} else if (prevProps.end !== props.end) {
 			props.setChannelScrollState(
 				props.currentChannel,
-				this.fixupMessageStart(Math.max(props.start, props.end - MAX_MESSAGES), props),
+				fixupMessageStart(Math.max(props.start, props.end - MAX_MESSAGES), props.messages),
 				props.end
 			);
 		}

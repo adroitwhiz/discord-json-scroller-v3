@@ -1,4 +1,4 @@
-import {fixupMessageStart, fixupMessageEnd} from './set-channel-scroll-state';
+import {fixupMessageStart, fixupMessageEnd} from '../util/fixup-message-boundaries';
 
 export default (state, currentChannel) => {
 	if (currentChannel === null) return {currentChannel};
