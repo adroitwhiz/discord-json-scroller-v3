@@ -131,6 +131,7 @@ $avatar-margin-right: 0.5em;
 	font-size: 82.5%;
 	opacity: 0.64;
 	cursor: pointer;
+	flex: 0 0 auto;
 
 	&:hover {
 		text-decoration: underline;
