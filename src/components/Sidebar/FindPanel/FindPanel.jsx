@@ -1,6 +1,6 @@
 import style from './style';
 
-import {Component} from 'preact';
+import {Component, createRef} from 'preact';
 import {connect} from 'unistore/preact';
 
 import JumpableMessage from '../../JumpableMessage/JumpableMessage';
@@ -41,6 +41,8 @@ class FindPanel extends Component {
 			numPages: 0
 		};
 
+		this.foundMessagesElem = createRef();
+
 		this.toggleFindPanel = this.toggleFindPanel.bind(this);
 		this.searchMessages = this.searchMessages.bind(this);
 
@@ -79,6 +81,14 @@ class FindPanel extends Component {
 				pageNumber: state.pageNumber + 1
 			};
 		});
+	}
+
+	componentDidUpdate (prevProps, prevState) {
+		if (this.state.pageNumber > prevState.pageNumber) {
+			this.foundMessagesElem.current.scrollTop = 0;
+		} else if (this.state.pageNumber < prevState.pageNumber) {
+			this.foundMessagesElem.current.scrollTop = this.foundMessagesElem.current.scrollHeight;
+		}
 	}
 
 	searchMessages () {
@@ -204,7 +214,7 @@ class FindPanel extends Component {
 						<button onClick={this.searchMessages}>Find</button>
 					</div>
 				</div>
-				<div className={style['found-messages']}>
+				<div className={style['found-messages']} ref={this.foundMessagesElem}>
 					{
 						this.state.foundMessages.slice(start, end).map(message =>
 							<JumpableMessage
