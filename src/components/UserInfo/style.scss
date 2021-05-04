@@ -2,6 +2,8 @@
 @use '../../colors' as col;
 
 .user-infobox {
+	border-radius: 0.25em;
+	background-color: col.$base-color;
 	padding: 1em;
 	display: flex;
 	align-items: center;

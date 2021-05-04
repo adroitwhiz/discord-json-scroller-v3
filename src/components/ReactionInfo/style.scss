@@ -5,6 +5,9 @@
 	display: flex;
 	max-height: 50vh;
 	width: 50vh;
+	border-radius: 0.25em;
+	background-color: col.$base-color;
+	overflow: hidden;
 }
 
 .reactions {

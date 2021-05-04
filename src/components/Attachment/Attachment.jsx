@@ -1,5 +1,9 @@
 import style from './style';
 
+import {connect} from 'unistore/preact';
+
+import setViewedImage from '../../actions/set-viewed-image';
+
 const MAX_IMAGE_SIZE = 500;
 
 // `width: auto; height: auto` overrides unloaded images' "intrinsic size", causing the scroll to jump when they load,
@@ -21,13 +25,14 @@ const Attachment = props => {
 	return (
 		<div className={style.attachment}>
 			{
-				/\.(jpe?g|png|gif)$/.test(props.attachment.url.toLowerCase()) ?
+				/\.(jpe?g|png|gif)$/i.test(props.attachment.url) ?
 					<img
 						width={props.attachment.width || null}
 						height={props.attachment.height || null}
 						src={props.attachment.url}
 						className={style['attachment-image']}
 						style={sizeImageAttachment(props.attachment)}
+						onClick={props.setViewedImage.bind(null, props.attachment)}
 					/> :
 					<div className={style['attachment-file']}>
 						<a href={props.attachment.url}>{props.attachment.name}</a>
@@ -39,4 +44,4 @@ const Attachment = props => {
 	);
 };
 
-export default Attachment;
+export default connect([], {setViewedImage})(Attachment);

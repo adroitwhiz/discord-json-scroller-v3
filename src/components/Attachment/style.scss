@@ -2,6 +2,7 @@
 
 .attachment {
 	display: flex;
+	margin: 0.25em 0;
 }
 
 .attachment-file {
@@ -16,6 +17,7 @@
 
 .attachment-image {
 	border-radius: 0.25em;
+	cursor: pointer;
 }
 
 .attachment-size {

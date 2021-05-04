@@ -12,12 +12,14 @@ import Sidebar from '../Sidebar/Sidebar';
 import Modal from '../Modal/Modal';
 import UserInfo from '../UserInfo/UserInfo';
 import ReactionInfo from '../ReactionInfo/ReactionInfo';
+import ImageModal from '../ImageModal/ImageModal';
 import {ErrorBoundaryHOC} from '../ErrorBoundary/ErrorBoundary';
 
 import setArchive from '../../actions/set-archive';
 import setUserInfoID from '../../actions/set-user-info-id';
 import setReactionInfo from '../../actions/set-reaction-info';
 import setCurrentChannel from '../../actions/set-current-channel';
+import setViewedImage from '../../actions/set-viewed-image';
 
 const store = createStore({
 	archive: null,
@@ -25,6 +27,7 @@ const store = createStore({
 	showInfoOfUserID: null,
 	reactionsToShow: null,
 	showReactionIndex: null,
+	viewedImage: null,
 	channelScrollState: {},
 	showSidebar: true
 });
@@ -36,6 +39,7 @@ class _App extends Component {
 		this.handleUpload = this.handleUpload.bind(this);
 		this.hideUserInfo = this.hideUserInfo.bind(this);
 		this.hideReactionInfo = this.hideReactionInfo.bind(this);
+		this.hideViewedImage = this.hideViewedImage.bind(this);
 	}
 
 	handleUpload (event) {
@@ -59,6 +63,10 @@ class _App extends Component {
 
 	hideReactionInfo () {
 		this.props.setReactionInfo(null, null);
+	}
+
+	hideViewedImage () {
+		this.props.setViewedImage(null);
 	}
 
 	render () {
@@ -102,6 +110,12 @@ class _App extends Component {
 						<ReactionInfo />
 					</Modal> :
 					null}
+				
+				{this.props.viewedImage ?
+					<Modal onClose={this.hideViewedImage}>
+						<ImageModal viewedImage={this.props.viewedImage} />
+					</Modal> :
+					null}
 			</div>
 		);
 	}
@@ -109,8 +123,8 @@ class _App extends Component {
 
 const App = ErrorBoundaryHOC(
 	connect(
-		['archive', 'currentChannel', 'showInfoOfUserID', 'reactionsToShow'],
-		{setUserInfoID, setReactionInfo, setArchive, setCurrentChannel}
+		['archive', 'currentChannel', 'showInfoOfUserID', 'reactionsToShow', 'viewedImage'],
+		{setUserInfoID, setReactionInfo, setArchive, setCurrentChannel, setViewedImage}
 	)(_App)
 );
 

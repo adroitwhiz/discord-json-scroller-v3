@@ -7,7 +7,6 @@
   - Disable loading images
     - Click-to-load avatars (once per URL)
 - Bookmarks panel
-- Click-to-zoom images
 - Audio player for audio attachments
 - Video player for video attachments
 - Embeds
