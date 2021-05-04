@@ -1,0 +1,30 @@
+@use '../../colors.scss' as col;
+
+.text-dropdown {
+	position: relative;
+}
+
+.menu {
+	position: absolute;
+	background-color: col.$base-color-tertiary;
+	border-radius: 0.25em;
+	max-height: 50vh;
+	scrollbar-color: col.$base-color-secondary col.$base-color-tertiary;
+	overflow-y: auto;
+	overflow-x: hidden;
+	top: 100%;
+	z-index: 1;
+
+	&.hidden {
+		display: none;
+	}
+}
+
+.menu-option {
+	padding: 0.5em;
+	cursor: pointer;
+
+	&:hover {
+		background-color: col.$background-modifier-hover;
+	}
+}

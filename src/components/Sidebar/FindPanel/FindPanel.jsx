@@ -5,6 +5,7 @@ import {connect} from 'unistore/preact';
 
 import JumpableMessage from '../../JumpableMessage/JumpableMessage';
 import Toggle from '../../Toggle/Toggle';
+import TextDropdown from '../../TextDropdown/TextDropdown';
 
 import classNames from '../../../util/class-names';
 
@@ -50,13 +51,17 @@ class FindPanel extends Component {
 		this.setFilterText = makeInputSetter('filterText', this);
 
 		this.setFilterByUser = makeCheckboxSetter('filterByUser', this);
-		this.setFilterUser = makeInputSetter('filterUser', this);
+		this.setFilterUser = this.setFilterUser.bind(this);
 
 		this.setFilterByChannel = makeCheckboxSetter('filterByChannel', this);
 		this.setFilterChannel = makeInputSetter('filterChannel', this);
 
 		this.prevPage = this.prevPage.bind(this);
 		this.nextPage = this.nextPage.bind(this);
+	}
+
+	setFilterUser (filterUser) {
+		this.setState({filterUser});
 	}
 
 	toggleFindPanel () {
@@ -149,15 +154,11 @@ class FindPanel extends Component {
 	}
 
 	render () {
-		const listID = Math.random().toString(36);
-
 		const userTagOptions = [];
 		const archiveChannelOptions = [];
 		if (this.props.archive) {
 			for (const user of this.props.archive.users.values()) {
-				userTagOptions.push(
-					<option key={user.id} value={user.tag} />
-				);
+				userTagOptions.push(user.tag);
 			}
 
 			for (const channel of this.props.archive.channels.values()) {
@@ -192,10 +193,10 @@ class FindPanel extends Component {
 							/>
 							<span> From user (name or ID): </span>
 						</label>
-						<input type="text" onChange={this.setFilterUser} list={listID}></input>
-						<datalist id={listID}>
-							{userTagOptions}
-						</datalist>
+						<TextDropdown
+							onChange={this.setFilterUser}
+							options={userTagOptions}
+						/>
 					</div>
 					<div className={style['form-row']}>
 						<label className={style['form-label']}>
