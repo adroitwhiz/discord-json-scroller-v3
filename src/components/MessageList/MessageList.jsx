@@ -98,7 +98,7 @@ const MessageContents = ({message}) => (
 
 const RepliedContent = JumpableMessageHOC(({text, jumpToMessage, messageID, hasAttachments}) => (
 	<div className={style['replied-content']} onClick={() => jumpToMessage(messageID)}>
-		{(!text && hasAttachments) ? <i>Click to see attachment</i> : <Markdown text={text} />}
+		{(!text && hasAttachments) ? <i>Click to see attachment</i> : <Markdown removeBreaks text={text} />}
 	</div>
 ));
 

@@ -139,11 +139,15 @@ const reactRules = {
 	discordEmoji: (content, node) => <TooltipEmoji emoji={node} />
 };
 
-const reactify = nodeArray => nodeArray.map(node => {
+const reactify = (nodeArray, removeBreaks) => nodeArray.map(node => {
 	const nodeHasContent = Object.prototype.hasOwnProperty.call(node, 'content');
 	let content = node.content;
 	if (nodeHasContent && Array.isArray(node.content)) {
 		content = reactify(node.content);
+	}
+
+	if (node.type === 'br' && removeBreaks) {
+		return ' ';
 	}
 
 	if (Object.prototype.hasOwnProperty.call(reactRules, node.type)) {
@@ -158,7 +162,7 @@ const reactify = nodeArray => nodeArray.map(node => {
 //const Markdown = props => reactify(parser(props.text));
 const Markdown = props => {
 	const parsed = parser(props.text);
-	return reactify(parsed);
+	return reactify(parsed, props.removeBreaks);
 };
 
 export default Markdown;
