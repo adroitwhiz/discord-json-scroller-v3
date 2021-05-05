@@ -50,20 +50,6 @@
 	background-color: col.$base-color-secondary;
 }
 
-.icon {
-	width: 24px;
-	height: 24px;
-	opacity: 0.5;
-}
-
-.icon-find {
-	background-image: url('icon-find.svg');
-}
-
-.icon-users {
-	background-image: url('icon-users.svg');
-}
-
 .panel {
 	overflow: auto;
 	flex: 1 1 auto;

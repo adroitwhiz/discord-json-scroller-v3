@@ -41,14 +41,4 @@
 
 .page-button {
 	@include common.icon-button;
-	width: 24px;
-	height: 24px;
-}
-
-.prev {
-	background-image: url('icon-prev.svg');
-}
-
-.next {
-	background-image: url('icon-next.svg');
 }

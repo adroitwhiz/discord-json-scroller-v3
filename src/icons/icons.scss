@@ -1,0 +1,79 @@
+.icon {
+	width: 24px;
+	height: 24px;
+	opacity: 0.375;
+}
+
+.icon-button {
+	cursor: pointer;
+
+	&:hover {
+		opacity: 0.675;
+		cursor: pointer;
+	}
+
+	&.active {
+		opacity: 1;
+	}
+
+	&.disabled {
+		opacity: 0.175;
+		cursor: not-allowed;
+	}
+
+	transition: opacity 0.125s ease;
+}
+
+.text-channel {
+	background-image: url('icon-text-channel.svg');
+}
+
+.voice-channel {
+	background-image: url('icon-voice-channel.svg');
+}
+
+.category-channel-open {
+	width: 12px;
+	height: 12px;
+	background-image: url('icon-category-channel-open.svg');
+}
+
+.category-channel-closed {
+	width: 12px;
+	height: 12px;
+	background-image: url('icon-category-channel-closed.svg');
+}
+
+.arrow-left {
+	background-image: url('icon-arrow-left.svg');
+}
+
+.arrow-right {
+	background-image: url('icon-arrow-right.svg');
+}
+
+.arrow-left-double {
+	background-image: url('icon-arrow-left-double.svg');
+}
+
+.arrow-right-double {
+	background-image: url('icon-arrow-right-double.svg');
+}
+
+.pin {
+	background-image: url('icon-pin.svg');
+}
+
+.attachment {
+	width: 16px;
+	height: 16px;
+	background-image: url('icon-attachment.svg');
+}
+
+.find {
+	background-image: url('icon-find.svg');
+}
+
+.users {
+	background-image: url('icon-users.svg');
+}

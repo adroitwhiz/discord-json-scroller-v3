@@ -1,4 +1,5 @@
 import style from './style';
+import icons from '../../../icons/icons';
 
 import {Component, createRef} from 'preact';
 import {connect} from 'unistore/preact';
@@ -230,7 +231,8 @@ class FindPanel extends Component {
 					<div
 						className={classNames({
 							[style['page-button']]: true,
-							[style['prev']]: true,
+							[icons['icon']]: true,
+							[icons['arrow-left']]: true,
 							[style['disabled']]: this.state.pageNumber < 1
 						})}
 						onClick={this.prevPage}
@@ -239,7 +241,8 @@ class FindPanel extends Component {
 					<div
 						className={classNames({
 							[style['page-button']]: true,
-							[style['next']]: true,
+							[icons['icon']]: true,
+							[icons['arrow-right']]: true,
 							[style['disabled']]: this.state.pageNumber >= this.state.numPages - 1
 						})}
 						onClick={this.nextPage}

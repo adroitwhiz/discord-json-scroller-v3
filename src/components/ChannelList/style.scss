@@ -45,26 +45,5 @@
 }
 
 .channel-icon {
-	width: 24px;
-	height: 24px;
 	margin-right: 0.25em;
-	opacity: 0.375;
-}
-
-.text-channel > .channel-icon {
-	background-image: url('icon-text-channel.svg');
-}
-
-.voice-channel > .channel-icon {
-	background-image: url('icon-voice-channel.svg');
-}
-
-.category-channel > .channel-icon {
-	width: 12px;
-	height: 12px;
-	background-image: url('icon-category-channel-open.svg');
-}
-
-.category-channel.collapsed > .channel-icon {
-	background-image: url('icon-category-channel-closed.svg');
 }

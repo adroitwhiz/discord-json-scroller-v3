@@ -1,4 +1,5 @@
 import style from './style';
+import icons from '../../icons/icons';
 
 import {Component} from 'preact';
 import {connect} from 'unistore/preact';
@@ -63,13 +64,19 @@ class _ChannelItem extends Component {
 						[style['text-channel']]: channel.channel.type === 'text',
 						[style['voice-channel']]: channel.channel.type === 'voice',
 						[style['category-channel']]: channel.channel.type === 'category',
-						[style['selected']]: channel.channel.id === this.props.currentChannel,
-						[style['collapsed']]: this.state.collapsed
+						[style['selected']]: channel.channel.id === this.props.currentChannel
 					})}
 
 					onClick = {channel.channel.type === 'category' ? this.toggleCollapse : this.selectChannel}
 				>
-					<div className={style['channel-icon']}></div>
+					<div className={classNames({
+						[style['channel-icon']]: true,
+						[icons['icon']]: true,
+						[icons['text-channel']]: channel.channel.type === 'text',
+						[icons['voice-channel']]: channel.channel.type === 'voice',
+						[icons['category-channel-open']]: channel.channel.type === 'category' && !this.state.collapsed,
+						[icons['category-channel-closed']]: channel.channel.type === 'category' && this.state.collapsed
+					})}></div>
 					<div className={style['channel-name']}>{channel.channel.name}</div>
 				</div>
 				{channel.childChannels.length > 0 ?

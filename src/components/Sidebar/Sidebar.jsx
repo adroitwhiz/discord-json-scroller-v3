@@ -1,4 +1,5 @@
 import style from './style';
+import icons from '../../icons/icons';
 
 import {Component} from 'preact';
 import {connect} from 'unistore/preact';
@@ -49,7 +50,7 @@ class Sidebar extends Component {
 						})}
 						onClick={this.setUsersTab}
 					>
-						<div className={`${style['icon']} ${style['icon-users']}`}></div>
+						<div className={`${icons['icon']} ${icons['users']}`}></div>
 					</div>
 					<div
 						className={classNames({
@@ -58,7 +59,7 @@ class Sidebar extends Component {
 						})}
 						onClick={this.setFindTab}
 					>
-						<div className={`${style['icon']} ${style['icon-find']}`}></div>
+						<div className={`${icons['icon']} ${icons['find']}`}></div>
 					</div>
 				</div>
 				<div className={style['panel']}>

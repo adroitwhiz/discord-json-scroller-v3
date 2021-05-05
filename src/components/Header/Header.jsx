@@ -1,4 +1,5 @@
 import style from './style';
+import icons from '../../icons/icons';
 
 import {Component} from 'preact';
 import {connect} from 'unistore/preact';
@@ -42,7 +43,7 @@ class Header extends Component {
 							onClick={this.toggleShowPinnedMessages}
 							className={classNames({
 								[style['button']]: true,
-								[style['icon-pinned-messages']]: true,
+								[icons['pin']]: true,
 								[style['active']]: this.state.showPinnedMessages
 							})}
 							title="Pinned messages"
@@ -53,8 +54,8 @@ class Header extends Component {
 						onClick={this.props.toggleSidebar}
 						className={classNames({
 							[style['button']]: true,
-							[style['sidebar-open']]: !this.props.showSidebar,
-							[style['sidebar-close']]: this.props.showSidebar
+							[icons['arrow-left-double']]: !this.props.showSidebar,
+							[icons['arrow-right-double']]: this.props.showSidebar
 						})}
 						title="Toggle sidebar"
 					></div>

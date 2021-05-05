@@ -1,4 +1,5 @@
 import style from './style';
+import icons from '../../icons/icons';
 
 import {Component} from 'preact';
 import {connect} from 'unistore/preact';
@@ -122,7 +123,7 @@ const RepliedMessage = connect('archive', {setUserInfoID})(({message, archive, s
 			</div>
 			<RepliedContent text={message.content} hasAttachments={hasAttachments} messageID={message.id} />
 			{hasAttachments ?
-				<div className={style['replied-attachments-icon']} /> :
+				<div className={`${icons['icon']} ${icons['attachment']}`} /> :
 				null}
 		</div>
 	);
