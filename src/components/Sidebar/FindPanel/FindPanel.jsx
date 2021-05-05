@@ -7,6 +7,7 @@ import {connect} from 'unistore/preact';
 import JumpableMessage from '../../JumpableMessage/JumpableMessage';
 import Toggle from '../../Toggle/Toggle';
 import TextDropdown from '../../TextDropdown/TextDropdown';
+import BetterTextInput from '../../BetterTextInput/BetterTextInput';
 
 import classNames from '../../../util/class-names';
 
@@ -59,6 +60,9 @@ class FindPanel extends Component {
 
 		this.prevPage = this.prevPage.bind(this);
 		this.nextPage = this.nextPage.bind(this);
+		this.firstPage = this.firstPage.bind(this);
+		this.lastPage = this.lastPage.bind(this);
+		this.handlePageInputChange = this.handlePageInputChange.bind(this);
 	}
 
 	setFilterUser (filterUser) {
@@ -87,6 +91,21 @@ class FindPanel extends Component {
 				pageNumber: state.pageNumber + 1
 			};
 		});
+	}
+
+	firstPage () {
+		this.setState({pageNumber: 0});
+	}
+
+	lastPage () {
+		this.setState(state => ({pageNumber: state.numPages - 1}));
+	}
+
+	handlePageInputChange (event) {
+		const pageNumber = parseInt(event.target.value);
+		if (Number.isNaN(pageNumber)) return;
+
+		this.setState(state => ({pageNumber: Math.max(0, Math.min(pageNumber - 1, state.numPages))}));
 	}
 
 	componentDidUpdate (prevProps, prevState) {
@@ -232,12 +251,27 @@ class FindPanel extends Component {
 						className={classNames({
 							[style['page-button']]: true,
 							[icons['icon']]: true,
+							[icons['arrow-left-double']]: true,
+							[style['disabled']]: this.state.pageNumber < 1
+						})}
+						onClick={this.first}
+					/>
+					<div
+						className={classNames({
+							[style['page-button']]: true,
+							[icons['icon']]: true,
 							[icons['arrow-left']]: true,
 							[style['disabled']]: this.state.pageNumber < 1
 						})}
 						onClick={this.prevPage}
-					></div>
-					<div className={style['page-num']}>Page {this.state.pageNumber + 1} of {this.state.numPages}</div>
+					/>
+					<div className={style['page-num']}>Page
+						<BetterTextInput
+							className={style['page-input']}
+							value={this.state.pageNumber + 1}
+							onChange={this.handlePageInputChange}
+						/>
+					of {this.state.numPages}</div>
 					<div
 						className={classNames({
 							[style['page-button']]: true,
@@ -246,7 +280,16 @@ class FindPanel extends Component {
 							[style['disabled']]: this.state.pageNumber >= this.state.numPages - 1
 						})}
 						onClick={this.nextPage}
-					></div>
+					/>
+					<div
+						className={classNames({
+							[style['page-button']]: true,
+							[icons['icon']]: true,
+							[icons['arrow-right-double']]: true,
+							[style['disabled']]: this.state.pageNumber >= this.state.numPages - 1
+						})}
+						onClick={this.lastPage}
+					/>
 				</div>
 			</div>
 		);

@@ -28,8 +28,9 @@
 .found-messages {
 	display: flex;
 	overflow: auto;
-	flex: 0 1 auto;
+	flex: 1 1 auto;
 	flex-direction: column;
+	background-color: col.$base-color;
 }
 
 .paginator {
@@ -41,4 +42,9 @@
 
 .page-button {
 	@include common.icon-button;
+}
+
+.page-input {
+	width: 2em;
+	margin: 0 0.25em;
 }
