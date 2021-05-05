@@ -11,21 +11,21 @@
     "lint": "eslint \"src/**/*.{js,jsx}\""
   },
   "devDependencies": {
-    "eslint": "^6.0.1",
-    "eslint-plugin-react": "^7.19.0",
+    "eslint": "^7.25.0",
+    "eslint-plugin-react": "^7.23.2",
     "if-env": "^1.0.0",
     "preact-cli": "^3.0.5",
-    "sass": "^1.26.2",
-    "sass-loader": "^8.0.2",
-    "sirv-cli": "^0.4.5",
-    "unistore": "^3.5.1"
+    "sass": "^1.32.12",
+    "sass-loader": "^10.1.1",
+    "sirv-cli": "^1.0.11"
   },
   "dependencies": {
     "discord-markdown": "^2.4.2",
     "lodash.throttle": "^4.1.1",
-    "preact": "^10.1.0",
-    "preact-render-to-string": "^5.1.2",
+    "preact": "^10.5.13",
+    "preact-render-to-string": "^5.1.19",
     "twemoji-parser": "^13.0.0",
+    "unistore": "^3.5.2",
     "unzipit": "^1.3.5"
   }
 }
